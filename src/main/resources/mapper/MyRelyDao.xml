@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.myblog.dao.MyRelyDao">
+
+    <resultMap id="BaseResultMap" type="com.spring.myblog.entity.MyRely">
+        <!--@Table my_rely-->
+        <result property="replyId" column="reply_id" jdbcType="OTHER"/>
+        <result property="comId" column="com_id" jdbcType="OTHER"/>
+        <result property="replyOwner" column="reply_owner" jdbcType="OTHER"/>
+        <result property="replyBody" column="reply_body" jdbcType="VARCHAR"/>
+        <result property="replyTime" column="reply_time" jdbcType="TIMESTAMP"/>
+        <result property="replyState" column="reply_state" jdbcType="OTHER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          reply_id, com_id, reply_owner, reply_body, reply_time, reply_state
+        from myblog.my_rely
+        where reply_id = #{replyId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          reply_id, com_id, reply_owner, reply_body, reply_time, reply_state
+        from myblog.my_rely
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          reply_id, com_id, reply_owner, reply_body, reply_time, reply_state
+        from myblog.my_rely
+        <where>
+            <if test="replyId != null">
+                and reply_id = #{replyId}
+            </if>
+            <if test="comId != null">
+                and com_id = #{comId}
+            </if>
+            <if test="replyOwner != null">
+                and reply_owner = #{replyOwner}
+            </if>
+            <if test="replyBody != null and replyBody != ''">
+                and reply_body = #{replyBody}
+            </if>
+            <if test="replyTime != null">
+                and reply_time = #{replyTime}
+            </if>
+            <if test="replyState != null">
+                and reply_state = #{replyState}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="replyId" useGeneratedKeys="true">
+        insert into myblog.my_rely(com_id, reply_owner, reply_body, reply_time, reply_state)
+        values (#{comId}, #{replyOwner}, #{replyBody}, #{replyTime}, #{replyState})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update myblog.my_rely
+        <set>
+            <if test="comId != null">
+                com_id = #{comId},
+            </if>
+            <if test="replyOwner != null">
+                reply_owner = #{replyOwner},
+            </if>
+            <if test="replyBody != null and replyBody != ''">
+                reply_body = #{replyBody},
+            </if>
+            <if test="replyTime != null">
+                reply_time = #{replyTime},
+            </if>
+            <if test="replyState != null">
+                reply_state = #{replyState},
+            </if>
+        </set>
+        where reply_id = #{replyId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from myblog.my_rely where reply_id = #{replyId}
+    </delete>
+
+</mapper>

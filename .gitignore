@@ -1,5 +1,7 @@
 HELP.md
 target/
+/myblog.iml
+/.idea
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -31,3 +33,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/mvnw
+
+/mvnw.cmd
+/.mvn/

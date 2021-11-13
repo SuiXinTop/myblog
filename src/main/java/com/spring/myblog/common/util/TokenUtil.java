@@ -8,6 +8,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.*;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.spring.myblog.common.constant.JwtConstant;
+import com.spring.myblog.common.constant.RedisConstant;
+import com.spring.myblog.common.model.RestMsg;
 import com.spring.myblog.entity.MyUser;
 
 import java.util.Date;
@@ -19,6 +21,15 @@ import java.util.Map;
  * @create 2021-10-13
  */
 public class TokenUtil {
+
+    public static Map<String, Object> returnToken(MyUser myUser) {
+        String token = TokenUtil.createToken(myUser);
+        return new HashMap<>(1) {
+            {
+                put("token", token);
+            }
+        };
+    }
 
     public static String createToken(MyUser myUser) {
         return JWT.create()
@@ -38,7 +49,7 @@ public class TokenUtil {
     }
 
     public static Map<String, Object> createPayload(MyUser myUser) {
-        Map<String, Object> claims = new HashMap<String, Object>(JwtConstant.CLAIM_NUMBER);
+        Map<String, Object> claims = new HashMap<>(JwtConstant.CLAIM_NUMBER);
         claims.put(JwtConstant.USER_ID, myUser.getUserId());
         claims.put(JwtConstant.USER_NAME, myUser.getUserName());
         return claims;

@@ -8,6 +8,10 @@ package com.spring.myblog.common.constant;
  */
 public class HttpConstant {
     /**
+     * TOKEN在请求头的名称
+     */
+    public static final String TOKEN_NAME = "authorization";
+    /**
      * 操作成功
      */
     public static final int SUCCESS = 200;

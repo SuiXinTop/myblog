@@ -8,5 +8,8 @@ package com.spring.myblog.common.constant;
  */
 public class RedisConstant {
     public final static String TOKEN_PREFIX = "token:";
-    public final static Long TOKEN_EXPIRE_TIME = 60L;
+    public final static long TOKEN_EXPIRE_TIME = 60L;
+    public final static String EMAIL_PREFIX = "email:";
+    public final static long EMAIL_EXPIRE_TIME = 5L;
+
 }

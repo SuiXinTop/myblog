@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.spring.myblog.entity.MyRole;
 import com.spring.myblog.entity.MyUser;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 /**
@@ -12,6 +14,13 @@ import java.util.List;
  * @author makejava
  * @since 2021-11-13 11:54:50
  */
+@Repository
 public interface MyUserDao extends BaseMapper<MyRole> {
-
+  /**
+   * Select user role my user.
+   *
+   * @param myUser the my user
+   * @return the my user
+   */
+  MyUser selectUserRole(MyUser myUser);
 }

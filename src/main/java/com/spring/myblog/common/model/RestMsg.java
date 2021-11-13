@@ -58,6 +58,17 @@ public class RestMsg implements Serializable {
     }
 
     /**
+     * Success result msg.
+     *
+     * @param data the data
+     * @return the result msg
+     */
+    public static RestMsg success(String msg,Object data) {
+        return success(200, msg, data);
+    }
+
+
+    /**
      * Fail result msg.
      *
      * @param msg the msg

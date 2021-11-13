@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.spring.myblog.entity.MyUser">
         <!--@Table my_user-->
-        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <id property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="userName" column="user_name" jdbcType="VARCHAR"/>
         <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
         <result property="userImg" column="user_img" jdbcType="VARCHAR"/>
@@ -17,5 +17,26 @@
         <result property="registerTime" column="register_time" jdbcType="TIMESTAMP"/>
         <result property="roleId" column="role_id" jdbcType="INTEGER"/>
     </resultMap>
+    <resultMap id="UserRoleMap" type="com.spring.myblog.entity.MyUser" extends="BaseResultMap">
+        <association property="myRole">
+            <id property="roleId" column="role_id" jdbcType="INTEGER"/>
+            <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
+            <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <select id="selectUserRole" resultMap="UserRoleMap"
+            parameterType="com.spring.myblog.entity.MyUser">
+        select mu.*,mr.*
+        from my_user mu left join my_role mr
+        on mu.role_id = mr.role_id
+        where 1=0
+        <if test="userEmail!=null and userEmail!=''">
+            or user_email = #{userEmail}
+        </if>
+        <if test="userId!=null and userId!=''">
+            or user_id = #{userId}
+        </if>
+    </select>
 
 </mapper>

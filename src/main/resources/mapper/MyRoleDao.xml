@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.spring.myblog.entity.MyRole">
         <!--@Table my_role-->
-        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <id property="roleId" column="role_id" jdbcType="INTEGER"/>
         <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
         <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
     </resultMap>

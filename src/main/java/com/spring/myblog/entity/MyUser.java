@@ -1,6 +1,7 @@
 package com.spring.myblog.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyUser implements Serializable {
+
     private static final long serialVersionUID = -86422308011787984L;
+
     @TableId(type = IdType.AUTO)
     private Integer userId;
 
@@ -46,5 +49,8 @@ public class MyUser implements Serializable {
     private Date registerTime;
 
     private Integer roleId;
+
+    @TableField(exist = false)
+    private MyRole myRole;
 
 }

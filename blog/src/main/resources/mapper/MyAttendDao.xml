@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blog.dao.MyAttendDao">
+
+    <resultMap id="BaseResultMap" type="com.spring.common.entity.MyAttend">
+        <!--@Table my_attend-->
+        <result property="attendId" column="attend_id" jdbcType="INTEGER"/>
+        <result property="attendUserId" column="attend_user_id" jdbcType="INTEGER"/>
+        <result property="fansUserId" column="fans_user_id" jdbcType="INTEGER"/>
+        <result property="attendTime" column="attend_time" jdbcType="TIMESTAMP"/>
+        <result property="attendState" column="attend_state" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+</mapper>

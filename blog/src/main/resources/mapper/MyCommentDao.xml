@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blog.dao.MyCommentDao">
+
+    <resultMap id="BaseResultMap" type="com.spring.common.entity.MyComment">
+        <!--@Table my_comment-->
+        <result property="comId" column="com_id" jdbcType="INTEGER"/>
+        <result property="blogId" column="blog_id" jdbcType="INTEGER"/>
+        <result property="comOwner" column="com_owner" jdbcType="INTEGER"/>
+        <result property="comBody" column="com_body" jdbcType="VARCHAR"/>
+        <result property="comTime" column="com_time" jdbcType="TIMESTAMP"/>
+        <result property="comState" column="com_state" jdbcType="INTEGER"/>
+        <association property="owner" column="com_owner" select="selectUserByCom"/>
+    </resultMap>
+
+    <resultMap id="UserMap" type="com.spring.common.entity.MyUser">
+        <id property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userImg" column="user_img" jdbcType="VARCHAR"/>
+        <result property="userEmail" column="user_email" jdbcType="VARCHAR"/>
+        <result property="userAddress" column="user_address" jdbcType="VARCHAR"/>
+        <result property="userSex" column="user_sex" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="AllResultMap" type="com.spring.common.entity.MyComment" extends="BaseResultMap">
+        <collection property="myRelies" column="com_id" select="selectRelyByComId"/>
+    </resultMap>
+
+    <resultMap id="MyReliesMap" type="com.spring.common.entity.MyRely">
+        <result property="replyId" column="reply_id" jdbcType="INTEGER"/>
+        <result property="comId" column="com_id" jdbcType="INTEGER"/>
+        <result property="replyOwner" column="reply_owner" jdbcType="INTEGER"/>
+        <result property="replyBody" column="reply_body" jdbcType="VARCHAR"/>
+        <result property="replyTime" column="reply_time" jdbcType="TIMESTAMP"/>
+        <result property="replyState" column="reply_state" jdbcType="INTEGER"/>
+        <association property="owner" column="reply_owner" select="selectUserByReply"/>
+    </resultMap>
+
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="integer">
+        select *
+        from my_comment
+        where com_owner = #{comOwner}
+    </select>
+
+    <select id="selectByBlogId" resultMap="BaseResultMap" parameterType="integer">
+        select *
+        from my_comment
+        where blog_id = #{blogId}
+    </select>
+
+    <select id="selectAllByBlogId" resultMap="AllResultMap" parameterType="integer">
+        select *
+        from my_comment
+        where blog_id = #{blogId}
+    </select>
+
+    <select id="selectUserByCom" resultMap="UserMap">
+        select *
+        from my_user
+        where user_id = #{com_owner}
+    </select>
+
+    <select id="selectRelyByComId" resultMap="MyReliesMap">
+        select *
+        from my_rely
+        where com_id = #{com_id}
+    </select>
+
+    <select id="selectUserByReply" resultMap="UserMap">
+        select *
+        from my_user
+        where user_id = #{reply_owner}
+    </select>
+
+</mapper>

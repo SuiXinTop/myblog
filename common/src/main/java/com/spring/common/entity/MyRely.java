@@ -1,8 +1,6 @@
 package com.spring.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +27,9 @@ public class MyRely implements Serializable {
     private Integer replyId;
     
     private Integer comId;
+
+    @TableField(exist = false)
+    private MyComment myComment;
     
     private Integer replyOwner;
 
@@ -36,9 +37,10 @@ public class MyRely implements Serializable {
     private MyUser owner;
     
     private String replyBody;
-    
+
     private Date replyTime;
-    
+
+    @TableLogic(value = "1", delval = "0")
     private Integer replyState;
 
 }

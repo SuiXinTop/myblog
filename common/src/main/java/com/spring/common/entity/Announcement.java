@@ -1,8 +1,6 @@
 package com.spring.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,13 +26,16 @@ public class Announcement implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer amtId;
-    
+
     private String amtTitle;
-    
+
     private String amtBody;
-    
+
     private Integer amtTop;
 
+    @TableField(fill = FieldFill.INSERT)
     private Date amtTime;
 
+    @TableLogic(value = "1", delval = "0")
+    private Integer amtState;
 }

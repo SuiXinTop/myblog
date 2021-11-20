@@ -10,5 +10,4 @@ import com.spring.common.entity.MyTag;
  * @since 2021-11-13 11:54:31
  */
 public interface MyTagDao extends BaseMapper<MyTag>{
-
 }

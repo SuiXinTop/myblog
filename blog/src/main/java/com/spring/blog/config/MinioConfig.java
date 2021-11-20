@@ -31,7 +31,10 @@ public class MinioConfig {
      */
     public static final String BUCKET_NAME = "blog";
 
-    public static final String FILE_PREFIX = "http://118.31.15.127:9000/blog/";
+    /**
+     * 存储前缀
+     */
+    public static final String FILE_PREFIX = "http://118.31.15.127:9000/blog";
 
     @Bean
     public MinioClient getMinioClient() {

@@ -70,7 +70,7 @@ public class TokenUtil {
         } catch (SignatureVerificationException de) {
             throw new SignatureVerificationException(JwtConstant.KEY);
         } catch (TokenExpiredException tee) {
-            throw new TokenExpiredException("密钥已过期");
+            throw new TokenExpiredException("登录信息已过期");
         } catch (InvalidClaimException ice) {
             throw new InvalidClaimException("非法密钥");
         } catch (JWTVerificationException jve) {

@@ -30,7 +30,7 @@
         select mu.*,mr.*
         from my_user mu left join my_role mr
         on mu.role_id = mr.role_id
-        where 1=0
+        where false
         <if test="userEmail!=null and userEmail!=''">
             or user_email = #{userEmail}
         </if>

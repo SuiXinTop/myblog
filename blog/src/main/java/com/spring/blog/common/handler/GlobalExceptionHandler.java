@@ -1,5 +1,6 @@
 package com.spring.blog.common.handler;
 
+import com.spring.common.exception.ServiceException;
 import com.spring.common.exception.user.UserException;
 import com.spring.common.model.RestMsg;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserException.class)
     public RestMsg handleUserException(UserException e) {
         log.error("发生用户异常.", e);
+        return RestMsg.fail(e.getMessage());
+    }
+
+    /**
+     * 业务
+     */
+    @ExceptionHandler(ServiceException.class)
+    public RestMsg handleServiceException(ServiceException e) {
+        log.error("发生业务异常.", e);
         return RestMsg.fail(e.getMessage());
     }
 

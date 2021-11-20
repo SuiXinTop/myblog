@@ -1,7 +1,6 @@
 package com.spring.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,11 +27,18 @@ public class MyAttend implements Serializable {
     private Integer attendId;
     
     private Integer attendUserId;
+
+    @TableField(exist = false)
+    private MyUser attendUser;
     
     private Integer fansUserId;
-    
+
+    @TableField(exist = false)
+    private MyUser fansUser;
+
     private Date attendTime;
-    
+
+    @TableLogic(value = "1", delval = "0")
     private Integer attendState;
 
 }

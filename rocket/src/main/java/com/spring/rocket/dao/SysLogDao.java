@@ -1,7 +1,6 @@
 package com.spring.rocket.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.MyRole;
 import com.spring.common.entity.SysLog;
 
 /**

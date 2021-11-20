@@ -1,5 +1,6 @@
 package com.spring.blog.service.impl;
 
+import com.spring.common.constant.Topic;
 import com.spring.common.entity.EmailCode;
 import com.spring.blog.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,6 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendHtmlMail(EmailCode emailCode) {
-        rocketMqTemplate.sendOneWay("EmailCode", emailCode);
+        rocketMqTemplate.sendOneWay(Topic.EMAIL_CODE, emailCode);
     }
 }

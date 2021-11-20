@@ -5,7 +5,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+vue3.x/
 ### STS ###
 .apt_generated
 .classpath
@@ -37,3 +37,4 @@ build/
 
 /mvnw.cmd
 /.mvn/
+

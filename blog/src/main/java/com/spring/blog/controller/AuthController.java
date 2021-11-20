@@ -1,17 +1,16 @@
 package com.spring.blog.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.spring.common.exception.user.HasLoginException;
-import com.spring.common.model.RestMsg;
+import com.spring.blog.service.AuthService;
+import com.spring.blog.service.EmailService;
 import com.spring.common.constant.HttpConstant;
 import com.spring.common.entity.EmailCode;
 import com.spring.common.entity.MyUser;
-import com.spring.blog.service.AuthService;
-import com.spring.blog.service.EmailService;
+import com.spring.common.exception.user.HasLoginException;
+import com.spring.common.model.RestMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -36,6 +35,15 @@ public class AuthController {
             throw new HasLoginException();
         }
         return authService.login(myUser);
+    }
+    @PostMapping("/admin")
+    @ApiOperation(value = "管理员登录授权", notes = "id,email,password")
+    public RestMsg admin(@RequestBody MyUser myUser,
+                         @RequestHeader(value = HttpConstant.TOKEN_NAME, required = false) String token) {
+        if (!StrUtil.isEmpty(token)) {
+            throw new HasLoginException();
+        }
+        return authService.admin(myUser);
     }
 
     @PostMapping("/emailLogin")

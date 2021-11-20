@@ -1,14 +1,15 @@
 package com.spring.blog.common.advice;
 
+import com.spring.blog.dao.MyUserDao;
 import com.spring.blog.redis.RedisService;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.entity.MyUser;
+import com.spring.common.exception.UnauthorizedException;
 import com.spring.common.util.TokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 public class TokenAdvice {
     private final HttpServletRequest request;
     private final RedisService redisService;
+    private final MyUserDao myUserDao;
 
 
     /**
@@ -37,23 +39,18 @@ public class TokenAdvice {
     /**
      * Around增强型,可以有返回值以及修改传参
      *
-     * @param joinPoint the join point
-     * @return the object
-     * @throws Throwable the throwable
+     * @return the string
      */
-    @Around("advicePointcut()")
-    public Object logAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Before(value = "advicePointcut()")
+    public String logAdvice() {
         String token = request.getHeader("authorization");
         if (token == null) {
-            throw new RuntimeException("未通过授权");
+            throw new UnauthorizedException();
         }
         if (!redisService.hasKey(token)) {
-            MyUser user = TokenUtil.verifyToken(token);
-            if (user == null) {
-                throw new RuntimeException("登录信息已过期，请重新登录");
-            }
-            redisService.setExpire(RedisConstant.TOKEN_PREFIX + token, user, RedisConstant.TOKEN_EXPIRE_TIME);
+            MyUser newUser = myUserDao.selectUserRole(TokenUtil.verifyToken(token));
+            redisService.setExpire(RedisConstant.TOKEN_PREFIX + token, newUser, RedisConstant.TOKEN_EXPIRE_TIME);
         }
-        return joinPoint.proceed();
+        return token;
     }
 }

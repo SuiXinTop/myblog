@@ -22,6 +22,14 @@ public interface AuthService {
     RestMsg login(MyUser myUser);
 
     /**
+     * Admin rest msg.
+     *
+     * @param myUser the my user
+     * @return the rest msg
+     */
+    RestMsg admin(MyUser myUser);
+
+    /**
      * Email login rest msg.
      *
      * @param emailCode the email code

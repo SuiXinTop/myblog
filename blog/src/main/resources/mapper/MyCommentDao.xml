@@ -36,22 +36,24 @@
         <association property="owner" column="reply_owner" select="selectUserByReply"/>
     </resultMap>
 
-    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="integer">
+    <select id="selectByUserId" resultMap="AllResultMap" parameterType="integer">
         select *
         from my_comment
-        where com_owner = #{comOwner}
+        where com_owner = #{userId}
     </select>
 
     <select id="selectByBlogId" resultMap="BaseResultMap" parameterType="integer">
         select *
         from my_comment
-        where blog_id = #{blogId}
+        where com_state = 1
+          and blog_id = #{blogId}
     </select>
 
     <select id="selectAllByBlogId" resultMap="AllResultMap" parameterType="integer">
         select *
         from my_comment
-        where blog_id = #{blogId}
+        where com_state = 1
+          and blog_id = #{blogId}
     </select>
 
     <select id="selectUserByCom" resultMap="UserMap">
@@ -63,7 +65,8 @@
     <select id="selectRelyByComId" resultMap="MyReliesMap">
         select *
         from my_rely
-        where com_id = #{com_id}
+        where reply_state = 1
+          and com_id = #{com_id}
     </select>
 
     <select id="selectUserByReply" resultMap="UserMap">

@@ -7,6 +7,7 @@
         <id property="blogId" column="blog_id" jdbcType="INTEGER"/>
         <result property="blogTitle" column="blog_title" jdbcType="VARCHAR"/>
         <result property="blogBody" column="blog_body" jdbcType="VARCHAR"/>
+        <result property="blogImg" column="blog_img" jdbcType="VARCHAR"/>
         <result property="blogTime" column="blog_time" jdbcType="TIMESTAMP"/>
         <result property="blogCollect" column="blog_collect" jdbcType="INTEGER"/>
         <result property="blogView" column="blog_view" jdbcType="INTEGER"/>
@@ -18,6 +19,7 @@
 
     <resultMap id="BlogUserMap" type="com.spring.common.entity.MyBlog" extends="BaseBlogResultMap">
         <association property="myUser" column="user_id" select="selectUserByUserId"/>
+        <collection property="myBlogTagList" column="blog_id" select="getBlogTag"/>
     </resultMap>
 
     <resultMap id="UserMap" type="com.spring.common.entity.MyUser">
@@ -29,11 +31,38 @@
         <result property="userSex" column="user_sex" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="BlogTagMap" type="com.spring.common.entity.MyBlogTag">
+        <id property="blogTagId" column="blog_tag_id" jdbcType="INTEGER"/>
+        <result property="blogId" column="blog_id" jdbcType="INTEGER"/>
+        <result property="tagId" column="tag_id" jdbcType="INTEGER"/>
+        <association property="myTag" column="tag_id" select="getTag"/>
+    </resultMap>
+
+    <resultMap id="TagMap" type="com.spring.common.entity.MyTag">
+        <id property="tagId" column="tag_id" jdbcType="INTEGER"/>
+        <result property="tagName" column="tag_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <select id="selectByBlogId" resultMap="BlogUserMap" parameterType="integer">
-        select *
-        from my_blog mb
-        where mb.blog_state = 1
-          and mb.blog_id = #{blogId}
+        SELECT *
+        FROM my_blog mb
+        WHERE mb.blog_state = 1
+          AND mb.blog_id = #{blogId}
+    </select>
+
+    <select id="selectHot" resultMap="BlogUserMap">
+        SELECT *
+        FROM my_blog mb
+        WHERE mb.blog_state = 1
+        ORDER BY blog_view DESC
+        LIMIT 10
+    </select>
+
+    <select id="selectNew" resultMap="BlogUserMap">
+        SELECT *
+        FROM my_blog mb
+        WHERE mb.blog_state = 1
+        ORDER BY blog_time DESC
     </select>
 
     <select id="selectUserByUserId" resultMap="UserMap">
@@ -41,5 +70,18 @@
         from my_user
         where user_id = #{user_id}
     </select>
+
+    <select id="getBlogTag" resultMap="BlogTagMap">
+        select distinct *
+        from my_blog_tag
+        where blog_id = #{blog_id}
+    </select>
+
+    <select id="getTag" resultMap="TagMap">
+        select *
+        from my_tag
+        where tag_id = #{tag_id}
+    </select>
+
 
 </mapper>

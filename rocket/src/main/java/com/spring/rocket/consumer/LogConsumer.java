@@ -1,6 +1,9 @@
 package com.spring.rocket.consumer;
 
+import com.spring.common.constant.Topic;
 import com.spring.common.entity.SysLog;
+import com.spring.rocket.dao.SysLogDao;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
@@ -16,15 +19,16 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@RocketMQMessageListener(topic = "SysOperLog",consumerGroup = "consumer-log")
+@RequiredArgsConstructor
+@RocketMQMessageListener(topic = Topic.SYS_OPER_LOG, consumerGroup = "consumer-log")
 public class LogConsumer implements RocketMQListener<SysLog>, RocketMQPushConsumerLifecycleListener {
+    private final SysLogDao sysLogDao;
 
     @Override
     public void onMessage(SysLog sysLog) {
-        log.info("Receive message：" + sysLog);
-        //如果消费失败，则抛出RuntimeException，RocketMQ会自动重试
-        //可以手动抛出，也可以使用 Lombok 的 @SneakyThrows 注解来抛出 RuntimeException
+        sysLogDao.insert(sysLog);
     }
+
     @Override
     public void prepareStart(DefaultMQPushConsumer consumer) {
         // 每次拉取的间隔，单位为毫秒

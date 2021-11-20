@@ -1,7 +1,7 @@
 package com.spring.blog.common.advice;
 
-import cn.hutool.core.date.DateTime;
 import com.spring.blog.common.annotation.Log;
+import com.spring.common.constant.Topic;
 import com.spring.common.enmu.BusinessStatus;
 import com.spring.common.entity.SysLog;
 import com.spring.common.util.RequestUtil;
@@ -58,11 +58,11 @@ public class LogAdvice {
                     .operIp(RequestUtil.getIpAddress(request))
                     .operUrl(request.getRequestURI())
                     .operStatus(BusinessStatus.SUCCESS.ordinal())
-                    .operTime(new DateTime())
                     .methodName(className + "." + methodName + "()")
                     .businessType(controllerLog.businessType().ordinal())
                     .logName(controllerLog.logName())
                     .operType(controllerLog.operatorType().ordinal())
+                    .requestMethod("")
                     .build();
 
             log.info("日志对象已加载");
@@ -72,7 +72,7 @@ public class LogAdvice {
             }
 
             // 保存数据库
-           rocketMqTemplate.sendOneWay("SysOperLog",operLog);
+           rocketMqTemplate.sendOneWay(Topic.SYS_OPER_LOG,operLog);
             log.info("日志消息已发送");
         } catch (Exception exp) {
             // 记录本地异常日志

@@ -21,4 +21,12 @@ public class RedisConstant {
     public final static long LOGIN_EXPIRE_TIME = 30L;
 
     public final static int LOGIN_LIMIT = 5;
+
+    public final static String BLOG_PREFIX = "blog:";
+
+    public final static long BLOG_EXPIRE_TIME = 10L;
+
+    public final static String BLOG_HOT= "blogHot";
+
+    public final static long HOT_EXPIRE_TIME = 30L;
 }

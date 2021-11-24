@@ -24,6 +24,9 @@ public class MsgConstant {
 
     public static final String LOGOUT_SUCCESS = "成功退出";
 
+    public static final String LOGOUT_FAULT = "退出失败";
+
+
     public static final String SELECT_SUCCESS = "查询成功";
 
     public static final String NO_DATA = "暂无数据";
@@ -33,4 +36,14 @@ public class MsgConstant {
     public static final String UPLOAD_SUCCESS = "上传成功";
 
     public static final String UPLOAD_FAULT = "上传失败";
+
+    public static final String REGISTER_SUCCESS = "注册成功";
+
+    public static final String REGISTER_FAULT = "注册失败";
+
+    public static final String DELETE_USER_SUCCESS = "销户成功";
+
+    public static final String DELETE_USER_FAULT = "销户失败";
+
+
 }

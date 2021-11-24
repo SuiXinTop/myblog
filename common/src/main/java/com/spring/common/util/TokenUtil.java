@@ -8,7 +8,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.*;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.spring.common.constant.JwtConstant;
-import com.spring.common.entity.MyUser;
+import com.spring.common.entity.po.User;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -20,19 +20,10 @@ import java.util.Map;
  */
 public class TokenUtil {
 
-    public static Map<String, Object> returnToken(MyUser myUser) {
-        String token = TokenUtil.createToken(myUser);
-        return new HashMap<>(1) {
-            {
-                put("token", token);
-            }
-        };
-    }
-
-    public static String createToken(MyUser myUser) {
+    public static String createToken(User user) {
         return JWT.create()
                 .withHeader(createHeader())
-                .withPayload(createPayload(myUser))
+                .withPayload(createPayload(user))
                 .withExpiresAt(createExpire())
                 .sign(JwtConstant.KEY);
     }
@@ -46,10 +37,10 @@ public class TokenUtil {
         };
     }
 
-    public static Map<String, Object> createPayload(MyUser myUser) {
+    public static Map<String, Object> createPayload(User user) {
         Map<String, Object> claims = new HashMap<>(JwtConstant.CLAIM_NUMBER);
-        claims.put(JwtConstant.USER_ID, myUser.getUserId());
-        claims.put(JwtConstant.USER_NAME, myUser.getUserName());
+        claims.put(JwtConstant.USER_ID, user.getUserId());
+        claims.put(JwtConstant.USER_NAME, user.getUserName());
         return claims;
     }
 
@@ -57,11 +48,11 @@ public class TokenUtil {
         return DateUtil.offset(new DateTime(), DateField.HOUR, JwtConstant.EXPIRES);
     }
 
-    public static MyUser verifyToken(String token) {
+    public static User verifyToken(String token) {
         try {
             JWTVerifier jwtVerifier = JWT.require(JwtConstant.KEY).build();
             DecodedJWT decodedJwt = jwtVerifier.verify(token);
-            return MyUser.builder()
+            return User.builder()
                     .userId(decodedJwt.getClaim(JwtConstant.USER_ID).asInt())
                     .userName(decodedJwt.getClaim(JwtConstant.USER_NAME).asString())
                     .build();

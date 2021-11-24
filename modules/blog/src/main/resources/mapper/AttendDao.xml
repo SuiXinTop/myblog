@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blog.dao.AttendDao">
+
+    <resultMap id="AttendMap" type="com.spring.common.entity.po.Attend">
+        <!--@Table my_attend-->
+        <id property="attendId" column="attend_id" jdbcType="INTEGER"/>
+        <result property="attendUserId" column="attend_user_id" jdbcType="INTEGER"/>
+        <result property="fansUserId" column="fans_user_id" jdbcType="INTEGER"/>
+        <result property="attendTime" column="attend_time" jdbcType="TIMESTAMP"/>
+        <result property="attendState" column="attend_state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="AttendUserMap" type="com.spring.common.entity.bo.AttendMap" extends="AttendMap">
+        <association property="attendUser" column="attend_user_id" select="getAttendUser"/>
+    </resultMap>
+
+    <resultMap id="FansUserMap" type="com.spring.common.entity.bo.AttendMap" extends="AttendMap">
+        <association property="fansUser" column="fans_user_id" select="getFansUser"/>
+    </resultMap>
+
+    <select id="selectFans" resultMap="AttendUserMap">
+        select *
+        from my_attend
+        where attend_state = 1
+          and attend_user_id = #{attendUserId}
+    </select>
+
+    <select id="selectAttend" resultMap="FansUserMap">
+        select *
+        from my_attend
+        where attend_state = 1
+          and fans_user_id = #{fansUserId}
+    </select>
+
+
+
+
+    <!---->
+    <select id="getAttendUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
+        select *
+        from my_user
+        where user_id = #{attend_user_id}
+    </select>
+
+    <select id="getFansUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
+        select *
+        from my_user
+        where user_id = #{fans_user_id}
+    </select>
+
+</mapper>

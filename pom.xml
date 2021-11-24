@@ -12,13 +12,15 @@
 
     <modules>
         <module>common</module>
-        <module>blog</module>
-        <module>rocket</module>
+        <module>redis</module>
+        <module>elastic</module>
+        <module>datasource</module>
+        <module>security</module>
+        <module>swagger</module>
+        <module>modules</module>
     </modules>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -28,8 +30,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>2.5.6</version>
-                <type>pom</type>
                 <scope>import</scope>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
@@ -57,11 +59,6 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>1.4.0</version>
             </dependency>
-            <!--freemarker模版引擎依赖-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-thymeleaf</artifactId>
-            </dependency>
             <!-- hutool工具类-->
             <dependency>
                 <groupId>cn.hutool</groupId>
@@ -74,6 +71,11 @@
                 <version>3.18.2</version>
             </dependency>
             <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.78</version>
+            </dependency>
+            <dependency>
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>8.2.2</version>
@@ -83,21 +85,49 @@
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>3.0.3</version>
             </dependency>
+
             <dependency>
                 <groupId>com.spring</groupId>
                 <artifactId>common</artifactId>
-                <version>0.0.1</version>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spring</groupId>
+                <artifactId>redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spring</groupId>
+                <artifactId>elastic</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spring</groupId>
+                <artifactId>datasource</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spring</groupId>
+                <artifactId>security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spring</groupId>
+                <artifactId>swagger</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>11</source>
+                    <target>11</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>

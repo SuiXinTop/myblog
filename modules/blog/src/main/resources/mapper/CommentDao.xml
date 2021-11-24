@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blog.dao.CommentDao">
+
+    <resultMap id="CommentMap" type="com.spring.common.entity.po.Comment">
+        <!--@Table my_comment-->
+        <result property="comId" column="com_id" jdbcType="INTEGER"/>
+        <result property="blogId" column="blog_id" jdbcType="INTEGER"/>
+        <result property="comOwner" column="com_owner" jdbcType="INTEGER"/>
+        <result property="comBody" column="com_body" jdbcType="VARCHAR"/>
+        <result property="comTime" column="com_time" jdbcType="TIMESTAMP"/>
+        <result property="comState" column="com_state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="CommentUserMap" type="com.spring.common.entity.bo.CommentMap" extends="CommentMap">
+        <association property="owner" column="com_owner" select="getUserByCom"/>
+    </resultMap>
+
+    <resultMap id="CommentReplyMap" type="com.spring.common.entity.bo.CommentMap" extends="CommentUserMap">
+        <collection property="replyList" column="com_id" select="getReply"/>
+    </resultMap>
+
+    <resultMap id="MyReplyUserMap" type="com.spring.common.entity.bo.ReplyMap"
+               extends="com.spring.blog.dao.ReplyDao.ReplyMap">
+        <association property="owner" column="reply_owner" select="getUserByReply"/>
+    </resultMap>
+
+    <select id="selectAllByUserId" resultMap="CommentReplyMap" parameterType="integer">
+        select *
+        from my_comment
+        where com_owner = #{userId}
+    </select>
+
+    <select id="selectByBlogId" resultMap="CommentUserMap" parameterType="integer">
+        select *
+        from my_comment
+        where com_state = 1
+          and blog_id = #{blogId}
+    </select>
+
+    <select id="selectAllByBlogId" resultMap="CommentReplyMap" parameterType="integer">
+        select *
+        from my_comment
+        where com_state = 1
+          and blog_id = #{blogId}
+    </select>
+
+
+
+
+    <!---->
+    <select id="getUserByCom" resultMap="com.spring.blog.dao.UserDao.UserMap">
+        select user_id,
+               user_name,
+               user_img,
+               user_state
+        from my_user
+        where user_id = #{com_owner}
+    </select>
+
+    <select id="getReply" resultMap="MyReplyUserMap">
+        select *
+        from my_rely
+        where reply_state = 1
+          and com_id = #{com_id}
+    </select>
+
+    <select id="getUserByReply" resultMap="com.spring.blog.dao.UserDao.UserMap">
+        select user_id,
+               user_name,
+               user_img,
+               user_state
+        from my_user
+        where user_id = #{reply_owner}
+    </select>
+
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blog.dao.BlogDao">
+
+    <resultMap id="BlogMap" type="com.spring.common.entity.po.Blog">
+        <!--@Table my_blog-->
+        <id property="blogId" column="blog_id" jdbcType="INTEGER"/>
+        <result property="blogTitle" column="blog_title" jdbcType="VARCHAR"/>
+        <result property="blogBody" column="blog_body" jdbcType="VARCHAR"/>
+        <result property="blogImg" column="blog_img" jdbcType="VARCHAR"/>
+        <result property="blogTime" column="blog_time" jdbcType="TIMESTAMP"/>
+        <result property="blogUpdateTime" column="blog_update_time" jdbcType="TIMESTAMP"/>
+        <result property="blogCollect" column="blog_collect" jdbcType="INTEGER"/>
+        <result property="blogView" column="blog_view" jdbcType="INTEGER"/>
+        <result property="blogLike" column="blog_like" jdbcType="INTEGER"/>
+        <result property="blogComment" column="blog_comment" jdbcType="INTEGER"/>
+        <result property="blogState" column="blog_state" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="BlogUserMap" type="com.spring.common.entity.bo.BlogMap" extends="BlogMap">
+        <association property="user" column="user_id" select="getUser"/>
+        <collection property="blogTagList" column="blog_id" select="getBlogTag"/>
+    </resultMap>
+
+    <resultMap id="BlogTagMap" type="com.spring.common.entity.bo.BlogTagMap"
+               extends="com.spring.blog.dao.BlogTagDao.BlogTagMap">
+        <association property="tag" column="tag_id" select="getTag"/>
+    </resultMap>
+
+    <select id="selectByBlogId" resultMap="BlogUserMap" parameterType="integer">
+        SELECT *
+        FROM my_blog mb
+        WHERE mb.blog_state = 1
+          AND mb.blog_id = #{blogId}
+    </select>
+
+    <select id="selectHot" resultMap="BlogUserMap">
+        SELECT *
+        FROM my_blog mb
+        WHERE mb.blog_state = 1
+        ORDER BY blog_view DESC
+        LIMIT 10
+    </select>
+
+    <select id="selectNew" resultMap="BlogUserMap">
+        SELECT *
+        FROM my_blog mb
+        WHERE mb.blog_state = 1
+        ORDER BY blog_time DESC
+        LIMIT 10
+    </select>
+
+
+
+
+    <!---->
+    <select id="getBlogTag" resultMap="BlogTagMap">
+        select distinct *
+        from my_blog_tag
+        where blog_id = #{blog_id}
+    </select>
+
+    <select id="getUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
+        select user_id, user_name, user_img, user_email, user_state
+        from my_user
+        where user_id = #{user_id}
+    </select>
+
+    <select id="getTag" resultMap="com.spring.blog.dao.TagDao.TagMap">
+        select *
+        from my_tag
+        where tag_id = #{tag_id}
+    </select>
+
+
+</mapper>

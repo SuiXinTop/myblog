@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blog.dao.HistoryDao">
+
+    <resultMap id="HistoryMap" type="com.spring.common.entity.po.History">
+        <!--@Table my_history-->
+        <result property="historyId" column="history_id" jdbcType="INTEGER"/>
+        <result property="blogId" column="blog_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="historyTime" column="history_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="HistoryBlogMap" type="com.spring.common.entity.bo.HistoryMap" extends="HistoryMap">
+        <association property="blog" column="blog_id" select="getBlog"/>
+    </resultMap>
+
+    <resultMap id="BlogMap" type="com.spring.common.entity.bo.BlogMap" extends="com.spring.blog.dao.BlogDao.BlogMap">
+        <association property="user" column="user_id" select="getUser"/>
+    </resultMap>
+
+    <select id="selectAllByUserId" resultMap="HistoryBlogMap">
+        select *
+        from my_history
+        where user_id = #{userId}
+        <if test="isAsc == '0'">
+            order by history_time desc
+        </if>
+        <if test="isAsc == '1'">
+            order by history_time asc
+        </if>
+    </select>
+
+
+
+
+    <!---->
+    <select id="getBlog" resultMap="BlogMap">
+        select *
+        from my_blog
+        where blog_id = #{blog_id}
+    </select>
+
+    <select id="getUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
+        select user_id,
+               user_name,
+               user_img,
+               user_state
+        from my_user
+        where user_id = #{user_id}
+    </select>
+</mapper>

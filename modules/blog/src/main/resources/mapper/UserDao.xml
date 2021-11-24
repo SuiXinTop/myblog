@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blog.dao.UserDao">
+
+    <resultMap id="UserMap" type="com.spring.common.entity.po.User">
+        <!--@Table my_user-->
+        <id property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
+        <result property="userImg" column="user_img" jdbcType="VARCHAR"/>
+        <result property="userEmail" column="user_email" jdbcType="VARCHAR"/>
+        <result property="userAddress" column="user_address" jdbcType="VARCHAR"/>
+        <result property="userSex" column="user_sex" jdbcType="VARCHAR"/>
+        <result property="userState" column="user_state" jdbcType="INTEGER"/>
+        <result property="loginIp" column="login_ip" jdbcType="VARCHAR"/>
+        <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
+        <result property="registerTime" column="register_time" jdbcType="TIMESTAMP"/>
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="UserRoleMap" type="com.spring.common.entity.bo.UserMap" extends="UserMap">
+        <association property="role" column="role_id" select="getRole"/>
+    </resultMap>
+
+    <select id="selectAllByEmail" resultMap="UserRoleMap" parameterType="com.spring.common.entity.po.User">
+        select *
+        from my_user
+        where user_email = #{userEmail}
+    </select>
+
+    <select id="selectAllByUserId" resultMap="UserRoleMap">
+        select user_id,
+               user_name,
+               user_img,
+               user_email,
+               user_address,
+               user_sex,
+               user_state,
+               login_ip,
+               login_time,
+               register_time,
+               role_id
+        from my_user
+        where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+
+
+
+    <!---->
+    <select id="getRole" resultMap="com.spring.blog.dao.RoleDao.RoleMap">
+        select *
+        from my_role
+        where role_id = #{role_id}
+    </select>
+
+</mapper>

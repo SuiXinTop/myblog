@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author zmr
  * @author lucas
  */
-@ResponseStatus(code = HttpStatus.UNAUTHORIZED, reason = "unauthorized")
 public class UnauthorizedException extends RuntimeException {
 
     private static final String DEFAULT_MSG = "unauthorized";

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.blog.dao.ReplyDao">
+
+    <resultMap id="ReplyMap" type="com.spring.common.entity.po.Reply">
+        <!--@Table my_rely-->
+        <id property="replyId" column="reply_id" jdbcType="INTEGER"/>
+        <result property="comId" column="com_id" jdbcType="INTEGER"/>
+        <result property="replyOwner" column="reply_owner" jdbcType="INTEGER"/>
+        <result property="replyBody" column="reply_body" jdbcType="VARCHAR"/>
+        <result property="replyTime" column="reply_time" jdbcType="TIMESTAMP"/>
+        <result property="replyState" column="reply_state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="ReplyCommentMap" type="com.spring.common.entity.bo.ReplyMap" extends="ReplyMap">
+        <association property="comment" column="com_id" select="getComment"/>
+    </resultMap>
+
+    <resultMap id="CommentUserMap" type="com.spring.common.entity.bo.CommentMap"
+               extends="com.spring.blog.dao.CommentDao.CommentMap">
+        <association property="owner" column="com_owner" select="getUser"/>
+    </resultMap>
+
+    <select id="selectAllByOwner" resultMap="ReplyCommentMap">
+        select *
+        from my_rely
+        where reply_state = 1
+          and reply_owner = #{userId}
+    </select>
+
+
+
+
+    <!---->
+    <select id="getComment" resultMap="CommentUserMap">
+        select *
+        from my_comment
+        where com_id = #{com_id}
+    </select>
+
+    <select id="getUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
+        select user_id,
+               user_name,
+               user_img,
+               user_email,
+               user_address,
+               user_sex,
+               user_state,
+               login_ip,
+               login_time,
+               register_time
+        from my_user
+        where user_id = #{com_owner}
+    </select>
+</mapper>

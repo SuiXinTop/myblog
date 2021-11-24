@@ -23,7 +23,7 @@
 
     <select id="selectAllByOwner" resultMap="ReplyCommentMap">
         select *
-        from my_rely
+        from my_reply
         where reply_state = 1
           and reply_owner = #{userId}
     </select>

@@ -1,8 +1,6 @@
-package com.spring.rocket.elastic;
+package com.spring.elastic.service;
 
 import com.alibaba.fastjson.JSON;
-import com.spring.common.entity.po.Blog;
-import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -30,9 +28,12 @@ import java.util.Map;
  * @描述
  */
 @Service
-@RequiredArgsConstructor
 public class DocumentService {
     private final RestHighLevelClient restHighLevelClient;
+
+    public DocumentService(RestHighLevelClient restHighLevelClient) {
+        this.restHighLevelClient = restHighLevelClient;
+    }
 
     /**
      * 添加文档
@@ -44,17 +45,12 @@ public class DocumentService {
      * @throws IOException the io exception
      */
     public <T> IndexResponse addDocument(T t, String index, String id) throws IOException {
+        //创建请求
         IndexRequest request = new IndexRequest(index);
-        request.id(id);
-        request.timeout(TimeValue.timeValueSeconds(1));
-        request.source(JSON.toJSONString(t), XContentType.JSON);
-        return restHighLevelClient.index(request, RequestOptions.DEFAULT);
-    }
-
-    public <T> IndexResponse addDocument(T t, String index) throws IOException {
-        IndexRequest request = new IndexRequest(index);
-        request.timeout(TimeValue.timeValueSeconds(1))
+        request.id(id)
+                .timeout(TimeValue.timeValueSeconds(1))
                 .source(JSON.toJSONString(t), XContentType.JSON);
+        //客户端发送请求
         return restHighLevelClient.index(request, RequestOptions.DEFAULT);
     }
 
@@ -71,43 +67,45 @@ public class DocumentService {
         return restHighLevelClient.update(request, RequestOptions.DEFAULT);
     }
 
-    public boolean addBulkRequest(String index, List<Blog> list) throws IOException {
+    public <T> BulkResponse addBulkRequest(String index, List<T> tList, List<String> idList) throws IOException {
         BulkRequest request = new BulkRequest();
         request.timeout(TimeValue.timeValueSeconds(1));
 
-        list.forEach(i -> {
-            //批量更新或者删除只需修改方法即可
+        int i = 0;
+        for (T t : tList) {
             request.add(new IndexRequest(index)
-                            .id(i.getBlogId().toString())
+                    .id(idList.get(i))
                     .source(JSON.toJSONString(i), XContentType.JSON));
-        });
-        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
-        return !responses.hasFailures();
+            i++;
+        }
+
+        return restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
     }
 
-    public boolean updateBulkRequest(String index, List<Blog> list) throws IOException {
-        BulkRequest request = new BulkRequest();
-        request.timeout(TimeValue.timeValueSeconds(6));
-        list.forEach(i -> {
-            //批量更新或者删除只需修改方法即可
-            request.add(new UpdateRequest(index,i.getBlogId().toString())
-                    .doc(JSON.toJSONString(i),XContentType.JSON));
-        });
-        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
-        return !responses.hasFailures();
-    }
-
-    public <T> boolean delBulkRequest(String index, List<T> list) throws IOException {
+    public <T> BulkResponse deleteBulkRequest(String index, List<String> idList) throws IOException {
         BulkRequest request = new BulkRequest();
         request.timeout(TimeValue.timeValueSeconds(1));
 
-        list.forEach(i -> {
-            //批量更新或者删除只需修改方法即可
-            request.add(new DeleteRequest(index,i.toString()));
-        });
-        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
-        return !responses.hasFailures();
+        idList.stream().distinct().forEach(id -> request.add(new DeleteRequest(index, id)));
+
+        return restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
     }
+
+    public <T> BulkResponse updateBulkRequest(String index, List<T> tList, List<String> idList) throws IOException {
+        BulkRequest request = new BulkRequest();
+        request.timeout(TimeValue.timeValueSeconds(1));
+        int i = 0;
+        //批量更新或者删除只需修改方法即可
+
+        for (T t : tList) {
+            request.add(new UpdateRequest(index, idList.get(i))
+                    .doc(JSON.toJSONString(t), XContentType.JSON));
+            i++;
+        }
+
+        return restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
+    }
+
 
     public Map<String, Object> getDocument(String index, String id) throws IOException {
         GetRequest request = new GetRequest(index, id);

@@ -17,25 +17,25 @@ import java.util.List;
  * @since 2021-11-13 11:54:31
  */
 @RestController
-@RequestMapping("myTag")
+@RequestMapping("tag")
 @RequiredArgsConstructor
-@Api(tags = "博客标签模块(TODO)")
+@Api(tags = "博客标签模块")
 public class TagController {
     private final TagService tagService;
 
-    @PostMapping("/insert")
+    @PostMapping("")
     @ApiOperation(value = "新建标签")
     public RestMsg insert(@RequestBody List<Tag> tagList) {
         return tagService.insert(tagList);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     @ApiOperation(value = "删除标签")
     public RestMsg delete(List<Integer> tagIds) {
         return tagService.delete(tagIds);
     }
 
-    @GetMapping("/select")
+    @GetMapping("")
     @ApiOperation(value = "查询标签")
     public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {

@@ -5,13 +5,15 @@ import com.spring.blog.service.AuthService;
 import com.spring.blog.service.EmailService;
 import com.spring.common.constant.HttpConstant;
 import com.spring.common.entity.dto.EmailCode;
-import com.spring.common.entity.po.User;
-import com.spring.common.exception.user.HasLoginException;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.dto.UserLogin;
+import com.spring.common.exception.user.HasLoginException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author STARS
@@ -26,12 +28,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;
+    private final HttpServletRequest request;
 
     @PostMapping("/login")
     @ApiOperation(value = "登录授权", notes = "email,password")
-    public RestMsg login(@RequestBody User user,
-                         @RequestHeader(value = HttpConstant.TOKEN_NAME, required = false) String token) {
-        if (StrUtil.isNotEmpty(token)) {
+    public RestMsg login(@RequestBody UserLogin user) {
+        if (StrUtil.isNotEmpty(request.getHeader(HttpConstant.TOKEN_NAME))) {
             throw new HasLoginException();
         }
         return authService.login(user);
@@ -39,19 +41,17 @@ public class AuthController {
 
     @PostMapping("/admin")
     @ApiOperation(value = "管理员登录授权", notes = "email,password")
-    public RestMsg admin(@RequestBody User user,
-                         @RequestHeader(value = HttpConstant.TOKEN_NAME, required = false) String token) {
-        if (StrUtil.isNotEmpty(token)) {
+    public RestMsg admin(@RequestBody UserLogin user) {
+        if (StrUtil.isNotEmpty(request.getHeader(HttpConstant.TOKEN_NAME))) {
             throw new HasLoginException();
         }
         return authService.admin(user);
     }
 
-    @PostMapping("/emailLogin")
-    @ApiOperation(value = "邮箱登录授权", notes = "email,code")
-    public RestMsg emailLogin(@RequestBody EmailCode emailCode,
-                              @RequestHeader(value = HttpConstant.TOKEN_NAME, required = false) String token) {
-        if (StrUtil.isNotEmpty(token)) {
+    @PostMapping("/email")
+    @ApiOperation(value = "邮箱登录授权")
+    public RestMsg emailLogin(@RequestBody EmailCode emailCode) {
+        if (StrUtil.isNotEmpty(request.getHeader(HttpConstant.TOKEN_NAME))) {
             throw new HasLoginException();
         }
         return authService.login(emailCode);
@@ -63,10 +63,10 @@ public class AuthController {
         return authService.logout(token);
     }
 
-    @PostMapping("/emailCode")
+    @PostMapping("/verifyEmail")
     @ApiOperation(value = "发送邮箱验证码(消息)")
     public RestMsg emailCode(@RequestBody EmailCode emailCode) {
-       return emailService.verifyMail(emailCode);
+        return emailService.verifyMail(emailCode);
     }
 
     @PostMapping("/registerMail")

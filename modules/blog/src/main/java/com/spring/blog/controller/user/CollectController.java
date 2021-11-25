@@ -18,41 +18,41 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("myCollect")
+@RequestMapping("collect")
 @Api(tags = "收藏模块")
 public class CollectController {
     private final CollectService collectService;
 
-    @GetMapping("/select")
+    @GetMapping("")
     @ApiOperation(value = "查询个人收藏,默认时间倒序")
-    public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                   @RequestParam(value = "userId") int userId,
-                   @RequestParam(value = "isAsc", defaultValue = "0") int isAsc) {
+    public RestMsg select(@RequestParam(value = "userId") int userId,
+                          @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                          @RequestParam(value = "isAsc", defaultValue = "0") int isAsc) {
         return collectService.select(pageNum, pageSize, userId, isAsc);
     }
 
-    @PostMapping("/insert")
-    @ApiOperation(value = "添加收藏",notes = "blogId,userId")
+    @PostMapping("")
+    @ApiOperation(value = "添加收藏", notes = "blogId,userId")
     public RestMsg insert(@RequestBody Collect collect) {
         return collectService.insert(collect);
     }
 
-    @DeleteMapping("/deleteList")
+    @DeleteMapping("/inList")
     @ApiOperation(value = "个人中心删除收藏")
     public RestMsg deleteList(@RequestBody List<Integer> collectId) {
         return collectService.delete(collectId);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/inBlog")
     @ApiOperation(value = "博客删除收藏")
     public RestMsg delete(@RequestBody Collect collect) {
         return RestMsg.success("");
-    }
+    }//TODO
 
     @PostMapping("/hasCollect")
-    @ApiOperation(value = "是否已收藏",notes = "blogId,userId")
-    public boolean hasCollect(@RequestBody Collect collect){
+    @ApiOperation(value = "是否已收藏", notes = "blogId,userId")
+    public boolean hasCollect(@RequestBody Collect collect) {
         return collectService.hasCollect(collect);
     }
 

@@ -1,8 +1,6 @@
 package com.spring.common.entity.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -13,8 +11,10 @@ import java.io.Serializable;
  * @描述
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class UserLogin implements Serializable {
 
     private static final long serialVersionUID = -86422308011787984L;

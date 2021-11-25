@@ -10,18 +10,18 @@ import java.io.Serializable;
 /**
  * @author STARS
  * @创建者 SuiXinTop
- * @创建时间 2021-11-23
+ * @创建时间 2021-11-25
  * @描述
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserRegister extends UserLogin implements Serializable {
-
+public class UserSecurity extends UserLogin implements Serializable {
     private static final long serialVersionUID = -86422308011787984L;
 
-    private String userName;
+    private Integer userId;
 
     private String code;
+
 }

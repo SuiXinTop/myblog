@@ -19,27 +19,27 @@ import java.util.List;
  * @since 2021-11-13 11:52:24
  */
 @RestController
-@RequestMapping("myAnnouncement")
+@RequestMapping("announcement")
 @Api(tags = "系统公告模块")
 @RequiredArgsConstructor
 public class AnnouncementController {
     private final AnnouncementService announcementService;
 
-    @PostMapping("/insert")
+    @PostMapping("")
     @ApiOperation(value = "新建系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
     public RestMsg insert(@RequestBody Announcement announcement) {
         return announcementService.insert(announcement);
     }
 
-    @PostMapping("/update")
+    @PutMapping("")
     @ApiOperation(value = "修改系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
     public RestMsg update(@RequestBody Announcement announcement) {
         return announcementService.update(announcement);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     @ApiOperation(value = "删除系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
     public RestMsg delete(@RequestBody List<Integer> amtIds) {
@@ -53,8 +53,8 @@ public class AnnouncementController {
         return announcementService.top(amtIds);
     }
 
-    @GetMapping("/select")
-    @ApiOperation(value = "查看系统公告，置顶倒序")
+    @GetMapping("")
+    @ApiOperation(value = "查看系统公告")
     public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                           @RequestParam(value = "isAsc", defaultValue = "0") int isAsc) {

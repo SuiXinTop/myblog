@@ -1,7 +1,9 @@
 package com.spring.blog.service;
 
-import com.spring.common.entity.po.User;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.dto.UserRegister;
+import com.spring.common.entity.dto.UserSecurity;
+import com.spring.common.entity.po.User;
 
 /**
  * (MyUser)表服务接口
@@ -15,10 +17,9 @@ public interface UserService {
      * Register rest msg.
      *
      * @param user the my user
-     * @param code   the code
      * @return the rest msg
      */
-    RestMsg register(User user, String code);
+    RestMsg register(UserRegister user);
 
     /**
      * Update rest msg.
@@ -32,10 +33,9 @@ public interface UserService {
      * Update email rest msg.
      *
      * @param user the my user
-     * @param code   the code
      * @return the rest msg
      */
-    RestMsg updateSecurity(User user, String code);
+    RestMsg updateSecurity(UserSecurity user);
 
     /**
      * Select rest msg.
@@ -43,13 +43,21 @@ public interface UserService {
      * @param userId the user id
      * @return the rest msg
      */
-    RestMsg select(Integer userId);
+    RestMsg selectByUserId(Integer userId);
 
     /**
-     * Delete rest msg.
+     * Select by user name rest msg.
      *
-     * @param userId the user id
+     * @param userName the user name
      * @return the rest msg
      */
+    RestMsg selectByUserName(String userName, int pageNum, int pageSize);
+
+        /**
+         * Delete rest msg.
+         *
+         * @param userId the user id
+         * @return the rest msg
+         */
     RestMsg delete(Integer userId);
 }

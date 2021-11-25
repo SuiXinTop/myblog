@@ -1,6 +1,6 @@
 package com.spring.blog.controller.system;
 
-import com.spring.blog.elastic.DocumentService;
+import com.spring.blog.elastic.SearchService;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.dto.SearchModel;
 import io.swagger.annotations.Api;
@@ -23,16 +23,16 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Api(tags = "搜索引擎")
 public class SearchController {
-    private final DocumentService documentService;
+    private final SearchService searchService;
 
-    @GetMapping("/searchBlog")
+    @GetMapping("/blog")
     public RestMsg searchBlog(@RequestParam(value = "param", defaultValue = "") String param,
                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                               @RequestParam(value = "start", defaultValue = "") String start,
                               @RequestParam(value = "end", defaultValue = "") String end) throws IOException {
         SearchModel searchModel = new SearchModel(param, pageNum, pageSize, 1, start, end);
-        return documentService.boolSearchBlog(searchModel);
+        return searchService.boolSearchBlog(searchModel);
     }
 
 }

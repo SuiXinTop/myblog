@@ -17,31 +17,31 @@ import java.util.List;
  * @since 2021-11-13 11:54:04
  */
 @RestController
-@RequestMapping("myRely")
+@RequestMapping("rely")
 @RequiredArgsConstructor
 @Api(tags = "回复管理模块(TODO)")
 public class ReplyController {
     private final ReplyService replyService;
 
-    @PostMapping("/insert")
+    @PostMapping("")
     @ApiOperation(value = "新建回复")
     public RestMsg insert(@RequestBody Reply reply) {
         return replyService.insert(reply);
     }
 
-    @PostMapping("/update")
+    @PutMapping("")
     @ApiOperation(value = "修改回复内容")
     public RestMsg update(@RequestBody Reply reply) {
         return replyService.update(reply);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     @ApiOperation(value = "删除回复")
     public RestMsg delete(List<Integer> replyIds) {
         return replyService.delete(replyIds);
     }
 
-    @GetMapping("/select")
+    @GetMapping("/userId")
     @ApiOperation(value = "查看个人回复")
     public RestMsg select(@RequestParam(value = "userId") Integer userId,
                           @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,

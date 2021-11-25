@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("myRole")
+@RequestMapping("role")
 @Api(tags = "角色管理模块")
 public class RoleController {
 
     private final RoleService roleService;
 
-    @PostMapping("/select")
+    @GetMapping("/all")
     @ApiOperation(value = "查询所有角色")
     public RestMsg select(){
         return roleService.selectAll();

@@ -24,7 +24,7 @@ public class SysLogController {
 
     private final SysLogService sysLogService;
 
-    @GetMapping("/select")
+    @GetMapping("")
     @ApiOperation(value = "日志查询")
     public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,

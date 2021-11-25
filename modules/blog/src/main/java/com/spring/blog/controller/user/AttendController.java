@@ -17,19 +17,19 @@ import java.util.List;
  * @since 2021-11-13 11:53:05
  */
 @RestController
-@RequestMapping("myAttend")
+@RequestMapping("attend")
 @Api(tags = "好友管理模块")
 @RequiredArgsConstructor
 public class AttendController {
     private final AttendService attendService;
 
-    @PostMapping("/insert")
+    @PostMapping("")
     @ApiOperation(value = "添加关注")
     public RestMsg insert(@RequestBody Attend attend) {
         return attendService.insert(attend);
     }
 
-    @GetMapping("/selectAttend")
+    @GetMapping("/attendList")
     @ApiOperation(value = "查看关注列表")
     public RestMsg selectAttend(@RequestParam(value = "fansUserId") Integer fansUserId,
                                 @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -37,7 +37,7 @@ public class AttendController {
         return attendService.selectAttend(fansUserId, pageNum, pageSize);
     }
 
-    @GetMapping("/selectFans")
+    @GetMapping("/fansList")
     @ApiOperation(value = "查看粉丝列表")
     public RestMsg selectFans(@RequestParam(value = "attendUserId") Integer attendUserId,
                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -45,7 +45,7 @@ public class AttendController {
         return attendService.selectFans(attendUserId, pageNum, pageSize);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     @ApiOperation(value = "逻辑删除关注或粉丝")
     public RestMsg delete(@RequestBody List<Integer> attendIds) {
         return attendService.delete(attendIds);

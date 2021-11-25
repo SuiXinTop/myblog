@@ -1,8 +1,8 @@
 package com.spring.blog.service;
 
-import com.spring.common.entity.po.User;
 import com.spring.common.entity.dto.EmailCode;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.dto.UserLogin;
 
 /**
  * The interface Auth service.
@@ -20,7 +20,7 @@ public interface AuthService {
      * @param user the my user
      * @return the rest msg
      */
-    RestMsg login(User user);
+    RestMsg login(UserLogin user);
 
     /**
      * Email login rest msg.
@@ -36,7 +36,7 @@ public interface AuthService {
      * @param user the my user
      * @return the rest msg
      */
-    RestMsg admin(User user);
+    RestMsg admin(UserLogin user);
 
     /**
      * Logout rest msg.

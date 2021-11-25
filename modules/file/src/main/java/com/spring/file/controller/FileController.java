@@ -28,7 +28,7 @@ public class FileController {
     private final FileService fileService;
 
     @SneakyThrows(Exception.class)
-    @PostMapping("/upLoadUserImg")
+    @PostMapping("/userImg")
     @ApiOperation(value = "用户头像上传")
     public RestMsg upLoadUserImg(@RequestParam(value = "file") MultipartFile file,
                                  @RequestParam(value = "userId") Integer userId) {
@@ -36,7 +36,7 @@ public class FileController {
     }
 
     @SneakyThrows(Exception.class)
-    @PostMapping("/upLoadBlogImg")
+    @PostMapping("/blogImg")
     @ApiOperation(value = "博客封面上传")
     public RestMsg upLoadBlogImg(@RequestParam(value = "file") MultipartFile file,
                                  @RequestParam(value = "blogId") Integer blogId) {
@@ -44,7 +44,7 @@ public class FileController {
     }
 
     @SneakyThrows(Exception.class)
-    @PostMapping("/upLoadBlog")
+    @PostMapping("/blog")
     @ApiOperation(value = "博客内容上传")
     public RestMsg upLoadBlog(@RequestParam(value = "file") MultipartFile[] files) {
         return fileService.upLoadBlogContent(files);

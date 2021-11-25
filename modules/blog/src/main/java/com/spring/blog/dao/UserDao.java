@@ -4,28 +4,38 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.spring.common.entity.bo.UserMap;
 import com.spring.common.entity.po.User;
 
+import java.util.List;
+
 /**
  * (MyUser)表数据库访问层
  *
  * @author makejava
- * @since 2021-11-13 11:54:50
+ * @since 2021 -11-13 11:54:50
  */
 public interface UserDao extends BaseMapper<User> {
 
   /**
    * Select user role my user.
    *
-   * @param user the my user
+   * @param userEmail the user email
    * @return the my user
    */
-  UserMap selectAllByEmail(User user);
+  UserMap selectAllByEmail(String userEmail);
 
   /**
    * Select all by user id my user.
    *
-   * @param user the my user
+   * @param userId the user id
    * @return the my user
    */
-  UserMap selectAllByUserId(User user);
+  UserMap selectAllByUserId(Integer userId);
+
+  /**
+   * Select all by user name list.
+   *
+   * @param userName the user name
+   * @return the list
+   */
+  List<UserMap> selectAllByUserName(String userName);
 
 }

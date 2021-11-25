@@ -22,10 +22,10 @@
         <association property="role" column="role_id" select="getRole"/>
     </resultMap>
 
-    <select id="selectAllByEmail" resultMap="UserRoleMap" parameterType="com.spring.common.entity.po.User">
+    <select id="selectAllByEmail" resultMap="UserRoleMap">
         select *
         from my_user
-        where user_email = #{userEmail}
+        where user_email = #{userEmail,jdbcType=VARCHAR}
     </select>
 
     <select id="selectAllByUserId" resultMap="UserRoleMap">
@@ -42,6 +42,22 @@
                role_id
         from my_user
         where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAllByUserName" resultMap="UserRoleMap">
+        select user_id,
+               user_name,
+               user_img,
+               user_email,
+               user_address,
+               user_sex,
+               user_state,
+               login_ip,
+               login_time,
+               register_time,
+               role_id
+        from my_user
+        where user_name LIKE CONCAT('%',#{userName},'%')
     </select>
 
 

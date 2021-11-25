@@ -17,31 +17,31 @@ import java.util.List;
  * @since 2021-11-13 11:53:51
  */
 @RestController
-@RequestMapping("myComment")
+@RequestMapping("comment")
 @Api(tags = "评论管理模块")
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/insert")
+    @PostMapping("")
     @ApiOperation(value = "新建评论")
     public RestMsg insert(@RequestBody Comment comment) {
         return commentService.insert(comment);
     }
 
-    @PostMapping("/update")
+    @PutMapping("")
     @ApiOperation(value = "修改评论内容")
     public RestMsg update(@RequestBody Comment comment) {
         return commentService.update(comment);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     @ApiOperation(value = "删除评论")
     public RestMsg delete(@RequestBody List<Integer> comIds) {
         return commentService.delete(comIds);
     }
 
-    @GetMapping("/selectByBlogId")
+    @GetMapping("/blogId")
     @ApiOperation(value = "查询博客评论")
     public RestMsg selectByBlogId(@RequestParam(value = "blogId") Integer blogId,
                                   @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -49,11 +49,11 @@ public class CommentController {
         return commentService.selectByBlogId(blogId, pageNum, pageSize);
     }
 
-    @GetMapping("/selectByUserId")
+    @GetMapping("/userId")
     @ApiOperation(value = "查询个人历史评论")
-    public RestMsg select(@RequestParam(value = "userId") Integer userId,
-                          @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    public RestMsg selectByUserId(@RequestParam(value = "userId") Integer userId,
+                                  @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return commentService.selectByUserId(userId, pageNum, pageSize);
     }
 

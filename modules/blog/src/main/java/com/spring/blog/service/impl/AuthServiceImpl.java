@@ -12,6 +12,7 @@ import com.spring.common.constant.UserConstant;
 import com.spring.common.entity.bo.UserMap;
 import com.spring.common.entity.dto.EmailCode;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.dto.UserLogin;
 import com.spring.common.entity.po.User;
 import com.spring.common.exception.user.*;
 import com.spring.common.util.RequestUtil;
@@ -40,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final HttpServletRequest request;
 
     @Override
-    public RestMsg login(User user) {
+    public RestMsg login(UserLogin user) {
         if (!redisService.hasKey(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail())) {
             redisService.setExpire(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail(),
                     1, RedisConstant.LOGIN_EXPIRE_TIME);
@@ -52,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
             redisService.increment(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail(), 1);
         }
 
-        UserMap result = userDao.selectAllByEmail(user);
+        UserMap result = userDao.selectAllByEmail(user.getUserEmail());
         if (result == null) {
             throw new UserNotExistsException();
         }
@@ -66,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
         String loginIp = RequestUtil.getIpAddress(request);
         Date loginTime = new DateTime();
 
+        //修改登陆时间和ip
         User update = User.builder().userId(result.getUserId())
                 .loginIp(loginIp)
                 .loginTime(loginTime).build();
@@ -83,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RestMsg admin(User user) {
+    public RestMsg admin(UserLogin user) {
         if (!redisService.hasKey(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail())) {
             redisService.setExpire(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail(),
                     1, RedisConstant.LOGIN_EXPIRE_TIME);
@@ -95,7 +97,7 @@ public class AuthServiceImpl implements AuthService {
             redisService.increment(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail(), 1);
         }
 
-        UserMap result = userDao.selectAllByEmail(user);
+        UserMap result = userDao.selectAllByEmail(user.getUserEmail());
         if (result == null) {
             throw new UserNotExistsException();
         }
@@ -115,7 +117,9 @@ public class AuthServiceImpl implements AuthService {
         String loginIp = RequestUtil.getIpAddress(request);
         Date loginTime = new DateTime();
 
-        User update = User.builder().userId(result.getUserId())
+        //修改登陆时间和ip
+        User update = User.builder()
+                .userId(result.getUserId())
                 .loginIp(RequestUtil.getIpAddress(request))
                 .loginTime(new DateTime()).build();
         userDao.updateById(update);
@@ -145,8 +149,7 @@ public class AuthServiceImpl implements AuthService {
             throw new EmailCodeNotMatchException();
         }
 
-        User user = User.builder().userEmail(emailCode.getEmail()).build();
-        UserMap result = userDao.selectAllByEmail(user);
+        UserMap result = userDao.selectAllByEmail(emailCode.getEmail());
 
         if (result == null) {
             throw new UserNotExistsException();
@@ -155,7 +158,9 @@ public class AuthServiceImpl implements AuthService {
         String loginIp = RequestUtil.getIpAddress(request);
         Date loginTime = new DateTime();
 
-        User update = User.builder().userId(result.getUserId())
+        //修改登陆时间和ip
+        User update = User.builder()
+                .userId(result.getUserId())
                 .loginIp(RequestUtil.getIpAddress(request))
                 .loginTime(new DateTime()).build();
         userDao.updateById(update);

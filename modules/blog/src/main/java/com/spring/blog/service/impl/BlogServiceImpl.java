@@ -1,6 +1,8 @@
 package com.spring.blog.service.impl;
 
 import cn.hutool.core.date.DateTime;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.spring.blog.dao.BlogDao;
 import com.spring.blog.dao.BlogTagDao;
 import com.spring.blog.service.BlogService;
@@ -65,6 +67,20 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public RestMsg recoverBlog(List<Integer> blogIdList) {
+        if (blogIdList.isEmpty()) {
+            throw new ServiceException(MsgConstant.UPDATE_FAULT);
+        }
+        blogIdList.forEach(blogId -> {
+            if (blogDao.updateBlogState(blogId) == Status.Exception.ordinal()) {
+                throw new ServiceException(MsgConstant.UPDATE_FAULT);
+            }
+        });
+        return RestMsg.success(MsgConstant.UPDATE_SUCCESS, null);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public RestMsg delete(List<Integer> blogIds) {
         if (blogDao.deleteBatchIds(blogIds) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.DELETE_FAULT);
@@ -95,6 +111,16 @@ public class BlogServiceImpl implements BlogService {
 
 
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, blog);
+    }
+
+    @Override
+    public RestMsg selectException(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<BlogMap> blogList = blogDao.selectException();
+        if (blogList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(blogList));
     }
 
     @Override

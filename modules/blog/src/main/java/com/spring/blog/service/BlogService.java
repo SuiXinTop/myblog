@@ -30,6 +30,8 @@ public interface BlogService {
      */
     RestMsg update(Blog blog);
 
+    RestMsg recoverBlog(List<Integer> blogIdList);
+
     /**
      * Delete rest msg.
      *
@@ -45,6 +47,8 @@ public interface BlogService {
      * @return the rest msg
      */
     RestMsg select(Integer blogId);
+
+    RestMsg selectException(int pageNum, int pageSize);
 
     /**
      * Select by hot rest msg.
@@ -89,5 +93,5 @@ public interface BlogService {
      * @param blogId     the blog id
      * @return the rest msg
      */
-    RestMsg deleteTag(List<Integer> blogTagIds,Integer blogId);
+    RestMsg deleteTag(List<Integer> blogTagIds, Integer blogId);
 }

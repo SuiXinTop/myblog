@@ -5,6 +5,8 @@ import com.spring.common.entity.dto.UserRegister;
 import com.spring.common.entity.dto.UserSecurity;
 import com.spring.common.entity.po.User;
 
+import java.util.List;
+
 /**
  * (MyUser)表服务接口
  *
@@ -29,12 +31,16 @@ public interface UserService {
      */
     RestMsg update(User user);
 
-    /**
-     * Update email rest msg.
-     *
-     * @param user the my user
-     * @return the rest msg
-     */
+    RestMsg recoverState(List<Integer> userIdList);
+
+    RestMsg updateRole(Integer userId, Integer roleId);
+
+        /**
+         * Update email rest msg.
+         *
+         * @param user the my user
+         * @return the rest msg
+         */
     RestMsg updateSecurity(UserSecurity user);
 
     /**
@@ -44,6 +50,8 @@ public interface UserService {
      * @return the rest msg
      */
     RestMsg selectByUserId(Integer userId);
+
+    RestMsg selectException(int pageNum, int pageSize);
 
     /**
      * Select by user name rest msg.
@@ -60,4 +68,6 @@ public interface UserService {
          * @return the rest msg
          */
     RestMsg delete(Integer userId);
+
+    RestMsg deleteList(List<Integer> userIdList);
 }

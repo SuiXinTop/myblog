@@ -1,9 +1,9 @@
 server:
-  port: 8080
+  port: 8004
 #配置数据库信息
 spring:
   application:
-    name: blog
+    name: chat
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://118.31.15.127:3306/myblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
@@ -21,10 +21,6 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy年MM月dd日 HH:mm:ss
-  elasticsearch:
-    rest:
-      uris: 47.98.209.26:9200
-      connection-timeout: 1000
   redis:
     host: 118.31.15.127
     database: 0

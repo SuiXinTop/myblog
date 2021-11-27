@@ -1,8 +1,8 @@
-package com.spring.blog.controller.system;
+package com.spring.auth.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.spring.blog.service.AuthService;
-import com.spring.blog.service.EmailService;
+import com.spring.auth.service.AuthService;
+import com.spring.auth.service.EmailService;
 import com.spring.common.constant.HttpConstant;
 import com.spring.common.entity.dto.EmailCode;
 import com.spring.common.entity.dto.RestMsg;

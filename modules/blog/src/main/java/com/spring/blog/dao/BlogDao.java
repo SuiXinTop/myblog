@@ -23,6 +23,8 @@ public interface BlogDao extends BaseMapper<Blog> {
      */
     BlogMap selectByBlogId(Integer blogId);
 
+    List<BlogMap> selectException();
+
     /**
      * Select hot list.
      *
@@ -36,6 +38,9 @@ public interface BlogDao extends BaseMapper<Blog> {
      * @return the list
      */
     List<BlogMap> selectNew();
+
+    @Update("update my_blog set blog_state =1 where blog_id = #{blogId}")
+    Integer updateBlogState(Integer blogId);
 
     /**
      * Add collect.

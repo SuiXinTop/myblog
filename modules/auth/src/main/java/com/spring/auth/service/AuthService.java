@@ -1,4 +1,4 @@
-package com.spring.blog.service;
+package com.spring.auth.service;
 
 import com.spring.common.entity.dto.EmailCode;
 import com.spring.common.entity.dto.RestMsg;

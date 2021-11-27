@@ -1,4 +1,4 @@
-package com.spring.blog.controller.system;
+package com.spring.blog.controller.admin;
 
 import com.spring.blog.service.SysLogService;
 import com.spring.common.entity.dto.RestMsg;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("sysLog")
-@Api(tags = "系统日志模块")
+@Api(tags = "系统日志模块",consumes = "admin")
 public class SysLogController {
 
     private final SysLogService sysLogService;

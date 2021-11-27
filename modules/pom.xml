@@ -16,6 +16,8 @@
         <module>blog</module>
         <module>file</module>
         <module>rocket</module>
+        <module>chat</module>
+        <module>auth</module>
     </modules>
 
 </project>

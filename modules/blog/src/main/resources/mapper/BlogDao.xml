@@ -35,6 +35,13 @@
           AND mb.blog_id = #{blogId}
     </select>
 
+    <select id="selectException" resultMap="BlogUserMap">
+        SELECT *
+        FROM my_blog mb
+        WHERE mb.blog_state = 0
+    </select>
+
+
     <select id="selectHot" resultMap="BlogUserMap">
         SELECT *
         FROM my_blog mb
@@ -50,8 +57,6 @@
         ORDER BY blog_time DESC
         LIMIT 10
     </select>
-
-
 
 
     <!---->

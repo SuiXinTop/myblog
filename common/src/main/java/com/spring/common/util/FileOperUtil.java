@@ -3,7 +3,6 @@ package com.spring.common.util;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.pinyin.PinyinUtil;
 import com.spring.common.exception.ServiceException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +29,7 @@ public class FileOperUtil {
      * 编码文件名
      */
     public static String extractFilename(MultipartFile file) {
-        String name = PinyinUtil.getPinyin(FileUtil.getPrefix(file.getOriginalFilename()));
+        String name = SecurityUtil.getMd5Hex(file.getOriginalFilename());
         String extension = FileUtil.getSuffix(file.getOriginalFilename());
         if (StrUtil.isEmpty(extension)) {
             extension = "txt";

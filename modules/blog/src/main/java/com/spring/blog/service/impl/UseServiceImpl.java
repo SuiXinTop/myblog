@@ -30,9 +30,9 @@ import java.util.List;
  * @author makejava
  * @since 2021-11-13 11:54:50
  */
-@Service("myUserService")
+@Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UseServiceImpl implements UserService {
     private final UserDao userDao;
     private final RedisService redisService;
 
@@ -62,6 +62,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public RestMsg update(User user) {
         if (userDao.updateById(user) == Status.Exception.ordinal()) {
+            throw new ServiceException(MsgConstant.UPDATE_FAULT);
+        }
+        return RestMsg.success(MsgConstant.UPDATE_SUCCESS, null);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public RestMsg recoverState(List<Integer> userIdList) {
+        if (userIdList.isEmpty()) {
+            throw new ServiceException(MsgConstant.UPDATE_FAULT);
+        }
+        userIdList.forEach(userId -> {
+            if (userDao.updateUserState(userId) == Status.Exception.ordinal()) {
+                throw new ServiceException(MsgConstant.UPDATE_FAULT);
+            }
+        });
+        return RestMsg.success(MsgConstant.UPDATE_SUCCESS, null);
+    }
+
+    @Override
+    public RestMsg updateRole(Integer userId, Integer roleId) {
+        User update = User.builder().userId(userId).roleId(roleId).build();
+        if (userDao.updateById(update) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.UPDATE_FAULT);
         }
         return RestMsg.success(MsgConstant.UPDATE_SUCCESS, null);
@@ -100,10 +123,23 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
 
-        result.setUserPassword(null);
         result.setUserEmail(DesensitizedUtil.email(result.getUserEmail()));
 
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, result);
+    }
+
+    @Override
+    public RestMsg selectException(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserMap> userMapList = userDao.selectException();
+        if (userMapList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+
+        userMapList.stream().map(User::getUserEmail)
+                .forEach(DesensitizedUtil::email);
+
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(userMapList));
     }
 
     @Override
@@ -120,8 +156,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public RestMsg delete(Integer userId) {
         if (userDao.deleteById(userId) == Status.Exception.ordinal()) {
-            throw new ServiceException(MsgConstant.DELETE_USER_SUCCESS);
+            throw new ServiceException(MsgConstant.DELETE_USER_FAULT);
         }
-        return RestMsg.success(MsgConstant.DELETE_USER_FAULT, null);
+        return RestMsg.success(MsgConstant.DELETE_USER_SUCCESS, null);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public RestMsg deleteList(List<Integer> userIdList) {
+        if (userIdList.isEmpty()) {
+            throw new ServiceException(MsgConstant.DELETE_USER_FAULT);
+        }
+        if (userDao.deleteBatchIds(userIdList) == Status.Exception.ordinal()) {
+            throw new ServiceException(MsgConstant.DELETE_USER_FAULT);
+        }
+        return RestMsg.success(MsgConstant.DELETE_USER_SUCCESS, null);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.spring.blog.controller.system;
+package com.spring.blog.controller.admin;
 
 import com.spring.security.annotation.PreRole;
 import com.spring.blog.service.AnnouncementService;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("announcement")
-@Api(tags = "系统公告模块")
+@Api(tags = "系统公告模块",consumes = "admin")
 @RequiredArgsConstructor
 public class AnnouncementController {
     private final AnnouncementService announcementService;

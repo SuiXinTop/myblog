@@ -1,10 +1,10 @@
-package com.spring.blog.service.impl;
+package com.spring.auth.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.core.util.StrUtil;
-import com.spring.blog.dao.UserDao;
-import com.spring.blog.service.AuthService;
+import com.spring.auth.dao.UserDao;
+import com.spring.auth.service.AuthService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.constant.RoleConstant;

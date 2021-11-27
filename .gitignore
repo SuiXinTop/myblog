@@ -5,7 +5,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-vue3.x/
+
 ### STS ###
 .apt_generated
 .classpath
@@ -38,11 +38,3 @@ build/
 /mvnw.cmd
 /.mvn/
 
-/vue3.x/
-/vue3.x/public/
-/vue3.x/src/
-/vue3.x/.gitignore
-/vue3.x/babel.config.js
-/vue3.x/package.json
-/vue3.x/package-lock.json
-/vue3.x/vue.config.js

@@ -1,7 +1,10 @@
 package com.spring.blog.controller.admin;
 
+import com.spring.common.entity.dto.RestMsg;
+import com.spring.redis.service.RedisService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,8 +15,25 @@ import org.springframework.web.bind.annotation.RestController;
  * @描述
  */
 @RestController
-@RequestMapping("dataDisplay")
+@RequestMapping("admin/display")
 @RequiredArgsConstructor
-@Api(tags = "后台数据显示(TODO)")
+@Api(tags = "后台数据显示",consumes = "admin")
 public class DataDisplayController {
+    private final RedisService redisService;
+
+    @GetMapping("/online")
+    public RestMsg getOnlineCount() {
+        return RestMsg.success("");
+    }
+
+    @GetMapping("/blogCount")
+    public RestMsg blogCount() {
+        return RestMsg.success("");
+    }
+
+    @GetMapping("/userCount")
+    public RestMsg userCount() {
+        return RestMsg.success("");
+    }
+
 }

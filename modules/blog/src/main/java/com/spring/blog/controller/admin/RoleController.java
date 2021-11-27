@@ -1,4 +1,4 @@
-package com.spring.blog.controller.user;
+package com.spring.blog.controller.admin;
 
 import com.spring.blog.service.RoleService;
 import com.spring.common.entity.dto.RestMsg;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("role")
-@Api(tags = "角色管理模块")
+@Api(tags = "角色管理模块",consumes = "admin")
 public class RoleController {
 
     private final RoleService roleService;

@@ -1,4 +1,4 @@
-package com.spring.security.handler;
+package com.spring.common.handler;
 
 import com.spring.common.exception.ServiceException;
 import com.spring.common.exception.UnauthorizedException;

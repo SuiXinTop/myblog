@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.chat.dao.ChatGroupDao">
+
+    <resultMap id="ChatGroupMap" type="com.spring.common.entity.po.ChatGroup">
+        <!--@Table chat_group-->
+        <id property="msgId" column="msg_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="msgContent" column="msg_content" jdbcType="VARCHAR"/>
+        <result property="msgTime" column="msg_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="ChatGroupUserMap" type="com.spring.common.entity.bo.ChatGroupMap">
+        <association property="user" column="user_id" select="getUser"/>
+    </resultMap>
+
+    <resultMap id="UserMap" type="com.spring.common.entity.po.User">
+        <id property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userImg" column="user_img" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
+
+    <select id="getUser" resultMap="UserMap">
+        select user_id,user_name,user_img
+        from my_user
+        where user_id = #{user_id}
+    </select>
+</mapper>

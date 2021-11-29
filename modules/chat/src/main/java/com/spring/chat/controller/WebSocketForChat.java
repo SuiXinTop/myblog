@@ -75,7 +75,7 @@ public class WebSocketForChat {
     @OnMessage
     public void onMessage(String message) {
         ChatMsg chatMsg = ChatMsg.builder()
-                .channelId(channelId)
+                .channelId(otherChannelId)
                 .msgContent(message)
                 .msgTime(new DateTime())
                 .build();

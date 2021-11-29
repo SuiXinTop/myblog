@@ -59,6 +59,12 @@ public class ChatService {
         if (chatMsgList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
+
+        ChatMsg update = ChatMsg.builder().msgStatus(1).build();
+        chatMsgList.forEach(i -> {
+            update.setMsgId(i.getMsgId());
+            chatMsgDao.updateById(update);
+        });
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, chatMsgList);
     }
 

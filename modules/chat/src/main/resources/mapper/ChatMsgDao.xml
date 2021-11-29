@@ -18,7 +18,6 @@
         select *
         from chat_msg
         where channel_id = #{channelId}
-        order by channel_id
         limit 20
     </select>
 

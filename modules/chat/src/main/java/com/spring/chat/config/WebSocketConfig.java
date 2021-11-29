@@ -4,11 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.websocket.HandshakeResponse;
 import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpointConfig;
@@ -24,11 +21,11 @@ import javax.websocket.server.ServerEndpointConfig;
 public class WebSocketConfig extends ServerEndpointConfig.Configurator {
     @Override
     public boolean checkOrigin(String originHeaderValue) {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert servletRequestAttributes != null;
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-
-        String token = request.getParameter("token");
+//        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//        assert servletRequestAttributes != null;
+//        HttpServletRequest request = servletRequestAttributes.getRequest();
+//
+//        String token = request.getParameter("token");
         log.info("token {}", originHeaderValue);
         return super.checkOrigin(originHeaderValue);
     }

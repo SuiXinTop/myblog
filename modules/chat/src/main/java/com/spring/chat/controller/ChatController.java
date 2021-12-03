@@ -29,9 +29,4 @@ public class ChatController {
         return chatService.createChannel(fromUser, toUser);
     }
 
-    @GetMapping("/lastMsg/{channelId}")
-    public RestMsg getLastMsg(@PathVariable(value = "channelId") Integer channelId) {
-        return chatService.getLastMsg(channelId);
-    }
-
 }

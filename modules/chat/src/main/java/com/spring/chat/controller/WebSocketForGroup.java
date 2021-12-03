@@ -1,6 +1,7 @@
 package com.spring.chat.controller;
 
 import com.spring.chat.config.WebSocketConfig;
+import com.spring.chat.config.WebSocketEncode;
 import com.spring.chat.service.ChatGroupService;
 import com.spring.common.entity.po.User;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * ws://localhost:8004/group/{userId}
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @Component
-@ServerEndpoint(value = "/group/{userId}", configurator = WebSocketConfig.class)
+@ServerEndpoint(value = "/group/{userId}", configurator = WebSocketConfig.class,encoders = WebSocketEncode.class)
 public class WebSocketForGroup {
 
     private static ChatGroupService chatGroupService;
@@ -40,7 +40,6 @@ public class WebSocketForGroup {
      * 用来保存websocket连接信息，供统计查询当前连接数使用
      */
     private static Map<String, Session> SessionPool = new ConcurrentHashMap<>();
-    private static AtomicInteger count = new AtomicInteger(0);
     private Session session;
     private User user;
 
@@ -58,7 +57,6 @@ public class WebSocketForGroup {
         this.user = new User();
 
         sendToFrom("连接成功");
-        count.incrementAndGet();
     }
 
     /**
@@ -100,7 +98,6 @@ public class WebSocketForGroup {
     public void onClose() {
         log.debug("websocket连接onClose。{}", this);
         SessionPool.remove(user.getUserId().toString());
-        count.decrementAndGet();
         //然后关闭
         this.close();
     }

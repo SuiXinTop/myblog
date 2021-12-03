@@ -17,8 +17,7 @@
     <select id="getLastMsg" resultMap="ChatMsgMap">
         select *
         from chat_msg
-        where channel_id = #{channelId}
-        limit 20
+        where msg_status = 0 and channel_id = #{channelId}
     </select>
 
 

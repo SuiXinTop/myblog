@@ -54,18 +54,19 @@ public class ChatService {
         return chatChannelDao.getChannelId(chatChannel);
     }
 
-    public RestMsg getLastMsg(Integer channelId) {
+    public List<ChatMsg> getLastMsg(Integer channelId) {
         List<ChatMsg> chatMsgList = chatMsgDao.getLastMsg(channelId);
-        if (chatMsgList.isEmpty()) {
-            throw new ServiceException(MsgConstant.NO_DATA);
-        }
-
-        ChatMsg update = ChatMsg.builder().msgStatus(1).build();
-        chatMsgList.forEach(i -> {
-            update.setMsgId(i.getMsgId());
-            chatMsgDao.updateById(update);
-        });
-        return RestMsg.success(MsgConstant.SELECT_SUCCESS, chatMsgList);
+//        if (chatMsgList.isEmpty()) {
+//            throw new ServiceException(MsgConstant.NO_DATA);
+//        }
+//
+//        ChatMsg update = ChatMsg.builder().msgStatus(1).build();
+//        chatMsgList.forEach(i -> {
+//            update.setMsgId(i.getMsgId());
+//            chatMsgDao.updateById(update);
+//        });
+//        return RestMsg.success(MsgConstant.SELECT_SUCCESS, chatMsgList);
+        return chatMsgList;
     }
 
     @Transactional(rollbackFor = Exception.class)

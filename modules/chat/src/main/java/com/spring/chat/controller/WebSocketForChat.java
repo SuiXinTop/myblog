@@ -1,10 +1,11 @@
 package com.spring.chat.controller;
 
 import cn.hutool.core.date.DateTime;
-import cn.hutool.json.JSONUtil;
 import com.spring.chat.config.WebSocketConfig;
+import com.spring.chat.config.WebSocketEncode;
 import com.spring.chat.service.ChatService;
 import com.spring.common.entity.bo.ChatChannelMap;
+import com.spring.common.entity.dto.WebSocketMsg;
 import com.spring.common.entity.po.ChatMsg;
 import com.spring.common.entity.po.User;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,16 +25,21 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author STARS
  * @创建者 SuiXinTop
- * @创建时间 2021-11-27
+ * @创建时间 2021 -11-27
  * @描述
  */
 @Slf4j
 @Component
-@ServerEndpoint(value = "/chat/{channelId}", configurator = WebSocketConfig.class)
+@ServerEndpoint(value = "/chat/{channelId}", configurator = WebSocketConfig.class, encoders = WebSocketEncode.class)
 public class WebSocketForChat {
 
     private static ChatService chatService;
 
+    /**
+     * Sets og location service.
+     *
+     * @param chatService the chat service
+     */
     @Autowired
     public void setOgLocationService(ChatService chatService) {
         WebSocketForChat.chatService = chatService;
@@ -42,29 +49,44 @@ public class WebSocketForChat {
     /**
      * 用来保存websocket连接信息，供统计查询当前连接数使用
      */
-    private static final Map<String, Session> SessionPool = new ConcurrentHashMap<>();
+    private static Map<String, WebSocketForChat> webSocketPool = new ConcurrentHashMap<>();
     private Session session;
+
     private Integer channelId;
+    private User fromUser;
+
     private Integer otherChannelId;
+    private User toUser;
+
 
     /**
      * 连接建立成功调用的方法
      *
-     * @param session 链接session
+     * @param session   链接session
+     * @param channelId the channel id
      */
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "channelId") Integer channelId) {
-
-        SessionPool.putIfAbsent(channelId.toString(), session);
+        webSocketPool.put(channelId.toString(), this);
         this.session = session;
+        this.channelId = channelId;
 
         ChatChannelMap chatChannelMap = chatService.getChannel(channelId);
-        User fromUser = chatChannelMap.getFromUserMap();
-        User toUser = chatChannelMap.getToUserMap();
-        this.channelId = channelId;
+        fromUser = chatChannelMap.getFromUserMap();
+        toUser = chatChannelMap.getToUserMap();
+
         this.otherChannelId = chatService.getChannelId(fromUser.getUserId(), toUser.getUserId());
 
-        sendToFrom("连接成功");
+        List<ChatMsg> msgList = chatService.getLastMsg(channelId);
+        if (!msgList.isEmpty()) {
+            WebSocketMsg chatMsg = WebSocketMsg.builder().user(toUser).build();
+            msgList.forEach(msg -> {
+                chatMsg.setMsgContent(msg.getMsgContent());
+                chatMsg.setMsgTime(msg.getMsgTime());
+                sendToFrom(chatMsg);
+            });
+        }
+        log.info("连接成功:{}", channelId);
     }
 
     /**
@@ -74,24 +96,28 @@ public class WebSocketForChat {
      */
     @OnMessage
     public void onMessage(String message) {
-        ChatMsg chatMsg = ChatMsg.builder()
-                .channelId(otherChannelId)
+        if (!webSocketPool.containsKey(channelId.toString())) {
+            return;
+        }
+//        ChatMsg chatMsg = ChatMsg.builder()
+//                .channelId(otherChannelId)
+//                .msgContent(message)
+//                .msgTime(new DateTime())
+//                .build();
+        //若对方不在线则不推送消息，直接存入mysql
+        if (!webSocketPool.containsKey(otherChannelId.toString())) {
+//            chatMsg.setMsgStatus(0);
+//            chatService.insertMsg(chatMsg);
+            return;
+        }
+
+        WebSocketMsg webSocketMsg = WebSocketMsg.builder()
+                .user(toUser)
                 .msgContent(message)
                 .msgTime(new DateTime())
                 .build();
-
-        if (!SessionPool.containsKey(channelId.toString())) {
-            return;
-        }
-
-        //若对方不在线则不推送消息，直接存入mysql
-        if (!SessionPool.containsKey(otherChannelId.toString())) {
-            chatMsg.setMsgStatus(0);
-            chatService.insertMsg(chatMsg);
-            return;
-        }
-        push(chatMsg);
-        chatService.insertMsg(chatMsg);
+        sendToOther(webSocketMsg);
+//        chatService.insertMsg(chatMsg);
     }
 
     /**
@@ -103,9 +129,8 @@ public class WebSocketForChat {
     @OnError
     public void onError(Session session, Throwable throwable) {
         if (this.session != null && this.session.isOpen()) {
-            sendToFrom("错误");
+            sendToFrom(new WebSocketMsg(fromUser, "传输错误", new DateTime()));
             log.error("websocket连接onError。inputSession：{}-localSession：{}", session.getId(), this, throwable);
-            this.close();
         } else {
             log.debug("已经关闭的websocket连接发生异常！inputSession：{}-localSession：{}", session.getId(), this, throwable);
         }
@@ -117,43 +142,45 @@ public class WebSocketForChat {
     @OnClose
     public void onClose() {
         log.debug("websocket连接onClose。{}", this);
-        SessionPool.remove(channelId.toString());
+        webSocketPool.remove(channelId.toString());
         //然后关闭
-        this.close();
+        close();
     }
 
-    public void push(ChatMsg chatMsg) {
+    /**
+     * Send to others.
+     *
+     * @param webSocketMsg the web socket msg
+     */
+    public void sendToOther(WebSocketMsg webSocketMsg) {
         if (!session.isOpen()) {
             this.close();
             throw new RuntimeException("session is closed");
         }
-
-        String msg = JSONUtil.toJsonStr(chatMsg);
-        this.sendToOther(msg);
+        webSocketPool.get(otherChannelId.toString()).sendMessage(webSocketMsg);
     }
 
-    public void sendToOther(String msg) {
-        try {
-            SessionPool.get(otherChannelId.toString()).getBasicRemote().sendText(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
+    /**
+     * Send to from.
+     *
+     * @param webSocketMsg the web socket msg
+     */
+    public void sendToFrom(WebSocketMsg webSocketMsg) {
+        if (!session.isOpen()) {
+            this.close();
+            throw new RuntimeException("session is closed");
         }
-    }
-
-    public void sendToFrom(String msg) {
-        sendMessage(msg);
+        sendMessage(webSocketMsg);
     }
 
     /**
      * 推送消息给客户端
-     *
-     * @param message 消息内容
      */
-    private void sendMessage(String message) {
+    private void sendMessage(WebSocketMsg webSocketMsg) {
         try {
-            session.getBasicRemote().sendText(message);
+            session.getAsyncRemote().sendObject(webSocketMsg);
         } catch (Exception e) {
-            log.error("websocket连接发送客户端发送消息时异常！{}-{}", message, this, e);
+            log.error("websocket连接发送客户端发送消息时异常！");
         }
     }
 
@@ -175,6 +202,5 @@ public class WebSocketForChat {
             log.error("websocket连接关闭时异常。{}", this, e);
         }
     }
-
 
 }

@@ -1,7 +1,7 @@
 package com.spring.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.bo.ReplyMap;
+import com.spring.common.entity.vo.ReplyVo;
 import com.spring.common.entity.po.Reply;
 
 import java.util.List;
@@ -19,5 +19,5 @@ public interface ReplyDao extends BaseMapper<Reply> {
    * @param userId the user id
    * @return the list
    */
-  List<ReplyMap> selectAllByOwner(Integer userId);
+  List<ReplyVo> selectAllByOwner(Integer userId);
 }

@@ -12,11 +12,11 @@
         <result property="replyState" column="reply_state" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="ReplyCommentMap" type="com.spring.common.entity.bo.ReplyMap" extends="ReplyMap">
+    <resultMap id="ReplyCommentMap" type="com.spring.common.entity.vo.ReplyVo" extends="ReplyMap">
         <association property="comment" column="com_id" select="getComment"/>
     </resultMap>
 
-    <resultMap id="CommentUserMap" type="com.spring.common.entity.bo.CommentMap"
+    <resultMap id="CommentUserMap" type="com.spring.common.entity.vo.CommentVo"
                extends="com.spring.blog.dao.CommentDao.CommentMap">
         <association property="owner" column="com_owner" select="getUser"/>
     </resultMap>

@@ -10,7 +10,7 @@ import com.spring.common.constant.MsgConstant;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.constant.Topic;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.bo.BlogMap;
+import com.spring.common.entity.vo.BlogVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Blog;
 import com.spring.common.entity.po.BlogTag;
@@ -98,9 +98,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public RestMsg select(Integer blogId) {
-        BlogMap blog;
+        BlogVo blog;
         if (redisService.hasKey(RedisConstant.BLOG_PREFIX + blogId)) {
-            blog = (BlogMap) redisService.get(RedisConstant.BLOG_PREFIX + blogId);
+            blog = (BlogVo) redisService.get(RedisConstant.BLOG_PREFIX + blogId);
             return RestMsg.success(MsgConstant.SELECT_SUCCESS, blog);
         }
         blog = blogDao.selectByBlogId(blogId);
@@ -116,7 +116,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public RestMsg selectException(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<BlogMap> blogList = blogDao.selectException();
+        List<BlogVo> blogList = blogDao.selectException();
         if (blogList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
@@ -126,17 +126,17 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public RestMsg selectHot() {
         if (redisService.hasKey(RedisConstant.BLOG_HOT)) {
-            List<BlogMap> redis = (List<BlogMap>) redisService.get(RedisConstant.BLOG_HOT);
+            List<BlogVo> redis = (List<BlogVo>) redisService.get(RedisConstant.BLOG_HOT);
             return RestMsg.success(MsgConstant.SELECT_SUCCESS, redis);
         }
-        List<BlogMap> list = blogDao.selectHot();
+        List<BlogVo> list = blogDao.selectHot();
         redisService.setExpire(RedisConstant.BLOG_HOT, list, RedisConstant.HOT_EXPIRE_TIME);
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, list);
     }
 
     @Override
     public RestMsg selectNew() {
-        List<BlogMap> blogList = blogDao.selectHot();
+        List<BlogVo> blogList = blogDao.selectHot();
         if (blogList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }

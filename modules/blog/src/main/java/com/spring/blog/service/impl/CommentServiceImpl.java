@@ -8,7 +8,7 @@ import com.spring.blog.dao.CommentDao;
 import com.spring.blog.service.CommentService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.bo.CommentMap;
+import com.spring.common.entity.vo.CommentVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Comment;
 import com.spring.common.exception.ServiceException;
@@ -74,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public RestMsg selectByBlogId(Integer blogId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<CommentMap> commentList = commentDao.selectAllByBlogId(blogId);
+        List<CommentVo> commentList = commentDao.selectAllByBlogId(blogId);
         if (commentList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
@@ -84,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public RestMsg selectByUserId(Integer userId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<CommentMap> commentList = commentDao.selectAllByUserId(userId);
+        List<CommentVo> commentList = commentDao.selectAllByUserId(userId);
         if (commentList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }

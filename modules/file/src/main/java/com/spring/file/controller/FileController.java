@@ -7,10 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -44,9 +41,10 @@ public class FileController {
     }
 
     @SneakyThrows(Exception.class)
-    @PostMapping("/blog")
-    @ApiOperation(value = "博客内容上传")
-    public RestMsg upLoadBlog(@RequestParam(value = "file") MultipartFile[] files) {
-        return fileService.upLoadBlogContent(files);
+    @PostMapping("/{type}")
+    @ApiOperation(value = "文件上传")
+    public RestMsg upLoadBlog(@RequestParam(value = "file") MultipartFile file,
+                              @PathVariable(value = "type") String type) {
+        return fileService.upLoad(file,type);
     }
 }

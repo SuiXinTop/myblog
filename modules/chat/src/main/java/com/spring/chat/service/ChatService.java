@@ -3,7 +3,7 @@ package com.spring.chat.service;
 import com.spring.chat.dao.ChatChannelDao;
 import com.spring.chat.dao.ChatMsgDao;
 import com.spring.common.constant.MsgConstant;
-import com.spring.common.entity.bo.ChatChannelMap;
+import com.spring.common.entity.vo.ChatChannelVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.ChatChannel;
 import com.spring.common.entity.po.ChatMsg;
@@ -27,7 +27,7 @@ public class ChatService {
     private final ChatMsgDao chatMsgDao;
 
     public RestMsg getChannelList(Integer userId) {
-        List<ChatChannelMap> channelMapList = chatChannelDao.getChannelList(userId);
+        List<ChatChannelVo> channelMapList = chatChannelDao.getChannelList(userId);
         if (channelMapList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
@@ -45,7 +45,7 @@ public class ChatService {
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, null);
     }
 
-    public ChatChannelMap getChannel(Integer channelId) {
+    public ChatChannelVo getChannel(Integer channelId) {
         return chatChannelDao.getChannel(channelId);
     }
 
@@ -56,16 +56,14 @@ public class ChatService {
 
     public List<ChatMsg> getLastMsg(Integer channelId) {
         List<ChatMsg> chatMsgList = chatMsgDao.getLastMsg(channelId);
-//        if (chatMsgList.isEmpty()) {
-//            throw new ServiceException(MsgConstant.NO_DATA);
-//        }
-//
-//        ChatMsg update = ChatMsg.builder().msgStatus(1).build();
-//        chatMsgList.forEach(i -> {
-//            update.setMsgId(i.getMsgId());
-//            chatMsgDao.updateById(update);
-//        });
-//        return RestMsg.success(MsgConstant.SELECT_SUCCESS, chatMsgList);
+        if (chatMsgList.isEmpty()) {
+            return null;
+        }
+        ChatMsg update = ChatMsg.builder().msgStatus(1).build();
+        chatMsgList.forEach(i -> {
+            update.setMsgId(i.getMsgId());
+            chatMsgDao.updateById(update);
+        });
         return chatMsgList;
     }
 

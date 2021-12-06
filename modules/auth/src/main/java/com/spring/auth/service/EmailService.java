@@ -14,7 +14,7 @@ public interface EmailService {
      * @param emailCode the email code
      * @return the rest msg
      */
-    RestMsg verifyMail(EmailCode emailCode);
+    RestMsg sendVerifyEmail(EmailCode emailCode);
 
     /**
      * Send register mail rest msg.
@@ -22,6 +22,6 @@ public interface EmailService {
      * @param emailCode the email code
      * @return the rest msg
      */
-    RestMsg registerMail(EmailCode emailCode);
+    RestMsg sendRegisterMail(EmailCode emailCode);
 
 }

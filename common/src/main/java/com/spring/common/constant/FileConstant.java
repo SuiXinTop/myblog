@@ -8,10 +8,12 @@ package com.spring.common.constant;
  */
 public class FileConstant {
 
-    public final static String USER_HEAD_PATH ="/userImg/";
+    public final static String USER_HEAD_PATH = "/userImg/";
 
-    public final static String BLOG_IMG_PATH ="/blogImg/";
+    public final static String BLOG_IMG_PATH = "/blogImg/";
 
-    public final static String BLOG_CONTENT_PATH ="/blogContent/";
+    public final static String BLOG_CONTENT_PATH = "/blogContent/";
+
+    public final static String CHAT_CONTENT_PATH = "/chat/";
 
 }

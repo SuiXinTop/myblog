@@ -1,6 +1,6 @@
-package com.spring.common.entity.bo;
+package com.spring.common.entity.vo;
 
-import com.spring.common.entity.po.ChatGroup;
+import com.spring.common.entity.po.ChatChannel;
 import com.spring.common.entity.po.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,9 +17,10 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ChatGroupMap extends ChatGroup implements Serializable {
+public class ChatChannelVo extends ChatChannel implements Serializable {
+    private static final long serialVersionUID = -12618885475769821L;
 
-    private static final long serialVersionUID = -98423044856384210L;
+    private User fromUserMap;
 
-    private User user;
+    private User toUserMap;
 }

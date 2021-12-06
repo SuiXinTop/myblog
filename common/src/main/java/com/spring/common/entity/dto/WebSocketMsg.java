@@ -1,5 +1,6 @@
 package com.spring.common.entity.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.spring.common.entity.po.User;
 import lombok.*;
 
@@ -13,7 +14,6 @@ import java.util.Date;
  * @描述
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -24,5 +24,6 @@ public class WebSocketMsg implements Serializable {
 
     private String msgContent;
 
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date msgTime;
 }

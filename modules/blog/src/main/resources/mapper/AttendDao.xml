@@ -11,11 +11,11 @@
         <result property="attendState" column="attend_state" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="AttendUserMap" type="com.spring.common.entity.bo.AttendMap" extends="AttendMap">
+    <resultMap id="AttendUserMap" type="com.spring.common.entity.vo.AttendVo" extends="AttendMap">
         <association property="attendUser" column="attend_user_id" select="getAttendUser"/>
     </resultMap>
 
-    <resultMap id="FansUserMap" type="com.spring.common.entity.bo.AttendMap" extends="AttendMap">
+    <resultMap id="FansUserMap" type="com.spring.common.entity.vo.AttendVo" extends="AttendMap">
         <association property="fansUser" column="fans_user_id" select="getFansUser"/>
     </resultMap>
 

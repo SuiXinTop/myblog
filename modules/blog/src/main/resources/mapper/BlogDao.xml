@@ -18,12 +18,12 @@
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="BlogUserMap" type="com.spring.common.entity.bo.BlogMap" extends="BlogMap">
+    <resultMap id="BlogUserMap" type="com.spring.common.entity.vo.BlogVo" extends="BlogMap">
         <association property="user" column="user_id" select="getUser"/>
         <collection property="blogTagList" column="blog_id" select="getBlogTag"/>
     </resultMap>
 
-    <resultMap id="BlogTagMap" type="com.spring.common.entity.bo.BlogTagMap"
+    <resultMap id="BlogTagMap" type="com.spring.common.entity.vo.BlogTagVo"
                extends="com.spring.blog.dao.BlogTagDao.BlogTagMap">
         <association property="tag" column="tag_id" select="getTag"/>
     </resultMap>

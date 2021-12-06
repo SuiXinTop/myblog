@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class ChatController {
     private final ChatService chatService;
 
-    @GetMapping("/channelList/{userId}")
-    public RestMsg getChannelList(@PathVariable(value = "userId") Integer userId) {
+    @GetMapping("/channelList")
+    public RestMsg getChannelList(@RequestParam(value = "userId") Integer userId) {
         return chatService.getChannelList(userId);
     }
 

@@ -11,7 +11,6 @@ import java.io.Serializable;
  * @描述
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode

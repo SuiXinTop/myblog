@@ -1,12 +1,13 @@
-package com.spring.common.entity.bo;
+package com.spring.common.entity.vo;
 
-import com.spring.common.entity.po.Role;
+import com.spring.common.entity.po.Blog;
 import com.spring.common.entity.po.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author STARS
@@ -17,7 +18,11 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserMap  extends User implements Serializable {
+public class BlogVo extends Blog implements Serializable {
 
-    private Role role;
+    private static final long serialVersionUID = -60278110476686887L;
+
+    private User user;
+
+    private List<BlogTagVo> blogTagList;
 }

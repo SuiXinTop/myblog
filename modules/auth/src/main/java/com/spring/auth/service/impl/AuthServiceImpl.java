@@ -9,7 +9,7 @@ import com.spring.common.constant.MsgConstant;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.constant.RoleConstant;
 import com.spring.common.constant.UserConstant;
-import com.spring.common.entity.bo.UserMap;
+import com.spring.common.entity.vo.UserVo;
 import com.spring.common.entity.dto.EmailCode;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.dto.UserLogin;
@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
             redisService.increment(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail(), 1);
         }
 
-        UserMap result = userDao.selectAllByEmail(user.getUserEmail());
+        UserVo result = userDao.selectAllByEmail(user.getUserEmail());
         if (result == null) {
             throw new UserNotExistsException();
         }
@@ -97,7 +97,7 @@ public class AuthServiceImpl implements AuthService {
             redisService.increment(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail(), 1);
         }
 
-        UserMap result = userDao.selectAllByEmail(user.getUserEmail());
+        UserVo result = userDao.selectAllByEmail(user.getUserEmail());
         if (result == null) {
             throw new UserNotExistsException();
         }
@@ -149,11 +149,12 @@ public class AuthServiceImpl implements AuthService {
             throw new EmailCodeNotMatchException();
         }
 
-        UserMap result = userDao.selectAllByEmail(emailCode.getEmail());
+        UserVo result = userDao.selectAllByEmail(emailCode.getEmail());
 
         if (result == null) {
             throw new UserNotExistsException();
         }
+        redisService.del(RedisConstant.EMAIL_PREFIX + emailCode.getEmail());
 
         String loginIp = RequestUtil.getIpAddress(request);
         Date loginTime = new DateTime();

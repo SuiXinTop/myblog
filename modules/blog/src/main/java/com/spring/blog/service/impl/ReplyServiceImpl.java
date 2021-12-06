@@ -7,7 +7,7 @@ import com.spring.blog.dao.ReplyDao;
 import com.spring.blog.service.ReplyService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.bo.ReplyMap;
+import com.spring.common.entity.vo.ReplyVo;
 import com.spring.common.entity.po.Reply;
 import com.spring.common.exception.ServiceException;
 import com.spring.common.entity.dto.RestMsg;
@@ -59,7 +59,7 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public RestMsg select(Integer userId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<ReplyMap> replyList = replyDao.selectAllByOwner(userId);
+        List<ReplyVo> replyList = replyDao.selectAllByOwner(userId);
         if (replyList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }

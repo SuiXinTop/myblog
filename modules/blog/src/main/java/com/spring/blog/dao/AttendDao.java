@@ -1,7 +1,7 @@
 package com.spring.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.bo.AttendMap;
+import com.spring.common.entity.vo.AttendVo;
 import com.spring.common.entity.po.Attend;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface AttendDao extends BaseMapper<Attend> {
      * @param attendUserId the attend user id
      * @return the list
      */
-    List<AttendMap> selectFans(Integer attendUserId);
+    List<AttendVo> selectFans(Integer attendUserId);
 
     /**
      * Select attend list.
@@ -27,5 +27,5 @@ public interface AttendDao extends BaseMapper<Attend> {
      * @param fansUserId the fans user id
      * @return the list
      */
-    List<AttendMap> selectAttend(Integer fansUserId);
+    List<AttendVo> selectAttend(Integer fansUserId);
 }

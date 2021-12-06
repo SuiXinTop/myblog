@@ -10,11 +10,11 @@
         <result property="historyTime" column="history_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <resultMap id="HistoryBlogMap" type="com.spring.common.entity.bo.HistoryMap" extends="HistoryMap">
+    <resultMap id="HistoryBlogMap" type="com.spring.common.entity.vo.HistoryVo" extends="HistoryMap">
         <association property="blog" column="blog_id" select="getBlog"/>
     </resultMap>
 
-    <resultMap id="BlogMap" type="com.spring.common.entity.bo.BlogMap" extends="com.spring.blog.dao.BlogDao.BlogMap">
+    <resultMap id="BlogMap" type="com.spring.common.entity.vo.BlogVo" extends="com.spring.blog.dao.BlogDao.BlogMap">
         <association property="user" column="user_id" select="getUser"/>
     </resultMap>
 

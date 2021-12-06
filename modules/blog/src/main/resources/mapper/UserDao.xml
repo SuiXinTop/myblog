@@ -18,7 +18,7 @@
         <result property="roleId" column="role_id" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="UserRoleMap" type="com.spring.common.entity.bo.UserMap" extends="UserMap">
+    <resultMap id="UserRoleMap" type="com.spring.common.entity.vo.UserVo" extends="UserMap">
         <association property="role" column="role_id" select="getRole"/>
     </resultMap>
 

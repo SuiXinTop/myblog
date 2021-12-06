@@ -10,9 +10,6 @@
         <result property="msgTime" column="msg_time" jdbcType="TIMESTAMP"/>
         <result property="msgStatus" column="msg_status" jdbcType="INTEGER"/>
     </resultMap>
-<!--    <resultMap id="ChatMsgChannelMap" type="com.spring.common.entity.bo.ChatMsgMap">-->
-<!--        <association property="chatChannelMap" column="channel_id" select="getChannel"/>-->
-<!--    </resultMap>-->
 
     <select id="getLastMsg" resultMap="ChatMsgMap">
         select *
@@ -20,12 +17,5 @@
         where msg_status = 0 and channel_id = #{channelId}
     </select>
 
-
-
-<!--    <select id="getChannel" resultMap="com.spring.chat.dao.ChatChannelDao.ChatChannelUserMap">-->
-<!--        select *-->
-<!--        from chat_channel-->
-<!--        where channel_id = #{channel_id}-->
-<!--    </select>-->
 
 </mapper>

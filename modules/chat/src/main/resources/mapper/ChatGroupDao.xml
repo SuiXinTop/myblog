@@ -10,7 +10,7 @@
         <result property="msgTime" column="msg_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <resultMap id="ChatGroupUserMap" type="com.spring.common.entity.bo.ChatGroupMap">
+    <resultMap id="ChatGroupUserMap" type="com.spring.common.entity.vo.ChatGroupVo">
         <association property="user" column="user_id" select="getUser"/>
     </resultMap>
 

@@ -1,4 +1,4 @@
-package com.spring.common.entity.bo;
+package com.spring.common.entity.vo;
 
 import com.spring.common.entity.po.Collect;
 import lombok.Data;
@@ -16,9 +16,9 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CollectMap extends Collect implements Serializable {
+public class CollectVo extends Collect implements Serializable {
 
     private static final long serialVersionUID = 552675684727759491L;
 
-    private BlogMap blog;
+    private BlogVo blog;
 }

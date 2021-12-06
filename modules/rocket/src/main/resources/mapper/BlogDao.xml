@@ -19,7 +19,7 @@
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="BlogUserMap" type="com.spring.common.entity.bo.BlogMap" extends="BaseBlogResultMap">
+    <resultMap id="BlogUserMap" type="com.spring.common.entity.vo.BlogVo" extends="BaseBlogResultMap">
         <association property="user" column="user_id" select="selectUserByUserId"/>
         <collection property="blogTagList" column="blog_id" select="getBlogTag"/>
     </resultMap>
@@ -31,7 +31,7 @@
         <result property="userEmail" column="user_email" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <resultMap id="BlogTagMap" type="com.spring.common.entity.bo.BlogTagMap">
+    <resultMap id="BlogTagMap" type="com.spring.common.entity.vo.BlogTagVo">
         <id property="blogTagId" column="blog_tag_id" jdbcType="INTEGER"/>
         <result property="blogId" column="blog_id" jdbcType="INTEGER"/>
         <result property="tagId" column="tag_id" jdbcType="INTEGER"/>

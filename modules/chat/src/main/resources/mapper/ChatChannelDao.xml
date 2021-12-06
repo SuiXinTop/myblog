@@ -10,7 +10,7 @@
         <result property="lastChatTime" column="last_chat_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <resultMap id="ChatChannelUserMap" type="com.spring.common.entity.bo.ChatChannelMap" extends="ChatChannelMap">
+    <resultMap id="ChatChannelUserMap" type="com.spring.common.entity.vo.ChatChannelVo" extends="ChatChannelMap">
         <association property="fromUserMap" column="from_user" select="getFromUser"/>
         <association property="toUserMap" column="to_user" select="getToUser"/>
     </resultMap>

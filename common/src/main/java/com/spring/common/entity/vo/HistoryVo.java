@@ -1,4 +1,4 @@
-package com.spring.common.entity.bo;
+package com.spring.common.entity.vo;
 
 import com.spring.common.entity.po.History;
 import lombok.Data;
@@ -16,9 +16,9 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class HistoryMap extends History implements Serializable {
+public class HistoryVo extends History implements Serializable {
 
     private static final long serialVersionUID = 577892847350734239L;
 
-    private BlogMap blog;
+    private BlogVo blog;
 }

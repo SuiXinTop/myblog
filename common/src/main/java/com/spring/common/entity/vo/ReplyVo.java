@@ -1,6 +1,5 @@
-package com.spring.common.entity.bo;
+package com.spring.common.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.spring.common.entity.po.Reply;
 import com.spring.common.entity.po.User;
 import lombok.Data;
@@ -18,11 +17,11 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ReplyMap extends Reply implements Serializable {
+public class ReplyVo extends Reply implements Serializable {
 
     private static final long serialVersionUID = 790705687502029413L;
 
-    private CommentMap comment;
+    private CommentVo comment;
 
     private User owner;
 }

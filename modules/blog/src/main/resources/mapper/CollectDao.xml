@@ -11,11 +11,11 @@
         <result property="collectState" column="collect_state" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="CollectBlogMap" type="com.spring.common.entity.bo.CollectMap" extends="CollectMap">
+    <resultMap id="CollectBlogMap" type="com.spring.common.entity.vo.CollectVo" extends="CollectMap">
         <association property="blog" column="blog_id" select="getBlog"/>
     </resultMap>
 
-    <resultMap id="BlogUserMap" type="com.spring.common.entity.bo.BlogMap"
+    <resultMap id="BlogUserMap" type="com.spring.common.entity.vo.BlogVo"
                extends="com.spring.blog.dao.BlogDao.BlogMap">
         <association property="user" column="user_id" select="getUser"/>
     </resultMap>
@@ -24,9 +24,6 @@
         select * from my_collect
         where collect_state=1 and user_id = #{userId}
         order by collect_time
-        <if test="isAsc==1">
-            ASC
-        </if>
         <if test="isAsc==0">
             DESC
         </if>

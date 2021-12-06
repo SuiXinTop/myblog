@@ -1,4 +1,4 @@
-package com.spring.common.entity.bo;
+package com.spring.common.entity.vo;
 
 import com.spring.common.entity.po.BlogTag;
 import com.spring.common.entity.po.Tag;
@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BlogTagMap extends BlogTag implements Serializable {
+public class BlogTagVo extends BlogTag implements Serializable {
 
     private static final long serialVersionUID = -27003107228331626L;
 

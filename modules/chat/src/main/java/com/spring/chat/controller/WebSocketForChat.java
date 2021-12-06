@@ -4,10 +4,10 @@ import cn.hutool.core.date.DateTime;
 import com.spring.chat.config.WebSocketConfig;
 import com.spring.chat.config.WebSocketEncode;
 import com.spring.chat.service.ChatService;
-import com.spring.common.entity.bo.ChatChannelMap;
 import com.spring.common.entity.dto.WebSocketMsg;
 import com.spring.common.entity.po.ChatMsg;
 import com.spring.common.entity.po.User;
+import com.spring.common.entity.vo.ChatChannelVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -71,20 +71,15 @@ public class WebSocketForChat {
         this.session = session;
         this.channelId = channelId;
 
-        ChatChannelMap chatChannelMap = chatService.getChannel(channelId);
-        fromUser = chatChannelMap.getFromUserMap();
-        toUser = chatChannelMap.getToUserMap();
+        ChatChannelVo chatChannelVo = chatService.getChannel(channelId);
+        fromUser = chatChannelVo.getFromUserMap();
+        toUser = chatChannelVo.getToUserMap();
 
         this.otherChannelId = chatService.getChannelId(fromUser.getUserId(), toUser.getUserId());
 
         List<ChatMsg> msgList = chatService.getLastMsg(channelId);
         if (!msgList.isEmpty()) {
-            WebSocketMsg chatMsg = WebSocketMsg.builder().user(toUser).build();
-            msgList.forEach(msg -> {
-                chatMsg.setMsgContent(msg.getMsgContent());
-                chatMsg.setMsgTime(msg.getMsgTime());
-                sendToFrom(chatMsg);
-            });
+            msgList.forEach(msg -> sendToFrom(new WebSocketMsg(toUser, msg.getMsgContent(), msg.getMsgTime())));
         }
         log.info("连接成功:{}", channelId);
     }
@@ -99,25 +94,21 @@ public class WebSocketForChat {
         if (!webSocketPool.containsKey(channelId.toString())) {
             return;
         }
-//        ChatMsg chatMsg = ChatMsg.builder()
-//                .channelId(otherChannelId)
-//                .msgContent(message)
-//                .msgTime(new DateTime())
-//                .build();
-        //若对方不在线则不推送消息，直接存入mysql
-        if (!webSocketPool.containsKey(otherChannelId.toString())) {
-//            chatMsg.setMsgStatus(0);
-//            chatService.insertMsg(chatMsg);
-            return;
-        }
 
-        WebSocketMsg webSocketMsg = WebSocketMsg.builder()
-                .user(toUser)
+        ChatMsg chatMsg = ChatMsg.builder()
+                .channelId(otherChannelId)
                 .msgContent(message)
                 .msgTime(new DateTime())
                 .build();
-        sendToOther(webSocketMsg);
-//        chatService.insertMsg(chatMsg);
+
+        if (!webSocketPool.containsKey(otherChannelId.toString())) {
+            chatMsg.setMsgStatus(0);
+            chatService.insertMsg(chatMsg);
+            return;
+        }
+
+        sendToOther(new WebSocketMsg(toUser, message, new DateTime()));
+        chatService.insertMsg(chatMsg);
     }
 
     /**
@@ -142,7 +133,6 @@ public class WebSocketForChat {
     @OnClose
     public void onClose() {
         log.debug("websocket连接onClose。{}", this);
-        webSocketPool.remove(channelId.toString());
         //然后关闭
         close();
     }
@@ -154,7 +144,7 @@ public class WebSocketForChat {
      */
     public void sendToOther(WebSocketMsg webSocketMsg) {
         if (!session.isOpen()) {
-            this.close();
+            close();
             throw new RuntimeException("session is closed");
         }
         webSocketPool.get(otherChannelId.toString()).sendMessage(webSocketMsg);
@@ -167,7 +157,7 @@ public class WebSocketForChat {
      */
     public void sendToFrom(WebSocketMsg webSocketMsg) {
         if (!session.isOpen()) {
-            this.close();
+            close();
             throw new RuntimeException("session is closed");
         }
         sendMessage(webSocketMsg);
@@ -189,6 +179,7 @@ public class WebSocketForChat {
      * 关闭session连接
      */
     private void close() {
+        webSocketPool.remove(channelId.toString());
         if (session == null) {
             log.debug("websocket连接关闭完成。{}", this);
             return;

@@ -8,7 +8,7 @@ import com.spring.blog.dao.CollectDao;
 import com.spring.blog.service.CollectService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.bo.CollectMap;
+import com.spring.common.entity.vo.CollectVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Collect;
 import com.spring.common.exception.ServiceException;
@@ -32,7 +32,7 @@ public class CollectServiceImpl implements CollectService {
     @Override
     public RestMsg select(int pageNum, int pageSize, int userId, int isAsc) {
         PageHelper.startPage(pageNum, pageSize);
-        List<CollectMap> list = collectDao.selectAllByUserId(userId, isAsc);
+        List<CollectVo> list = collectDao.selectAllByUserId(userId, isAsc);
         if (list.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }

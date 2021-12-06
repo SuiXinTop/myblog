@@ -8,7 +8,7 @@ import com.spring.blog.service.UserService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.bo.UserMap;
+import com.spring.common.entity.vo.UserVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.dto.UserRegister;
 import com.spring.common.entity.dto.UserSecurity;
@@ -118,7 +118,7 @@ public class UseServiceImpl implements UserService {
     @Override
     public RestMsg selectByUserId(Integer userId) {
 
-        UserMap result = userDao.selectAllByUserId(userId);
+        UserVo result = userDao.selectAllByUserId(userId);
         if (result == null) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
@@ -131,21 +131,21 @@ public class UseServiceImpl implements UserService {
     @Override
     public RestMsg selectException(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<UserMap> userMapList = userDao.selectException();
-        if (userMapList.isEmpty()) {
+        List<UserVo> userVoList = userDao.selectException();
+        if (userVoList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
 
-        userMapList.stream().map(User::getUserEmail)
+        userVoList.stream().map(User::getUserEmail)
                 .forEach(DesensitizedUtil::email);
 
-        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(userMapList));
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(userVoList));
     }
 
     @Override
     public RestMsg selectByUserName(String userName, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<UserMap> result = userDao.selectAllByUserName(userName);
+        List<UserVo> result = userDao.selectAllByUserName(userName);
         if (result.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }

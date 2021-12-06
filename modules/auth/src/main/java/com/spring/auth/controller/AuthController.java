@@ -31,7 +31,7 @@ public class AuthController {
     private final HttpServletRequest request;
 
     @PostMapping("/login")
-    @ApiOperation(value = "登录授权", notes = "email,password")
+    @ApiOperation(value = "登录授权")
     public RestMsg login(@RequestBody UserLogin user) {
         if (StrUtil.isNotEmpty(request.getHeader(HttpConstant.TOKEN_NAME))) {
             throw new HasLoginException();
@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/admin")
-    @ApiOperation(value = "管理员登录授权", notes = "email,password")
+    @ApiOperation(value = "管理员登录授权")
     public RestMsg admin(@RequestBody UserLogin user) {
         if (StrUtil.isNotEmpty(request.getHeader(HttpConstant.TOKEN_NAME))) {
             throw new HasLoginException();
@@ -64,14 +64,14 @@ public class AuthController {
     }
 
     @PostMapping("/verifyEmail")
-    @ApiOperation(value = "发送邮箱验证码(消息)")
-    public RestMsg emailCode(@RequestBody EmailCode emailCode) {
-        return emailService.verifyMail(emailCode);
+    @ApiOperation(value = "发送邮箱验证码")
+    public RestMsg sendVerifyEmail(@RequestBody EmailCode emailCode) {
+        return emailService.sendVerifyEmail(emailCode);
     }
 
     @PostMapping("/registerMail")
-    @ApiOperation(value = "发送注册验证码(消息)")
+    @ApiOperation(value = "发送注册验证码")
     public RestMsg sendRegisterMail(@RequestBody EmailCode emailCode) {
-        return emailService.registerMail(emailCode);
+        return emailService.sendRegisterMail(emailCode);
     }
 }

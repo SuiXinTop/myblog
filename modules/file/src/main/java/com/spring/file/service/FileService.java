@@ -33,10 +33,11 @@ public interface FileService {
     /**
      * Up load blog content rest msg.
      *
-     * @param files the files
+     * @param file the file
+     * @param type the type
      * @return the rest msg
      * @throws Exception the exception
      */
-    RestMsg upLoadBlogContent(MultipartFile[] files) throws Exception;
+    RestMsg upLoad(MultipartFile file,String type) throws Exception;
 
 }

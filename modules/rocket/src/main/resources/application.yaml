@@ -31,29 +31,6 @@ spring:
     host: 118.31.15.127
     database: 0
     timeout: 1000
-  mail:
-    host: smtp.qq.com
-    username: 1270857044@qq.com
-    password: gncatexfmfyvjihg
-    port: 465
-    default-encoding: UTF-8
-    protocol: smtp
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-          ssl:
-            enable: true
-            socketFactory:
-              port: 465
-              class: javax.net.ssl.SSLSocketFactory
-  servlet:
-    multipart:
-      max-file-size: 5MB
-      max-request-size: 50MB
 
 #指定mybatisPlus扫描的xml文件
 mybatis-plus:

@@ -1,13 +1,12 @@
-package com.spring.common.entity.bo;
+package com.spring.common.entity.vo;
 
-import com.spring.common.entity.po.Comment;
+import com.spring.common.entity.po.Attend;
 import com.spring.common.entity.po.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author STARS
@@ -18,12 +17,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CommentMap extends Comment implements Serializable {
+public class AttendVo extends Attend implements Serializable {
 
-    private static final long serialVersionUID = 454292928361574917L;
+    private static final long serialVersionUID = -57465757444703768L;
 
-    private User owner;
+    private User attendUser;
 
-    private List<ReplyMap> replyList;
-
+    private User fansUser;
 }

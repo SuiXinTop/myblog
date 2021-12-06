@@ -1,7 +1,7 @@
 package com.spring.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.bo.BlogMap;
+import com.spring.common.entity.vo.BlogVo;
 import com.spring.common.entity.po.Blog;
 import org.apache.ibatis.annotations.Update;
 
@@ -21,23 +21,23 @@ public interface BlogDao extends BaseMapper<Blog> {
      * @param blogId the blog id
      * @return the my blog
      */
-    BlogMap selectByBlogId(Integer blogId);
+    BlogVo selectByBlogId(Integer blogId);
 
-    List<BlogMap> selectException();
+    List<BlogVo> selectException();
 
     /**
      * Select hot list.
      *
      * @return the list
      */
-    List<BlogMap> selectHot();
+    List<BlogVo> selectHot();
 
     /**
      * Select new list.
      *
      * @return the list
      */
-    List<BlogMap> selectNew();
+    List<BlogVo> selectNew();
 
     @Update("update my_blog set blog_state =1 where blog_id = #{blogId}")
     Integer updateBlogState(Integer blogId);

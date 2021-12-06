@@ -18,9 +18,21 @@
         <result property="roleId" column="role_id" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="UserRoleMap" type="com.spring.common.entity.bo.UserMap" extends="UserMap">
+    <resultMap id="UserRoleMap" type="com.spring.common.entity.vo.UserVo" extends="UserMap">
         <association property="role" column="role_id" select="getRole"/>
     </resultMap>
+
+    <resultMap id="RoleMap" type="com.spring.common.entity.po.Role">
+        <id property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectExitByEmail" resultMap="UserMap">
+        select count(user_id)
+        from my_user
+        where user_email = #{userEmail,jdbcType=VARCHAR}
+    </select>
 
     <select id="selectAllByEmail" resultMap="UserRoleMap">
         select *
@@ -32,7 +44,7 @@
 
 
     <!---->
-    <select id="getRole" resultMap="com.spring.blog.dao.RoleDao.RoleMap">
+    <select id="getRole" resultMap="RoleMap">
         select *
         from my_role
         where role_id = #{role_id}

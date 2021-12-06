@@ -9,7 +9,7 @@
         <result property="tagId" column="tag_id" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="BlogTagTagMap" type="com.spring.common.entity.bo.BlogTagMap" extends="BlogTagMap">
+    <resultMap id="BlogTagTagMap" type="com.spring.common.entity.vo.BlogTagVo" extends="BlogTagMap">
         <association property="tag" column="tag_id" select="getTag"/>
     </resultMap>
 

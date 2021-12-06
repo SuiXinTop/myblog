@@ -1,7 +1,7 @@
 package com.spring.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.bo.CommentMap;
+import com.spring.common.entity.vo.CommentVo;
 import com.spring.common.entity.po.Comment;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface CommentDao extends BaseMapper<Comment>{
     * @param userId the user id
     * @return the list
     */
-   List<CommentMap> selectAllByUserId(Integer userId);
+   List<CommentVo> selectAllByUserId(Integer userId);
 
    /**
     * Select all by blog id list.
@@ -27,5 +27,5 @@ public interface CommentDao extends BaseMapper<Comment>{
     * @param blogId the blog id
     * @return the list
     */
-   List<CommentMap> selectAllByBlogId(Integer blogId);
+   List<CommentVo> selectAllByBlogId(Integer blogId);
 }

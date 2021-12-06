@@ -1,28 +1,25 @@
-package com.spring.common.entity.bo;
+package com.spring.common.entity.vo;
 
-import com.spring.common.entity.po.Blog;
+import com.spring.common.entity.po.ChatGroup;
 import com.spring.common.entity.po.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author STARS
  * @创建者 SuiXinTop
- * @创建时间 2021-11-23
+ * @创建时间 2021-11-29
  * @描述
  */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BlogMap extends Blog implements Serializable {
+public class ChatGroupVo extends ChatGroup implements Serializable {
 
-    private static final long serialVersionUID = -60278110476686887L;
+    private static final long serialVersionUID = -98423044856384210L;
 
     private User user;
-
-    private List<BlogTagMap> blogTagList;
 }

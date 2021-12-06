@@ -8,8 +8,6 @@ package com.spring.common.constant;
  */
 public class Topic {
 
-    public final static String EMAIL_CODE ="EmailCode";
-
     public final static String SYS_OPER_LOG ="SysOperLog";
 
     public final static String ADD_VIEW ="AddView";

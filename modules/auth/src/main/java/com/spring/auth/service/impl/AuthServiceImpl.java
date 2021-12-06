@@ -9,11 +9,12 @@ import com.spring.common.constant.MsgConstant;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.constant.RoleConstant;
 import com.spring.common.constant.UserConstant;
-import com.spring.common.entity.vo.UserVo;
 import com.spring.common.entity.dto.EmailCode;
+import com.spring.common.entity.dto.LoginResponse;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.dto.UserLogin;
 import com.spring.common.entity.po.User;
+import com.spring.common.entity.vo.UserVo;
 import com.spring.common.exception.user.*;
 import com.spring.common.util.RequestUtil;
 import com.spring.common.util.SecurityUtil;
@@ -81,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
         String token = TokenUtil.createToken(result);
         String key = RedisConstant.TOKEN_PREFIX + SecurityUtil.getMd5Key(token, loginIp);
         redisService.setExpire(key, result, RedisConstant.TOKEN_EXPIRE_TIME);
-        return RestMsg.success(MsgConstant.LOGIN_SUCCESS, token);
+        return RestMsg.success(MsgConstant.LOGIN_SUCCESS, new LoginResponse(token,result));
     }
 
     @Override
@@ -117,7 +118,6 @@ public class AuthServiceImpl implements AuthService {
         String loginIp = RequestUtil.getIpAddress(request);
         Date loginTime = new DateTime();
 
-        //修改登陆时间和ip
         User update = User.builder()
                 .userId(result.getUserId())
                 .loginIp(RequestUtil.getIpAddress(request))
@@ -132,7 +132,7 @@ public class AuthServiceImpl implements AuthService {
         String token = TokenUtil.createToken(result);
         String key = RedisConstant.TOKEN_PREFIX + SecurityUtil.getMd5Key(token, loginIp);
         redisService.setExpire(key, result, RedisConstant.TOKEN_EXPIRE_TIME);
-        return RestMsg.success(MsgConstant.LOGIN_SUCCESS, token);
+        return RestMsg.success(MsgConstant.LOGIN_SUCCESS, new LoginResponse(token,result));
     }
 
 
@@ -159,7 +159,6 @@ public class AuthServiceImpl implements AuthService {
         String loginIp = RequestUtil.getIpAddress(request);
         Date loginTime = new DateTime();
 
-        //修改登陆时间和ip
         User update = User.builder()
                 .userId(result.getUserId())
                 .loginIp(RequestUtil.getIpAddress(request))
@@ -174,7 +173,7 @@ public class AuthServiceImpl implements AuthService {
         String token = TokenUtil.createToken(result);
         String key = RedisConstant.TOKEN_PREFIX + SecurityUtil.getMd5Key(token, loginIp);
         redisService.setExpire(key, result, RedisConstant.TOKEN_EXPIRE_TIME);
-        return RestMsg.success(MsgConstant.LOGIN_SUCCESS, token);
+        return RestMsg.success(MsgConstant.LOGIN_SUCCESS, new LoginResponse(token,result));
     }
 
     @Override

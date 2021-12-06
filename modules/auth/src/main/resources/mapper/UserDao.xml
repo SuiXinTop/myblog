@@ -28,8 +28,8 @@
         <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="selectExitByEmail" resultMap="UserMap">
-        select count(user_id)
+    <select id="selectExitByEmail" resultType="int">
+        select count(*)
         from my_user
         where user_email = #{userEmail,jdbcType=VARCHAR}
     </select>

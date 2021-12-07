@@ -78,9 +78,11 @@ public class WebSocketForChat {
         this.otherChannelId = chatService.getChannelId(fromUser.getUserId(), toUser.getUserId());
 
         List<ChatMsg> msgList = chatService.getLastMsg(channelId);
-        if (!msgList.isEmpty()) {
-            msgList.forEach(msg -> sendToFrom(new WebSocketMsg(toUser, msg.getMsgContent(), msg.getMsgTime())));
+        if (msgList.isEmpty()) {
+            return;
         }
+        msgList.forEach(msg -> sendToFrom(new WebSocketMsg(toUser, msg.getMsgContent(), msg.getMsgTime())));
+
         log.info("连接成功:{}", channelId);
     }
 

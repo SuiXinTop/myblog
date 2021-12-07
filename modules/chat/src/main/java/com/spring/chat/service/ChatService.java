@@ -56,14 +56,13 @@ public class ChatService {
 
     public List<ChatMsg> getLastMsg(Integer channelId) {
         List<ChatMsg> chatMsgList = chatMsgDao.getLastMsg(channelId);
-        if (chatMsgList.isEmpty()) {
-            return null;
+        if (!chatMsgList.isEmpty()) {
+            ChatMsg update = ChatMsg.builder().msgStatus(1).build();
+            chatMsgList.forEach(i -> {
+                update.setMsgId(i.getMsgId());
+                chatMsgDao.updateById(update);
+            });
         }
-        ChatMsg update = ChatMsg.builder().msgStatus(1).build();
-        chatMsgList.forEach(i -> {
-            update.setMsgId(i.getMsgId());
-            chatMsgDao.updateById(update);
-        });
         return chatMsgList;
     }
 

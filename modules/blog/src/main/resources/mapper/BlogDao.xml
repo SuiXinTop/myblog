@@ -30,30 +30,39 @@
 
     <select id="selectByBlogId" resultMap="BlogUserMap" parameterType="integer">
         SELECT *
-        FROM my_blog mb
-        WHERE mb.blog_state = 1
-          AND mb.blog_id = #{blogId}
+        FROM my_blog
+        WHERE blog_state = 1
+          AND blog_id = #{blogId}
     </select>
+
+    <select id="selectByUserId" resultMap="BlogUserMap" parameterType="integer">
+        SELECT *
+        FROM my_blog
+        WHERE blog_state = 1
+          AND user_id = #{userId}
+        ORDER BY blog_id DESC
+    </select>
+
 
     <select id="selectException" resultMap="BlogUserMap">
         SELECT *
-        FROM my_blog mb
-        WHERE mb.blog_state = 0
+        FROM my_blog
+        WHERE blog_state = 0
     </select>
 
 
     <select id="selectHot" resultMap="BlogUserMap">
         SELECT *
-        FROM my_blog mb
-        WHERE mb.blog_state = 1
+        FROM my_blog
+        WHERE blog_state = 1
         ORDER BY blog_view DESC
         LIMIT 10
     </select>
 
     <select id="selectNew" resultMap="BlogUserMap">
         SELECT *
-        FROM my_blog mb
-        WHERE mb.blog_state = 1
+        FROM my_blog
+        WHERE blog_state = 1
         ORDER BY blog_time DESC
         LIMIT 10
     </select>

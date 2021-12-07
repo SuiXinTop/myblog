@@ -114,6 +114,16 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public RestMsg selectBlogList(Integer userId,int pageNum,int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        List<BlogVo> blogList = blogDao.selectByUserId(userId);
+        if (blogList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(blogList));
+    }
+
+    @Override
     public RestMsg selectException(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<BlogVo> blogList = blogDao.selectException();

@@ -30,6 +30,12 @@ public interface BlogService {
      */
     RestMsg update(Blog blog);
 
+    /**
+     * Recover blog rest msg.
+     *
+     * @param blogIdList the blog id list
+     * @return the rest msg
+     */
     RestMsg recoverBlog(List<Integer> blogIdList);
 
     /**
@@ -48,6 +54,23 @@ public interface BlogService {
      */
     RestMsg select(Integer blogId);
 
+    /**
+     * Select blog list rest msg.
+     *
+     * @param userId   the user id
+     * @param pageNum  the page num
+     * @param pageSize the page size
+     * @return the rest msg
+     */
+    RestMsg selectBlogList(Integer userId,int pageNum,int pageSize);
+
+    /**
+     * Select exception rest msg.
+     *
+     * @param pageNum  the page num
+     * @param pageSize the page size
+     * @return the rest msg
+     */
     RestMsg selectException(int pageNum, int pageSize);
 
     /**

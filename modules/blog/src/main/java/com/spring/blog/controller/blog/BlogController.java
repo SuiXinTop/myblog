@@ -48,14 +48,22 @@ public class BlogController {
         return blogService.delete(blogIds);
     }
 
-    @GetMapping("/blogId")
+    @GetMapping("")
     @ApiOperation(value = "获取博客内容")
-    public RestMsg select(Integer blogId) {
+    public RestMsg select(@RequestParam(value = "blogId") Integer blogId) {
         return blogService.select(blogId);
     }
 
+    @GetMapping("/blogList")
+    @ApiOperation(value = "获取用户的博客列表")
+    public RestMsg selectBlogList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  @RequestParam(value = "userId") int userId) {
+        return blogService.selectBlogList(userId, pageNum, pageSize);
+    }
+
     @GetMapping("/new")
-    @ApiOperation(value = "博客列表，时间倒序")
+    @ApiOperation(value = "获取新增博客列表")
     public RestMsg selectNew() {
         return blogService.selectNew();
     }
@@ -76,7 +84,7 @@ public class BlogController {
     @Async
     @PostMapping("/like")
     @ApiOperation(value = "增加点赞数")
-    public void addLike(Integer blogId) {
+    public void addLike(@RequestParam(value = "blogId") Integer blogId) {
         blogService.addLike(blogId);
     }
 
@@ -88,8 +96,9 @@ public class BlogController {
 
     @DeleteMapping("/tag")
     @ApiOperation(value = "删除标签关联")
-    public RestMsg deleteTag(@RequestBody List<Integer> blogTagIds,Integer blogId) {
-        return blogService.deleteTag(blogTagIds,blogId);
+    public RestMsg deleteTag(@RequestBody List<Integer> blogTagIds,
+                             @RequestParam(value = "blogId") Integer blogId) {
+        return blogService.deleteTag(blogTagIds, blogId);
     }
 
 

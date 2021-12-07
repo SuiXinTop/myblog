@@ -31,6 +31,11 @@ public interface UserDao extends BaseMapper<User> {
    */
   UserVo selectAllByUserId(Integer userId);
 
+  /**
+   * Select exception list.
+   *
+   * @return the list
+   */
   List<UserVo> selectException();
 
   /**
@@ -41,6 +46,12 @@ public interface UserDao extends BaseMapper<User> {
    */
   List<UserVo> selectAllByUserName(String userName);
 
+  /**
+   * Update user state integer.
+   *
+   * @param userId the user id
+   * @return the integer
+   */
   @Update("update my_user set user_state = 1 where user_id = #{userId}")
   Integer updateUserState(Integer userId);
 

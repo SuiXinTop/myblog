@@ -23,6 +23,19 @@ public interface BlogDao extends BaseMapper<Blog> {
      */
     BlogVo selectByBlogId(Integer blogId);
 
+    /**
+     * Select by user id blog vo.
+     *
+     * @param userId the user id
+     * @return the blog vo
+     */
+    List<BlogVo> selectByUserId(Integer userId);
+
+    /**
+     * Select exception list.
+     *
+     * @return the list
+     */
     List<BlogVo> selectException();
 
     /**
@@ -39,6 +52,12 @@ public interface BlogDao extends BaseMapper<Blog> {
      */
     List<BlogVo> selectNew();
 
+    /**
+     * Update blog state integer.
+     *
+     * @param blogId the blog id
+     * @return the integer
+     */
     @Update("update my_blog set blog_state =1 where blog_id = #{blogId}")
     Integer updateBlogState(Integer blogId);
 

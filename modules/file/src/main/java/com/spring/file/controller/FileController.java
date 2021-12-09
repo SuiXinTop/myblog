@@ -41,10 +41,10 @@ public class FileController {
     }
 
     @SneakyThrows(Exception.class)
-    @PostMapping("/{type}")
+    @PostMapping("/all")
     @ApiOperation(value = "文件上传")
     public RestMsg upLoadBlog(@RequestParam(value = "file") MultipartFile file,
-                              @PathVariable(value = "type") String type) {
+                              @RequestParam(value = "type") String type) {
         return fileService.upLoad(file,type);
     }
 }

@@ -16,6 +16,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,12 +53,18 @@ public class WebSocketForChat {
     private static Map<String, WebSocketForChat> webSocketPool = new ConcurrentHashMap<>();
     private Session session;
 
+    /**
+     * 自己的消息队列
+     */
     private Integer channelId;
-    private User fromUser;
-
+    /**
+     * 对方的消息队列
+     */
     private Integer otherChannelId;
-    private User toUser;
-
+    /**
+     * 自己的信息
+     */
+    private User user;
 
     /**
      * 连接建立成功调用的方法
@@ -72,15 +79,17 @@ public class WebSocketForChat {
         this.channelId = channelId;
 
         ChatChannelVo chatChannelVo = chatService.getChannel(channelId);
-        fromUser = chatChannelVo.getFromUserMap();
-        toUser = chatChannelVo.getToUserMap();
+        user = chatChannelVo.getFromUserMap();
+        User toUser = chatChannelVo.getToUserMap();
 
-        this.otherChannelId = chatService.getChannelId(fromUser.getUserId(), toUser.getUserId());
+        this.otherChannelId = chatService.getChannelId(user.getUserId(), toUser.getUserId());
 
+        //发送未读聊天记录
         List<ChatMsg> msgList = chatService.getLastMsg(channelId);
         if (msgList.isEmpty()) {
             return;
         }
+        //以对方的信息发送给连接方
         msgList.forEach(msg -> sendToFrom(new WebSocketMsg(toUser, msg.getMsgContent(), msg.getMsgTime())));
 
         log.info("连接成功:{}", channelId);
@@ -93,23 +102,30 @@ public class WebSocketForChat {
      */
     @OnMessage
     public void onMessage(String message) {
+        //自己不在线
         if (!webSocketPool.containsKey(channelId.toString())) {
             return;
         }
 
+        Date date =new DateTime();
+        //创建存储对象,发给对方的消息队列
         ChatMsg chatMsg = ChatMsg.builder()
                 .channelId(otherChannelId)
                 .msgContent(message)
-                .msgTime(new DateTime())
+                .msgTime(date)
                 .build();
 
+        WebSocketMsg webSocketMsg = new WebSocketMsg(user, message, date);
+        //如果对方不在线，则不发送给对方，只转发给自己，存入mysql
         if (!webSocketPool.containsKey(otherChannelId.toString())) {
             chatMsg.setMsgStatus(0);
             chatService.insertMsg(chatMsg);
+            sendToFrom(webSocketMsg);
             return;
         }
 
-        sendToOther(new WebSocketMsg(toUser, message, new DateTime()));
+        //如果对方在线，则发送给双方，存储记录
+        sendToAll(webSocketMsg);
         chatService.insertMsg(chatMsg);
     }
 
@@ -122,7 +138,7 @@ public class WebSocketForChat {
     @OnError
     public void onError(Session session, Throwable throwable) {
         if (this.session != null && this.session.isOpen()) {
-            sendToFrom(new WebSocketMsg(fromUser, "传输错误", new DateTime()));
+            sendToFrom(new WebSocketMsg(user, "传输错误", new DateTime()));
             log.error("websocket连接onError。inputSession：{}-localSession：{}", session.getId(), this, throwable);
         } else {
             log.debug("已经关闭的websocket连接发生异常！inputSession：{}-localSession：{}", session.getId(), this, throwable);
@@ -135,8 +151,12 @@ public class WebSocketForChat {
     @OnClose
     public void onClose() {
         log.debug("websocket连接onClose。{}", this);
-        //然后关闭
         close();
+    }
+
+    public void sendToAll(WebSocketMsg webSocketMsg) {
+        sendToOther(webSocketMsg);
+        sendToFrom(webSocketMsg);
     }
 
     /**
@@ -145,10 +165,6 @@ public class WebSocketForChat {
      * @param webSocketMsg the web socket msg
      */
     public void sendToOther(WebSocketMsg webSocketMsg) {
-        if (!session.isOpen()) {
-            close();
-            throw new RuntimeException("session is closed");
-        }
         webSocketPool.get(otherChannelId.toString()).sendMessage(webSocketMsg);
     }
 

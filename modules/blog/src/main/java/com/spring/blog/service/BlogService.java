@@ -22,6 +22,8 @@ public interface BlogService {
      */
     RestMsg insert(Blog blog);
 
+    RestMsg saveTemp(Blog blog);
+
     /**
      * Update rest msg.
      *
@@ -53,6 +55,8 @@ public interface BlogService {
      * @return the rest msg
      */
     RestMsg select(Integer blogId);
+
+    RestMsg getTemp(Integer userId);
 
     /**
      * Select blog list rest msg.

@@ -36,4 +36,6 @@ public class RedisConstant {
     public final static String BLOG_HOT= "blog:hot";
 
     public final static long HOT_EXPIRE_TIME = 10L;
+
+    public final static String BLOG_TEMP= "blog:temp:";
 }

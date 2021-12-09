@@ -15,8 +15,8 @@ import java.util.Date;
  */
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 public class ChatGroup implements Serializable {
     private static final long serialVersionUID = -98423044856384210L;

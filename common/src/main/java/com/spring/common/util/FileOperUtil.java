@@ -22,6 +22,7 @@ public class FileOperUtil {
             add("png");
             add("jpeg");
             add("bmp");
+            add("doc");
         }
     };
 

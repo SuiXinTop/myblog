@@ -1,5 +1,5 @@
 server:
-  port: 8003
+  port: 8081
 #配置数据库信息
 spring:
   application:

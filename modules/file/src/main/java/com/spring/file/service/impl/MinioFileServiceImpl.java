@@ -76,6 +76,9 @@ public class MinioFileServiceImpl implements FileService {
             case "blog":
                 fileName = FileConstant.BLOG_CONTENT_PATH + FileOperUtil.extractFilename(file);
                 break;
+            case "blogImg":
+                fileName = FileConstant.BLOG_IMG_PATH + FileOperUtil.extractFilename(file);
+                break;
             case "chat":
                 fileName = FileConstant.CHAT_CONTENT_PATH + FileOperUtil.extractFilename(file);
                 break;

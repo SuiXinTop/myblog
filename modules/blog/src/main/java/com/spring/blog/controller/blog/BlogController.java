@@ -36,6 +36,12 @@ public class BlogController {
         return blogService.insert(blog);
     }
 
+    @PostMapping("/temp")
+    @ApiOperation(value = "暂存博客")
+    public RestMsg saveTemp(@RequestBody Blog blog) {
+        return blogService.saveTemp(blog);
+    }
+
     @PutMapping("")
     @ApiOperation(value = "修改博客")
     public RestMsg update(@RequestBody Blog blog) {
@@ -52,6 +58,12 @@ public class BlogController {
     @ApiOperation(value = "获取博客内容")
     public RestMsg select(@RequestParam(value = "blogId") Integer blogId) {
         return blogService.select(blogId);
+    }
+
+    @GetMapping("/temp")
+    @ApiOperation(value = "获取暂存")
+    public RestMsg getTemp(Integer userId) {
+        return blogService.getTemp(userId);
     }
 
     @GetMapping("/blogList")
@@ -100,6 +112,5 @@ public class BlogController {
                              @RequestParam(value = "blogId") Integer blogId) {
         return blogService.deleteTag(blogTagIds, blogId);
     }
-
 
 }

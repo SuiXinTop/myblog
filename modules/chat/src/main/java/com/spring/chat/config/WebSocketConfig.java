@@ -26,7 +26,7 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
 //        HttpServletRequest request = servletRequestAttributes.getRequest();
 //
 //        String token = request.getParameter("token");
-        log.info("token {}", originHeaderValue);
+//        log.info("token {}", originHeaderValue);
         return super.checkOrigin(originHeaderValue);
     }
 

@@ -5,6 +5,7 @@ import com.spring.chat.config.WebSocketConfig;
 import com.spring.chat.config.WebSocketEncode;
 import com.spring.chat.service.ChatGroupService;
 import com.spring.common.entity.dto.WebSocketMsg;
+import com.spring.common.entity.po.ChatGroup;
 import com.spring.common.entity.po.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -45,9 +47,9 @@ public class WebSocketForGroup {
     /**
      * 用来保存websocket连接信息，供统计查询当前连接数使用
      */
-    private static Set<Session> SessionPool = new CopyOnWriteArraySet<>();
+    public static Set<Session> SessionPool = new CopyOnWriteArraySet<>();
     /**
-     * The constant userSet.
+     * 用来存储，用户列表
      */
     public static Set<User> userSet = new CopyOnWriteArraySet<>();
     private Session session;
@@ -69,7 +71,6 @@ public class WebSocketForGroup {
 
         SessionPool.add(session);
         this.session = session;
-        sendToFrom("连接成功");
     }
 
     /**
@@ -82,7 +83,16 @@ public class WebSocketForGroup {
         if (!SessionPool.contains(session)) {
             return;
         }
-        sendToAll(new WebSocketMsg(user, message, new DateTime()));
+        Date date =new DateTime();
+        sendToAll(new WebSocketMsg(user, message, date));
+
+        //存储群聊消息
+        ChatGroup chatGroup = ChatGroup.builder()
+                .userId(user.getUserId())
+                .msgContent(message)
+                .msgTime(date)
+                .build();
+        chatGroupService.insert(chatGroup);
     }
 
     /**
@@ -94,7 +104,6 @@ public class WebSocketForGroup {
     @OnError
     public void onError(Session session, Throwable throwable) {
         if (this.session != null && this.session.isOpen()) {
-            sendToFrom("错误");
             log.error("websocket连接onError。inputSession：{}-localSession：{}", session.getId(), this, throwable);
             close();
         } else {
@@ -114,14 +123,14 @@ public class WebSocketForGroup {
     /**
      * 推送消息给聊天室的其他人的客户端
      *
-     * @param chatMsg the chat msg
+     * @param webSocketMsg the web socket msg
      */
-    public void sendToAll(WebSocketMsg chatMsg) {
+    public void sendToAll(WebSocketMsg webSocketMsg) {
         if (!session.isOpen()) {
             close();
             throw new RuntimeException("session is closed");
         }
-        SessionPool.forEach(i -> i.getAsyncRemote().sendObject(chatMsg));
+        SessionPool.forEach(i -> i.getAsyncRemote().sendObject(webSocketMsg));
     }
 
     /**

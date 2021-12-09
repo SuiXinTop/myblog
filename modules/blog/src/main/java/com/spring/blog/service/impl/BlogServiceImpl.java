@@ -53,6 +53,17 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public RestMsg saveTemp(Blog blog) {
+        Date now = new DateTime();
+        blog.setBlogUpdateTime(now);
+        blog.setBlogTime(now);
+        if (!redisService.set(RedisConstant.BLOG_TEMP + blog.getUserId(), blog)) {
+            return RestMsg.fail(MsgConstant.INSERT_FAULT);
+        }
+        return RestMsg.success(MsgConstant.INSERT_SUCCESS, null);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public RestMsg update(Blog blog) {
         redisService.del(RedisConstant.BLOG_PREFIX + blog.getBlogId());
@@ -114,7 +125,16 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public RestMsg selectBlogList(Integer userId,int pageNum,int pageSize){
+    public RestMsg getTemp(Integer userId) {
+        Blog blog = (Blog) redisService.get(RedisConstant.BLOG_TEMP+userId);
+        if (blog==null){
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(blog);
+    }
+
+    @Override
+    public RestMsg selectBlogList(Integer userId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<BlogVo> blogList = blogDao.selectByUserId(userId);
         if (blogList.isEmpty()) {

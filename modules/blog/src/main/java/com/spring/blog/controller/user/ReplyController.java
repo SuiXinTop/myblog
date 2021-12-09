@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("rely")
 @RequiredArgsConstructor
-@Api(tags = "回复管理模块(TODO)")
+@Api(tags = "回复管理模块(暂不使用)")
 public class ReplyController {
     private final ReplyService replyService;
 

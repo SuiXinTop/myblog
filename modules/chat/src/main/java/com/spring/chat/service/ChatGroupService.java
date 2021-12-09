@@ -1,6 +1,7 @@
 package com.spring.chat.service;
 
 import com.spring.chat.dao.ChatGroupDao;
+import com.spring.common.entity.po.ChatGroup;
 import com.spring.common.entity.po.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,9 @@ public class ChatGroupService {
 
     public User getUser(Integer userId) {
         return chatGroupDao.getUser(userId);
+    }
+
+    public void insert(ChatGroup chatGroup) {
+        chatGroupDao.insert(chatGroup);
     }
 }

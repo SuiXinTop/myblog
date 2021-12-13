@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -17,10 +18,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class SearchModel implements Serializable {
 
+    @NotBlank
     private String param;
 
+    @NotBlank
     private int pageNum;
 
+    @NotBlank
     private int pageSize;
 
     private int sortType;

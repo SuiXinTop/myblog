@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,9 +25,11 @@ public class History implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer historyId;
-    
+
+    @NotNull(message = "博客ID不能为空")
     private Integer blogId;
-    
+
+    @NotNull(message = "用户ID不能为空")
     private Integer userId;
 
     private Date historyTime;

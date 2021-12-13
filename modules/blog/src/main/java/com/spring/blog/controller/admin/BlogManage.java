@@ -31,13 +31,13 @@ public class BlogManage {
 
     @DeleteMapping("")
     @ApiOperation(value = "封禁博客")
-    public RestMsg delete(List<Integer> blogIdList){
+    public RestMsg delete(@RequestBody List<Integer> blogIdList){
         return blogService.delete(blogIdList);
     }
 
     @PutMapping("")
     @ApiOperation(value = "恢复博客")
-    public RestMsg recover(List<Integer> blogIdList){
+    public RestMsg recover(@RequestBody List<Integer> blogIdList){
         return blogService.recoverBlog(blogIdList);
     }
 }

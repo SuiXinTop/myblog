@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
@@ -23,9 +24,11 @@ public class BlogTag implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer blogTagId;
-    
+
+    @NotEmpty
     private Integer blogId;
-    
+
+    @NotEmpty
     private Integer tagId;
 
 

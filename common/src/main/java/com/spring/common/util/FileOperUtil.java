@@ -2,11 +2,8 @@ package com.spring.common.util;
 
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.StrUtil;
-import com.spring.common.exception.ServiceException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,29 +13,18 @@ import java.util.UUID;
  * @author STARS
  */
 public class FileOperUtil {
-    private final static List<String> ALLOWED_EXTENSION = new ArrayList<>() {
-        {
-            add("jpg");
-            add("png");
-            add("jpeg");
-            add("bmp");
-            add("doc");
-        }
-    };
+
+    private final static List<String> IMG_EXTENSION = List.of(new String[]{"jpg", "bmp", "png", "jpeg", "gif"});
 
     /**
      * 编码文件名
      */
     public static String extractFilename(MultipartFile file) {
-        String name = SecurityUtil.getMd5Hex(file.getOriginalFilename());
         String extension = FileUtil.getSuffix(file.getOriginalFilename());
-        if (StrUtil.isEmpty(extension)) {
-            extension = "txt";
-        }
-        System.out.println(extension);
-        if (!isAllowedExtension(extension)) {
-            throw new ServiceException("未允许MIME类型");
-        }
+//        if (!isAllowedExtension(extension)) {
+//            throw new ServiceException("未允许MIME类型");
+//        }
+        String name = SecurityUtil.getMd5Hex(file.getOriginalFilename());
         return name + "-" + UUID.randomUUID() + "." + extension;
     }
 
@@ -49,7 +35,7 @@ public class FileOperUtil {
      * @return true/false
      */
     private static boolean isAllowedExtension(String extension) {
-        return ALLOWED_EXTENSION.stream().anyMatch(s -> s.equals(extension));
+        return IMG_EXTENSION.stream().anyMatch(s -> s.equals(extension));
     }
 
 }

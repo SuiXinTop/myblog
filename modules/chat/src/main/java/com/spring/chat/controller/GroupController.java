@@ -5,6 +5,7 @@ import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.User;
 import com.spring.common.exception.ServiceException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import java.util.Set;
 public class GroupController {
 
     @GetMapping("/userList")
+    @ApiOperation(value = "查询群员列表")
     public RestMsg getUserList() {
         Set<User> userSet = new HashSet<>(WebSocketForGroup.userSet);
         if (userSet.isEmpty()) {

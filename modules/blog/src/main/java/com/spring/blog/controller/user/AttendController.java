@@ -6,8 +6,10 @@ import com.spring.common.entity.dto.RestMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -25,13 +27,13 @@ public class AttendController {
 
     @PostMapping("")
     @ApiOperation(value = "添加关注")
-    public RestMsg insert(@RequestBody Attend attend) {
+    public RestMsg insert(@Validated @RequestBody Attend attend) {
         return attendService.insert(attend);
     }
 
     @GetMapping("/attendList")
     @ApiOperation(value = "查看关注列表")
-    public RestMsg selectAttend(@RequestParam(value = "fansUserId") Integer fansUserId,
+    public RestMsg selectAttend(@NotNull @RequestParam(value = "fansUserId") Integer fansUserId,
                                 @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return attendService.selectAttend(fansUserId, pageNum, pageSize);
@@ -39,7 +41,7 @@ public class AttendController {
 
     @GetMapping("/fansList")
     @ApiOperation(value = "查看粉丝列表")
-    public RestMsg selectFans(@RequestParam(value = "attendUserId") Integer attendUserId,
+    public RestMsg selectFans(@NotNull @RequestParam(value = "attendUserId") Integer attendUserId,
                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return attendService.selectFans(attendUserId, pageNum, pageSize);
@@ -47,8 +49,8 @@ public class AttendController {
 
     @DeleteMapping("")
     @ApiOperation(value = "逻辑删除关注或粉丝")
-    public RestMsg delete(@RequestBody List<Integer> attendIds) {
-        return attendService.delete(attendIds);
+    public RestMsg delete(@RequestBody List<Integer> attendIdList) {
+        return attendService.delete(attendIdList);
     }
 
 

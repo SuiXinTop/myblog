@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -20,8 +22,10 @@ import java.io.Serializable;
 public class UserSecurity extends UserLogin implements Serializable {
     private static final long serialVersionUID = -86422308011787984L;
 
+    @NotBlank
     private Integer userId;
 
+    @Length(min=4, max=4)
     private String code;
 
 }

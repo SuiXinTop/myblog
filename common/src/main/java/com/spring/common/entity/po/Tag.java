@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -27,7 +28,8 @@ public class Tag implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer tagId;
-    
+
+    @NotBlank
     private String tagName;
 
 }

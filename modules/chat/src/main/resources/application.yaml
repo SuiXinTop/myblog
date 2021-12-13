@@ -20,11 +20,12 @@ spring:
       maximum-pool-size: 20
   jackson:
     time-zone: GMT+8
-    date-format: yyyy年MM月dd日 HH:mm:ss
+    date-format: yyyy-MM-dd HH:mm:ss
   redis:
     host: 118.31.15.127
     database: 0
     timeout: 1000
+    password: Zkm229544074
 
 #指定mybatisPlus扫描的xml文件
 mybatis-plus:

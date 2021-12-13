@@ -37,5 +37,9 @@ public class RedisConstant {
 
     public final static long HOT_EXPIRE_TIME = 10L;
 
+    public final static String BLOG_NEW= "blog:new";
+
+    public final static long NEW_EXPIRE_TIME = 10L;
+
     public final static String BLOG_TEMP= "blog:temp:";
 }

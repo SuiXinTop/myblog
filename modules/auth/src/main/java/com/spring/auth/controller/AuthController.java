@@ -11,6 +11,7 @@ import com.spring.common.exception.user.HasLoginException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ApiOperation(value = "登录授权")
-    public RestMsg login(@RequestBody UserLogin user) {
+    public RestMsg login(@Validated @RequestBody UserLogin user) {
         if (StrUtil.isNotEmpty(request.getHeader(HttpConstant.TOKEN_NAME))) {
             throw new HasLoginException();
         }
@@ -41,7 +42,7 @@ public class AuthController {
 
     @PostMapping("/admin")
     @ApiOperation(value = "管理员登录授权")
-    public RestMsg admin(@RequestBody UserLogin user) {
+    public RestMsg admin(@Validated @RequestBody UserLogin user) {
         if (StrUtil.isNotEmpty(request.getHeader(HttpConstant.TOKEN_NAME))) {
             throw new HasLoginException();
         }
@@ -50,7 +51,7 @@ public class AuthController {
 
     @PostMapping("/email")
     @ApiOperation(value = "邮箱登录授权")
-    public RestMsg emailLogin(@RequestBody EmailCode emailCode) {
+    public RestMsg emailLogin(@Validated @RequestBody EmailCode emailCode) {
         if (StrUtil.isNotEmpty(request.getHeader(HttpConstant.TOKEN_NAME))) {
             throw new HasLoginException();
         }
@@ -65,13 +66,13 @@ public class AuthController {
 
     @PostMapping("/verifyEmail")
     @ApiOperation(value = "发送邮箱验证码")
-    public RestMsg sendVerifyEmail(@RequestBody EmailCode emailCode) {
+    public RestMsg sendVerifyEmail(@Validated @RequestBody EmailCode emailCode) {
         return emailService.sendVerifyEmail(emailCode);
     }
 
     @PostMapping("/registerMail")
     @ApiOperation(value = "发送注册验证码")
-    public RestMsg sendRegisterMail(@RequestBody EmailCode emailCode) {
+    public RestMsg sendRegisterMail(@Validated @RequestBody EmailCode emailCode) {
         return emailService.sendRegisterMail(emailCode);
     }
 }

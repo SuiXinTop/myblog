@@ -9,6 +9,7 @@ import com.spring.common.entity.po.ChatGroup;
 import com.spring.common.entity.po.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -40,9 +41,17 @@ public class WebSocketForGroup {
      * @param chatGroupService the chat group service
      */
     @Autowired
-    public void setOgLocationService(ChatGroupService chatGroupService) {
+    public void setChatService(ChatGroupService chatGroupService) {
         WebSocketForGroup.chatGroupService = chatGroupService;
     }
+
+    private static RedisTemplate redisTemplate;
+
+    @Autowired
+    public void setRedisService(RedisTemplate redisTemplate) {
+        WebSocketForGroup.redisTemplate = redisTemplate;
+    }
+
 
     /**
      * 用来保存websocket连接信息，供统计查询当前连接数使用
@@ -68,7 +77,6 @@ public class WebSocketForGroup {
             return;
         }
         userSet.add(user);
-
         SessionPool.add(session);
         this.session = session;
     }
@@ -83,7 +91,7 @@ public class WebSocketForGroup {
         if (!SessionPool.contains(session)) {
             return;
         }
-        Date date =new DateTime();
+        Date date = new DateTime();
         sendToAll(new WebSocketMsg(user, message, date));
 
         //存储群聊消息
@@ -105,7 +113,7 @@ public class WebSocketForGroup {
     public void onError(Session session, Throwable throwable) {
         if (this.session != null && this.session.isOpen()) {
             log.error("websocket连接onError。inputSession：{}-localSession：{}", session.getId(), this, throwable);
-            close();
+            sendToFrom("发送失败，请重新发送！");
         } else {
             log.debug("已经关闭的websocket连接发生异常！inputSession：{}-localSession：{}", session.getId(), this, throwable);
         }
@@ -140,7 +148,7 @@ public class WebSocketForGroup {
      */
     public void sendToFrom(String msg) {
         try {
-            session.getAsyncRemote().sendText(msg);
+            session.getAsyncRemote().sendObject(new WebSocketMsg(user, msg, new DateTime()));
         } catch (Exception e) {
             log.error("websocket连接发送客户端发送消息时异常！{}-{}", msg, this, e);
         }

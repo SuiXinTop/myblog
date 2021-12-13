@@ -25,6 +25,7 @@ spring:
     host: 118.31.15.127
     database: 0
     timeout: 1000
+    password: Zkm229544074
   mail:
     host: smtp.qq.com
     username: 1270857044@qq.com

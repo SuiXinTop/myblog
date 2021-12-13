@@ -1,13 +1,17 @@
 package com.spring.common.entity.po;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * (MyCollect)实体类
@@ -26,9 +30,11 @@ public class Collect implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer collectId;
-    
+
+    @NotNull
     private Integer blogId;
 
+    @NotNull
     private Integer userId;
 
     private Date collectTime;

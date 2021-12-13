@@ -1,4 +1,4 @@
-package com.spring.blog.controller.admin;
+package com.spring.blog.controller.system;
 
 import com.spring.blog.service.RoleService;
 import com.spring.common.entity.dto.RestMsg;

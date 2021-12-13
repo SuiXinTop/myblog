@@ -1,4 +1,4 @@
-package com.spring.blog.controller.user;
+package com.spring.blog.controller.blog;
 
 import com.spring.blog.service.ReplyService;
 import com.spring.common.entity.po.Reply;

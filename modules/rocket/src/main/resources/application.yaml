@@ -31,6 +31,7 @@ spring:
     host: 118.31.15.127
     database: 0
     timeout: 1000
+    password: Zkm229544074
 
 #指定mybatisPlus扫描的xml文件
 mybatis-plus:

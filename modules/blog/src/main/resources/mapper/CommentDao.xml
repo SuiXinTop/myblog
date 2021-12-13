@@ -29,6 +29,7 @@
         select *
         from my_comment
         where com_owner = #{userId}
+        ORDER BY com_id DESC
     </select>
 
     <select id="selectByBlogId" resultMap="CommentUserMap" parameterType="integer">
@@ -43,6 +44,7 @@
         from my_comment
         where com_state = 1
           and blog_id = #{blogId}
+        ORDER BY com_id DESC
     </select>
 
 

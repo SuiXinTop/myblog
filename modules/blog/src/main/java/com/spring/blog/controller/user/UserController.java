@@ -9,7 +9,11 @@ import com.spring.security.annotation.PreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * (MyUser)表控制层
@@ -26,7 +30,7 @@ public class UserController {
 
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
-    public RestMsg register(@RequestBody UserRegister user) {
+    public RestMsg register(@Validated @RequestBody UserRegister user) {
         return userService.register(user);
     }
 
@@ -46,22 +50,22 @@ public class UserController {
 
     @GetMapping("/userId")
     @ApiOperation(value = "查询个人信息")
-    public RestMsg selectByUserId(@RequestParam(value = "userId") Integer userId) {
+    public RestMsg selectByUserId(@NotNull @RequestParam(value = "userId") Integer userId) {
         return userService.selectByUserId(userId);
     }
 
     @GetMapping("/userName")
     @ApiOperation(value = "查询个人信息")
-    public RestMsg selectByUserName(@RequestParam(value = "userName") String userName,
+    public RestMsg selectByUserName(@NotBlank @RequestParam(value = "userName") String userName,
                                     @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return userService.selectByUserName(userName, pageNum, pageSize);
     }
 
-    @DeleteMapping("")
-    @ApiOperation(value = "逻辑销户")
     @PreAuth
-    public RestMsg delete(@RequestParam(value = "userId") Integer userId) {
+    @DeleteMapping
+    @ApiOperation(value = "逻辑销户")
+    public RestMsg delete(@NotNull @RequestParam(value = "userId") Integer userId) {
         return userService.delete(userId);
     }
 }

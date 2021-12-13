@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.spring.common.entity.dto.WebSocketMsg;
 
-import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
@@ -17,15 +16,11 @@ import javax.websocket.EndpointConfig;
 public class WebSocketEncode implements Encoder.Text<WebSocketMsg> {
 
     @Override
-    public void destroy() {
-    }
-
-    @Override
     public void init(EndpointConfig arg0) {
     }
 
     @Override
-    public String encode(WebSocketMsg webSocketMsg) throws EncodeException {
+    public String encode(WebSocketMsg webSocketMsg) {
         try {
             return JSON.toJSONString(webSocketMsg);
         } catch (JSONException e) {
@@ -34,4 +29,7 @@ public class WebSocketEncode implements Encoder.Text<WebSocketMsg> {
         }
     }
 
+    @Override
+    public void destroy() {
+    }
 }

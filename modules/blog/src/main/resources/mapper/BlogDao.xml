@@ -56,15 +56,15 @@
         FROM my_blog
         WHERE blog_state = 1
         ORDER BY blog_view DESC
-        LIMIT 10
+        LIMIT 20
     </select>
 
     <select id="selectNew" resultMap="BlogUserMap">
         SELECT *
         FROM my_blog
         WHERE blog_state = 1
-        ORDER BY blog_time DESC
-        LIMIT 10
+        ORDER BY blog_id DESC
+        LIMIT 20
     </select>
 
 

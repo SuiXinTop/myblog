@@ -42,7 +42,7 @@ public class FileController {
 
     @SneakyThrows(Exception.class)
     @PostMapping("/all")
-    @ApiOperation(value = "文件上传")
+    @ApiOperation(value = "文件上传",notes = "type:['chat','blog','blogImg']")
     public RestMsg upLoadBlog(@RequestParam(value = "file") MultipartFile file,
                               @RequestParam(value = "type") String type) {
         return fileService.upLoad(file,type);

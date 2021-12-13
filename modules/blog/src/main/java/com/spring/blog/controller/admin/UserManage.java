@@ -29,7 +29,7 @@ public class UserManage {
         return userService.selectException(pageNum,pageSize);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping
     @ApiOperation(value = "封禁用户")
     public RestMsg delete(@RequestBody List<Integer> userIdList){
         return userService.deleteList(userIdList);

@@ -25,6 +25,8 @@ spring:
     host: 118.31.15.127
     database: 0
     timeout: 1000
+    password: Zkm229544074
+
   servlet:
     multipart:
       max-file-size: 5MB

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -27,9 +28,11 @@ public class Role implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer roleId;
-    
+
+    @NotBlank
     private String roleKey;
-    
+
+    @NotBlank
     private String roleName;
 
 }

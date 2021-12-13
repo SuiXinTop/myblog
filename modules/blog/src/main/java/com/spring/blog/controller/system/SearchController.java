@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 /**
@@ -26,7 +27,7 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("/blog")
-    public RestMsg searchBlog(@RequestParam(value = "param", defaultValue = "") String param,
+    public RestMsg searchBlog(@NotNull @RequestParam(value = "param", defaultValue = "") String param,
                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                               @RequestParam(value = "start", defaultValue = "") String start,

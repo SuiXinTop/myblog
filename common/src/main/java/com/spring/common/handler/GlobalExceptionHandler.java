@@ -1,13 +1,19 @@
 package com.spring.common.handler;
 
+import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.exception.ServiceException;
 import com.spring.common.exception.UnauthorizedException;
 import com.spring.common.exception.user.UserException;
-import com.spring.common.entity.dto.RestMsg;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
 
 /**
  * @author STARS
@@ -29,6 +35,21 @@ public class GlobalExceptionHandler {
         return RestMsg.fail("请求方式不支持");
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public RestMsg handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("参数异常", e);
+        //打印校验住的所有的错误信息
+        StringBuilder msg = new StringBuilder("参数错误：[");
+        List<ObjectError> list = e.getAllErrors();
+        for (ObjectError item : list) {
+            msg.append(item.getDefaultMessage()).append(',');
+        }
+        msg.deleteCharAt(msg.length() - 1);
+        msg.append(']');
+        return RestMsg.fail(msg.toString());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedException.class)
     public RestMsg handleUnauthorizedException(UnauthorizedException e) {
         return RestMsg.fail(401,e.getMessage(),null);

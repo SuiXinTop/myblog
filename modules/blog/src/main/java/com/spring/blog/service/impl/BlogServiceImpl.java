@@ -159,17 +159,25 @@ public class BlogServiceImpl implements BlogService {
             List<BlogVo> redis = (List<BlogVo>) redisService.get(RedisConstant.BLOG_HOT);
             return RestMsg.success(MsgConstant.SELECT_SUCCESS, redis);
         }
-        List<BlogVo> list = blogDao.selectHot();
-        redisService.setExpire(RedisConstant.BLOG_HOT, list, RedisConstant.HOT_EXPIRE_TIME);
-        return RestMsg.success(MsgConstant.SELECT_SUCCESS, list);
+        List<BlogVo> blogList = blogDao.selectHot();
+        if(blogList.isEmpty()){
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        redisService.setExpire(RedisConstant.BLOG_HOT, blogList, RedisConstant.HOT_EXPIRE_TIME);
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, blogList);
     }
 
     @Override
     public RestMsg selectNew() {
-        List<BlogVo> blogList = blogDao.selectHot();
+        if (redisService.hasKey(RedisConstant.BLOG_NEW)) {
+            List<BlogVo> redis = (List<BlogVo>) redisService.get(RedisConstant.BLOG_NEW);
+            return RestMsg.success(MsgConstant.SELECT_SUCCESS, redis);
+        }
+        List<BlogVo> blogList = blogDao.selectNew();
         if (blogList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
+        redisService.setExpire(RedisConstant.BLOG_NEW, blogList, RedisConstant.NEW_EXPIRE_TIME);
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, blogList);
     }
 

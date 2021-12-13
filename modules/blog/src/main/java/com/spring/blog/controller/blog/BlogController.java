@@ -11,9 +11,10 @@ import com.spring.security.annotation.Log;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -29,10 +30,10 @@ import java.util.List;
 public class BlogController {
     private final BlogService blogService;
 
-    @PostMapping("")
+    @PostMapping
     @ApiOperation(value = "新增博客")
     @Log(logName = "新增博客", businessType = BusinessType.INSERT, operatorType = OperatorType.USER)
-    public RestMsg insert(@RequestBody Blog blog) {
+    public RestMsg insert(@Validated(value = Blog.Insert.class) @RequestBody Blog blog) {
         return blogService.insert(blog);
     }
 
@@ -42,27 +43,27 @@ public class BlogController {
         return blogService.saveTemp(blog);
     }
 
-    @PutMapping("")
+    @PutMapping
     @ApiOperation(value = "修改博客")
-    public RestMsg update(@RequestBody Blog blog) {
+    public RestMsg update(@Validated(value = Blog.Update.class) @RequestBody Blog blog) {
         return blogService.update(blog);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping
     @ApiOperation(value = "逻辑删除博客")
-    public RestMsg delete(List<Integer> blogIds) {
-        return blogService.delete(blogIds);
+    public RestMsg delete(@RequestBody List<Integer> blogIdList) {
+        return blogService.delete(blogIdList);
     }
 
-    @GetMapping("")
+    @GetMapping
     @ApiOperation(value = "获取博客内容")
-    public RestMsg select(@RequestParam(value = "blogId") Integer blogId) {
+    public RestMsg select(@NotNull(message = "博客ID不能为空") @RequestParam(value = "blogId") Integer blogId) {
         return blogService.select(blogId);
     }
 
     @GetMapping("/temp")
     @ApiOperation(value = "获取暂存")
-    public RestMsg getTemp(Integer userId) {
+    public RestMsg getTemp(@NotNull(message = "用户ID不能为空") Integer userId) {
         return blogService.getTemp(userId);
     }
 
@@ -70,7 +71,7 @@ public class BlogController {
     @ApiOperation(value = "获取用户的博客列表")
     public RestMsg selectBlogList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                  @RequestParam(value = "userId") int userId) {
+                                  @NotNull(message = "用户ID不能为空") @RequestParam(value = "userId") int userId) {
         return blogService.selectBlogList(userId, pageNum, pageSize);
     }
 
@@ -86,17 +87,15 @@ public class BlogController {
         return blogService.selectHot();
     }
 
-    @Async
     @PostMapping("/view")
     @ApiOperation(value = "增加浏览量")
-    public void addView(@RequestBody History history) {
+    public void addView(@Validated @RequestBody History history) {
         blogService.addView(history);
     }
 
-    @Async
     @PostMapping("/like")
     @ApiOperation(value = "增加点赞数")
-    public void addLike(@RequestParam(value = "blogId") Integer blogId) {
+    public void addLike(@NotNull(message = "博客ID不能为空") @RequestParam(value = "blogId") Integer blogId) {
         blogService.addLike(blogId);
     }
 
@@ -109,7 +108,7 @@ public class BlogController {
     @DeleteMapping("/tag")
     @ApiOperation(value = "删除标签关联")
     public RestMsg deleteTag(@RequestBody List<Integer> blogTagIds,
-                             @RequestParam(value = "blogId") Integer blogId) {
+                             @NotNull(message = "博客ID不能为空") @RequestParam(value = "blogId") Integer blogId) {
         return blogService.deleteTag(blogTagIds, blogId);
     }
 

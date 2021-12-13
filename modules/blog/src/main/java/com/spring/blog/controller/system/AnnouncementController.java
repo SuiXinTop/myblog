@@ -1,4 +1,4 @@
-package com.spring.blog.controller.admin;
+package com.spring.blog.controller.system;
 
 import com.spring.security.annotation.PreRole;
 import com.spring.blog.service.AnnouncementService;
@@ -42,19 +42,26 @@ public class AnnouncementController {
     @DeleteMapping("")
     @ApiOperation(value = "删除系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
-    public RestMsg delete(@RequestBody List<Integer> amtIds) {
-        return announcementService.delete(amtIds);
+    public RestMsg delete(@RequestBody List<Integer> amtIdList) {
+        return announcementService.delete(amtIdList);
     }
 
     @PostMapping("/top")
     @ApiOperation(value = "置顶系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
-    public RestMsg top(@RequestBody List<Integer> amtIds) {
-        return announcementService.top(amtIds);
+    public RestMsg top(@RequestBody List<Integer> amtIdList) {
+        return announcementService.top(amtIdList);
+    }
+
+
+    @GetMapping("/top")
+    @ApiOperation(value = "获取置顶公告")
+    public RestMsg selectTop() {
+        return RestMsg.success("");
     }
 
     @GetMapping("")
-    @ApiOperation(value = "查看系统公告")
+    @ApiOperation(value = "查看非置顶系统公告")
     public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                           @RequestParam(value = "isAsc", defaultValue = "0") int isAsc) {

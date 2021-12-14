@@ -58,4 +58,13 @@ public class ChatController {
         chatService.updateLastTime(channelId);
     }
 
+    @GetMapping("/msgList")
+    @ApiOperation(value = "更新最近聊天时间")
+    public RestMsg getMsgList(@NotNull Integer channelId,
+                              @NotNull @RequestParam int pageNum,
+                              @NotNull @RequestParam int pageSize) {
+        Integer otherChannelId = WebSocketForChat.getWebSocketPool().get(channelId.toString()).getOtherChannelId();
+        return chatService.getMsgList(channelId, otherChannelId,pageNum,pageSize);
+    }
+
 }

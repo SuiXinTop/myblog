@@ -1,6 +1,8 @@
 package com.spring.chat.service;
 
 import cn.hutool.core.date.DateTime;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.spring.chat.dao.ChatChannelDao;
 import com.spring.chat.dao.ChatMsgDao;
 import com.spring.common.constant.MsgConstant;
@@ -132,6 +134,15 @@ public class ChatService {
     @Transactional(rollbackFor = Exception.class)
     public void insertMsg(ChatMsg chatMsg) {
         chatMsgDao.insert(chatMsg);
+    }
+
+    public RestMsg getMsgList(Integer channelId, Integer otherChannelId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ChatMsg> msgList = chatMsgDao.getHistoryMsg(channelId, otherChannelId);
+        if (msgList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(msgList));
     }
 
 }

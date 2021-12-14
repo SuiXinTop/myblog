@@ -20,6 +20,10 @@
         <result property="userImg" column="user_img" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <select id="getHistoryMsg" resultMap="ChatGroupUserMap">
+        select * from chat_group
+        order by msg_id desc
+    </select>
 
 
 

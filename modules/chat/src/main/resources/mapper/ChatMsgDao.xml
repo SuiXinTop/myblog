@@ -17,11 +17,13 @@
         where msg_status = 0
           and channel_id = #{channelId}
     </update>
+
     <select id="getHistoryMsg" resultType="com.spring.common.entity.po.ChatMsg">
-        select msg_id, msg_content, msg_time, msg_status
+        select msg_id, channel_id, msg_content, msg_time, msg_status
         from chat_msg
         where channel_id = #{channelOne}
-           or #{channelTwo}
+           or channel_id = #{channelTwo}
+        ORDER BY msg_id DESC
     </select>
 
 </mapper>

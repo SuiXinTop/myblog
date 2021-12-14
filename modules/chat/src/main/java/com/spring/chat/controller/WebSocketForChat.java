@@ -223,4 +223,12 @@ public class WebSocketForChat {
         }
     }
 
+    public static Map<String, WebSocketForChat> getWebSocketPool(){
+        return webSocketPool;
+    }
+
+    public Integer getOtherChannelId(){
+        return this.otherChannelId;
+    }
+
 }

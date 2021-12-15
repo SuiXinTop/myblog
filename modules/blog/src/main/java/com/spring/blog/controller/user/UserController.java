@@ -34,16 +34,16 @@ public class UserController {
         return userService.register(user);
     }
 
+    @PreAuth
     @PutMapping("/info")
     @ApiOperation(value = "修改用户信息", notes = "基本信息")
-    @PreAuth
     public RestMsg update(@RequestBody User user) {
         return userService.update(user);
     }
 
+    @PreAuth
     @PutMapping("/security")
     @ApiOperation(value = "修改用户验证信息", notes = "密码,邮箱")
-    @PreAuth
     public RestMsg updateSecurity(@RequestBody UserSecurity user) {
         return userService.updateSecurity(user);
     }

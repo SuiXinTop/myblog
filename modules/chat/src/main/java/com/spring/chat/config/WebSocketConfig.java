@@ -11,7 +11,7 @@ import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpointConfig;
 
 /**
- * WebScoket配置处理器
+ * WebSocket配置处理器
  *
  * @author STARS
  */
@@ -21,12 +21,6 @@ import javax.websocket.server.ServerEndpointConfig;
 public class WebSocketConfig extends ServerEndpointConfig.Configurator {
     @Override
     public boolean checkOrigin(String originHeaderValue) {
-//        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//        assert servletRequestAttributes != null;
-//        HttpServletRequest request = servletRequestAttributes.getRequest();
-//
-//        String token = request.getParameter("token");
-//        log.info("token {}", originHeaderValue);
         return super.checkOrigin(originHeaderValue);
     }
 

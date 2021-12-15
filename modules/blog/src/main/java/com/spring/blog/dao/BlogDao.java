@@ -32,6 +32,14 @@ public interface BlogDao extends BaseMapper<Blog> {
     List<BlogVo> selectByUserId(Integer userId);
 
     /**
+     * Select by tag id list.
+     *
+     * @param tagId the tag id
+     * @return the list
+     */
+    List<BlogVo> selectByTagId(Integer tagId);
+
+    /**
      * Select exception list.
      *
      * @return the list

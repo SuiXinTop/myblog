@@ -1,10 +1,12 @@
 package com.spring.common.entity.dto;
 
+import com.spring.common.enmu.SortType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -21,13 +23,13 @@ public class SearchModel implements Serializable {
     @NotBlank
     private String param;
 
-    @NotBlank
+    @NotNull
     private int pageNum;
 
-    @NotBlank
+    @NotNull
     private int pageSize;
 
-    private int sortType;
+    private SortType sortType;
 
     private String start;
 

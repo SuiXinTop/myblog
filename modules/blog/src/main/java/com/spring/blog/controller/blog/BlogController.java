@@ -8,6 +8,7 @@ import com.spring.common.entity.po.Blog;
 import com.spring.common.entity.po.BlogTag;
 import com.spring.common.entity.po.History;
 import com.spring.security.annotation.Log;
+import com.spring.security.annotation.PreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import java.util.List;
 public class BlogController {
     private final BlogService blogService;
 
+    @PreAuth
     @PostMapping
     @ApiOperation(value = "新增博客")
     @Log(logName = "新增博客", businessType = BusinessType.INSERT, operatorType = OperatorType.USER)
@@ -37,18 +39,21 @@ public class BlogController {
         return blogService.insert(blog);
     }
 
+    @PreAuth
     @PostMapping("/temp")
     @ApiOperation(value = "暂存博客")
     public RestMsg saveTemp(@RequestBody Blog blog) {
         return blogService.saveTemp(blog);
     }
 
+    @PreAuth
     @PutMapping
     @ApiOperation(value = "修改博客")
     public RestMsg update(@Validated(value = Blog.Update.class) @RequestBody Blog blog) {
         return blogService.update(blog);
     }
 
+    @PreAuth
     @DeleteMapping
     @ApiOperation(value = "逻辑删除博客")
     public RestMsg delete(@RequestBody List<Integer> blogIdList) {
@@ -61,6 +66,7 @@ public class BlogController {
         return blogService.select(blogId);
     }
 
+    @PreAuth
     @GetMapping("/temp")
     @ApiOperation(value = "获取暂存")
     public RestMsg getTemp(@NotNull(message = "用户ID不能为空") Integer userId) {
@@ -87,24 +93,28 @@ public class BlogController {
         return blogService.selectHot();
     }
 
+    @PreAuth
     @PostMapping("/view")
     @ApiOperation(value = "增加浏览量")
     public void addView(@Validated @RequestBody History history) {
         blogService.addView(history);
     }
 
+    @PreAuth
     @PostMapping("/like")
     @ApiOperation(value = "增加点赞数")
     public void addLike(@NotNull(message = "博客ID不能为空") @RequestParam(value = "blogId") Integer blogId) {
         blogService.addLike(blogId);
     }
 
+    @PreAuth
     @PostMapping("/tag")
     @ApiOperation(value = "新建标签关联")
     public RestMsg insertTag(@RequestBody List<BlogTag> blogTagList) {
         return blogService.insertTag(blogTagList);
     }
 
+    @PreAuth
     @DeleteMapping("/tag")
     @ApiOperation(value = "删除标签关联")
     public RestMsg deleteTag(@RequestBody List<Integer> blogTagIds,

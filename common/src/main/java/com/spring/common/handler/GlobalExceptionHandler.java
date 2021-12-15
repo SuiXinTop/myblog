@@ -1,33 +1,37 @@
 package com.spring.common.handler;
 
+import com.spring.common.constant.HttpConstant;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.exception.ForbiddenException;
 import com.spring.common.exception.ServiceException;
 import com.spring.common.exception.UnauthorizedException;
 import com.spring.common.exception.user.UserException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
 /**
+ * The type Global exception handler.
+ *
  * @author STARS
  * @创建者 SuiXinTop
- * @创建时间 2021-11-07
+ * @创建时间 2021 -11-07
  * @描述
  */
-
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
      * 请求方式不支持
+     *
+     * @param e the e
+     * @return the rest msg
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public RestMsg handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException e) {
@@ -35,6 +39,12 @@ public class GlobalExceptionHandler {
         return RestMsg.fail("请求方式不支持");
     }
 
+    /**
+     * 参数校验异常
+     *
+     * @param e the e
+     * @return rest msg
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RestMsg handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("参数异常", e);
@@ -49,14 +59,34 @@ public class GlobalExceptionHandler {
         return RestMsg.fail(msg.toString());
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    /**
+     * Handle 未登录异常
+     *
+     * @param e the e
+     * @return the rest msg
+     */
     @ExceptionHandler(UnauthorizedException.class)
     public RestMsg handleUnauthorizedException(UnauthorizedException e) {
-        return RestMsg.fail(401,e.getMessage(),null);
+        return RestMsg.fail(HttpConstant.UNAUTHORIZED, e.getMessage(), null);
+    }
+
+
+    /**
+     * Handle 权限不足异常
+     *
+     * @param e the e
+     * @return the rest msg
+     */
+    @ExceptionHandler(ForbiddenException.class)
+    public RestMsg handleForbiddenException(ForbiddenException e) {
+        return RestMsg.fail(HttpConstant.FORBIDDEN, e.getMessage(), null);
     }
 
     /**
      * 用户异常
+     *
+     * @param e the e
+     * @return the rest msg
      */
     @ExceptionHandler(UserException.class)
     public RestMsg handleUserException(UserException e) {
@@ -66,6 +96,9 @@ public class GlobalExceptionHandler {
 
     /**
      * 业务
+     *
+     * @param e the e
+     * @return the rest msg
      */
     @ExceptionHandler(ServiceException.class)
     public RestMsg handleServiceException(ServiceException e) {
@@ -75,6 +108,9 @@ public class GlobalExceptionHandler {
 
     /**
      * 拦截未知的运行时异常
+     *
+     * @param e the e
+     * @return the rest msg
      */
     @ExceptionHandler(RuntimeException.class)
     public RestMsg handleRuntimeException(RuntimeException e) {
@@ -85,6 +121,9 @@ public class GlobalExceptionHandler {
 
     /**
      * 系统异常
+     *
+     * @param e the e
+     * @return the rest msg
      */
     @ExceptionHandler(Exception.class)
     public RestMsg handleException(Exception e) {

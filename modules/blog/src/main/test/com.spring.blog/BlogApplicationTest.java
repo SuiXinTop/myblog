@@ -1,6 +1,6 @@
 package com.spring.blog;
 
-import com.spring.blog.elastic.SearchService;
+import com.spring.blog.search.impl.EsSearchServiceImpl;
 import com.spring.elastic.service.DocumentService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -13,14 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class BlogApplicationTest {
     @Autowired
-    private SearchService searchService;
+    private EsSearchServiceImpl esSearchServiceImpl;
     @Autowired
     private DocumentService documentService;
 
     @Test
     @SneakyThrows
     void name() {
-        System.out.println(searchService.searchBlogEngine("神魔",1,10));
     }
 
     @Test

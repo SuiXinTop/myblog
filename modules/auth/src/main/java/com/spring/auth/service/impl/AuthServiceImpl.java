@@ -86,6 +86,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Deprecated
     public RestMsg admin(UserLogin user) {
         if (!redisService.hasKey(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail())) {
             redisService.setExpire(RedisConstant.LOGIN_TIMES_PREFIX + user.getUserEmail(),
@@ -134,7 +135,6 @@ public class AuthServiceImpl implements AuthService {
         redisService.setExpire(key, result, RedisConstant.TOKEN_EXPIRE_TIME);
         return RestMsg.success(MsgConstant.LOGIN_SUCCESS, new LoginResponse(token,result));
     }
-
 
     @Override
     public RestMsg login(EmailCode emailCode) {

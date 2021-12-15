@@ -42,17 +42,15 @@ public class TokenAdvice {
     public String logAdvice() {
         String token = request.getHeader("authorization");
         if (token == null) {
-            throw new UnauthorizedException("登录信息已过期，请重新登录");
+            throw new UnauthorizedException("未登录");
         }
         String ip = RequestUtil.getIpAddress(request);
         String key = RedisConstant.TOKEN_PREFIX + SecurityUtil.getMd5Key(token, ip);
-        log.info("key:{}", key);
         if (!redisService.hasKey(key)) {
-            throw new UnauthorizedException("登录信息已过期，请重新登录");
+            throw new UnauthorizedException("登录信息已过期");
         }
         if (redisService.selectExpire(key) <= RedisConstant.TOKEN_REFRESH_TIME) {
             redisService.expire(key, RedisConstant.REFRESH_EXPIRE_TIME);
-            log.info("令牌时间刷新");
         }
         return key;
     }

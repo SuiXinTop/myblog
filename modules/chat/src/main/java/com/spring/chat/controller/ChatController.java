@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("chat")
-@Api(tags = "单聊")
+@Api(tags = "私聊")
 public class ChatController {
     private final ChatService chatService;
 
@@ -59,7 +59,7 @@ public class ChatController {
     }
 
     @GetMapping("/msgList")
-    @ApiOperation(value = "更新最近聊天时间")
+    @ApiOperation(value = "获取历史私聊消息")
     public RestMsg getMsgList(@NotNull Integer channelId,
                               @NotNull @RequestParam int pageNum,
                               @NotNull @RequestParam int pageSize) {

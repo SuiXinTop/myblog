@@ -31,6 +31,7 @@ public class GroupController {
     }
 
     @GetMapping("/historyMsg")
+    @ApiOperation(value = "查询群聊历史")
     public RestMsg getHistoryMsg(@NotNull int pageNum, @NotNull int pageSize) {
         return chatGroupService.getHistoryMsg(pageNum, pageSize);
     }

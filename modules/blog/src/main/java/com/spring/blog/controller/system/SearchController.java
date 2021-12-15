@@ -1,17 +1,14 @@
 package com.spring.blog.controller.system;
 
-import com.spring.blog.elastic.SearchService;
+import com.spring.blog.search.SearchService;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.dto.SearchModel;
 import io.swagger.annotations.Api;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 
 /**
  * @author STARS
@@ -21,19 +18,24 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("search")
-@RequiredArgsConstructor
 @Api(tags = "搜索引擎")
 public class SearchController {
-    private final SearchService searchService;
+
+    @Resource(name = "esSearch")
+    private SearchService searchService;
 
     @GetMapping("/blog")
-    public RestMsg searchBlog(@NotNull @RequestParam(value = "param", defaultValue = "") String param,
-                              @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                              @RequestParam(value = "start", defaultValue = "") String start,
-                              @RequestParam(value = "end", defaultValue = "") String end) throws IOException {
-        SearchModel searchModel = new SearchModel(param, pageNum, pageSize, 1, start, end);
-        return searchService.boolSearchBlog(searchModel);
+    @ApiOperation(value = "搜索引擎es")
+    public RestMsg searchBlogEs(@RequestBody SearchModel searchModel) {
+        return searchService.searchBlogByParam(searchModel);
+    }
+
+    @GetMapping("/blog/tag")
+    @ApiOperation(value = "通过tagId获取博客列表")
+    public RestMsg searchBlogByTagId(@NotNull @RequestParam(value = "tagId") Integer tagId,
+                                     @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        return searchService.searchBlogByTagId(tagId, pageNum, pageSize);
     }
 
 }

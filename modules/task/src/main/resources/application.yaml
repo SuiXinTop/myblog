@@ -1,0 +1,57 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /
+#配置数据库信息
+spring:
+  application:
+    name: :rocket
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://118.31.15.127:3306/myblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: blog
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: HiKari
+      max-lifetime: 300000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      idle-timeout: 30000
+      minimum-idle: 3
+      maximum-pool-size: 20
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy年MM月dd日 HH:mm:ss
+  elasticsearch:
+    rest:
+      uris: 47.98.209.26:9200
+      connection-timeout: 1000
+  redis:
+    host: 118.31.15.127
+    database: 0
+    timeout: 1000
+    password: Zkm229544074
+
+#指定mybatisPlus扫描的xml文件
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    use-column-label: true
+  mapper-locations: classpath*:mapper/**.xml
+
+rocketmq:
+  name-server: 47.98.209.26:9876
+  producer:
+    group: myblog
+    # 发送同步消息失败时，重试次数，默认是 2
+    retry-times-when-send-failed: 2
+    # 发送异步消息失败时，重试次数，默认是 2
+    retry-times-when-send-async-failed: 2
+    # 发送消息超时时间，默认是 3s
+    send-message-timeout: 3000
+
+logging:
+  level:
+    org.springframework: warn
+

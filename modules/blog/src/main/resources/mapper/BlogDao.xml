@@ -43,6 +43,14 @@
         ORDER BY blog_id DESC
     </select>
 
+    <select id="selectByTagId" resultMap="BlogUserMap" parameterType="integer">
+        select *
+        from my_blog
+        where blog_state = 1
+          and blog_id in (select mbt.blog_id from my_blog_tag mbt where mbt.tag_id = #{tagId})
+        ORDER BY blog_id DESC
+
+    </select>
 
     <select id="selectException" resultMap="BlogUserMap">
         SELECT *
@@ -76,7 +84,7 @@
     </select>
 
     <select id="getUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
-        select user_id, user_name, user_img, user_email, user_state
+        select user_id, user_name, user_img
         from my_user
         where user_id = #{user_id}
     </select>

@@ -1,5 +1,6 @@
 package com.spring.security.advice;
 
+import com.spring.common.exception.ForbiddenException;
 import com.spring.security.annotation.PreRole;
 import com.spring.common.entity.vo.UserVo;
 import com.spring.common.exception.user.RoleBlockedException;
@@ -39,7 +40,7 @@ public class RoleAdvice {
         String roleKey = user.getRole().getRoleKey();
         List<String> roles = Arrays.asList(preRole.role());
         if (roles.stream().noneMatch(s -> s.equals(roleKey))) {
-            throw new RoleBlockedException();
+            throw new ForbiddenException();
         }
     }
 }

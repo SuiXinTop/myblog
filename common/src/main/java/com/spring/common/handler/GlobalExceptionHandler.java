@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RestMsg handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("参数异常", e);
+        log.error("参数异常");
         //打印校验住的所有的错误信息
         StringBuilder msg = new StringBuilder("参数错误：[");
         List<ObjectError> list = e.getAllErrors();
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(UserException.class)
     public RestMsg handleUserException(UserException e) {
-        log.error("发生用户异常.", e);
+        log.error("发生用户异常");
         return RestMsg.fail(e.getMessage());
     }
 
@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ServiceException.class)
     public RestMsg handleServiceException(ServiceException e) {
-        log.error("发生业务异常.", e);
+        log.error("发生业务异常");
         return RestMsg.fail(e.getMessage());
     }
 

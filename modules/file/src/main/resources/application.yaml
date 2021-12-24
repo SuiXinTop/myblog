@@ -4,18 +4,32 @@ server:
 spring:
   application:
     name: file
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://118.31.15.127:3306/myblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: blog
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: HiKari
+      max-lifetime: 300000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      idle-timeout: 30000
+      minimum-idle: 3
+      maximum-pool-size: 20
   jackson:
     time-zone: GMT+8
     date-format: yyyy年MM月dd日 HH:mm:ss
   redis:
     host: 118.31.15.127
     database: 0
-    timeout: 1000
+    timeout: 3000
     password: Zkm229544074
 
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 5MB
       max-request-size: 50MB
 
 rocketmq:

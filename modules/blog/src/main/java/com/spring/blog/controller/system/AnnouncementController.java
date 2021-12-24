@@ -25,28 +25,28 @@ import java.util.List;
 public class AnnouncementController {
     private final AnnouncementService announcementService;
 
-    @PostMapping("")
+    @PostMapping
     @ApiOperation(value = "新建系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
     public RestMsg insert(@RequestBody Announcement announcement) {
         return announcementService.insert(announcement);
     }
 
-    @PutMapping("")
+    @PutMapping
     @ApiOperation(value = "修改系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
     public RestMsg update(@RequestBody Announcement announcement) {
         return announcementService.update(announcement);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping
     @ApiOperation(value = "删除系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
     public RestMsg delete(@RequestBody List<Integer> amtIdList) {
         return announcementService.delete(amtIdList);
     }
 
-    @PostMapping("/top")
+    @PutMapping("/top")
     @ApiOperation(value = "置顶系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
     public RestMsg top(@RequestBody List<Integer> amtIdList) {
@@ -57,10 +57,10 @@ public class AnnouncementController {
     @GetMapping("/top")
     @ApiOperation(value = "获取置顶公告")
     public RestMsg selectTop() {
-        return RestMsg.success("");
+        return announcementService.selectTop();
     }
 
-    @GetMapping("")
+    @GetMapping
     @ApiOperation(value = "查看非置顶系统公告")
     public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,

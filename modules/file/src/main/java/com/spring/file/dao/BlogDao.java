@@ -1,4 +1,4 @@
-package com.spring.task.dao;
+package com.spring.file.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.spring.common.entity.po.Blog;
@@ -9,12 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * The interface My blog dao.
- *
  * @author STARS
- * @创建者 SuiXinTop
- * @创建时间 2021 -11-19
- * @描述
  */
 public interface BlogDao extends BaseMapper<Blog> {
 
@@ -26,6 +21,7 @@ public interface BlogDao extends BaseMapper<Blog> {
      * @return the list
      */
     List<Blog> selectUpdate(@Param("now") Date now, @Param("before") Date before);
+
 
     /**
      * Add view.

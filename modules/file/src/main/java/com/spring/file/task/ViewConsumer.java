@@ -1,9 +1,9 @@
-package com.spring.task.consumer;
+package com.spring.file.task;
 
 import com.spring.common.constant.Topic;
 import com.spring.common.entity.po.History;
-import com.spring.task.dao.BlogDao;
-import com.spring.task.dao.HistoryDao;
+import com.spring.file.dao.BlogDao;
+import com.spring.file.dao.HistoryDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -29,13 +29,15 @@ public class ViewConsumer implements RocketMQListener<History>, RocketMQPushCons
     @Override
     public void onMessage(History history) {
         blogDao.addView(history.getBlogId());
-        historyDao.insert(history);
+        if(history.getUserId()!=null){
+            historyDao.insert(history);
+        }
     }
 
     @Override
     public void prepareStart(DefaultMQPushConsumer consumer) {
         // 每次拉取的间隔，单位为毫秒
-        consumer.setPullInterval(20000);
+        consumer.setPullInterval(15000);
         consumer.setConsumeThreadMin(2);
         consumer.setConsumeThreadMax(4);
         // 设置每次从队列中拉取的消息数为16

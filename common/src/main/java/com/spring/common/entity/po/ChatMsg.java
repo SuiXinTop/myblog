@@ -17,7 +17,6 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class ChatMsg implements Serializable {
     private static final long serialVersionUID = -81872472727189387L;
 

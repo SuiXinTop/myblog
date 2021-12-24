@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spring.task.dao.BlogDao">
+<mapper namespace="com.spring.file.dao.BlogDao">
 
 
     <resultMap id="BaseBlogResultMap" type="com.spring.common.entity.po.Blog">
@@ -20,7 +20,7 @@
     </resultMap>
 
     <resultMap id="BlogUserMap" type="com.spring.common.entity.vo.BlogVo" extends="BaseBlogResultMap">
-        <association property="user" column="user_id" select="selectUserByUserId"/>
+        <association property="user" column="user_id" select="getUserByUserId"/>
         <collection property="blogTagList" column="blog_id" select="getBlogTag"/>
     </resultMap>
 
@@ -44,25 +44,36 @@
     </resultMap>
 
     <select id="selectUpdate" resultMap="BlogUserMap" parameterType="date">
-        SELECT *
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         FROM my_blog
         WHERE blog_update_time between #{before} and #{now}
     </select>
 
-    <select id="selectUserByUserId" resultMap="UserMap">
+    <select id="getUserByUserId" resultMap="UserMap">
         select user_id, user_name, user_img, user_email, user_state
         from my_user
         where user_id = #{user_id}
     </select>
 
     <select id="getBlogTag" resultMap="BlogTagMap">
-        select distinct *
+        select blog_tag_id, blog_id, tag_id
         from my_blog_tag
         where blog_id = #{blog_id}
     </select>
 
     <select id="getTag" resultMap="TagMap">
-        select *
+        select tag_id, tag_name
         from my_tag
         where tag_id = #{tag_id}
     </select>

@@ -28,4 +28,6 @@ public interface CommentDao extends BaseMapper<Comment>{
     * @return the list
     */
    List<CommentVo> selectAllByBlogId(Integer blogId);
+
+   int getCommentCount(Integer userId);
 }

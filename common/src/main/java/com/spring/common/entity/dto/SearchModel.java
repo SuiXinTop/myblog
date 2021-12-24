@@ -1,12 +1,9 @@
 package com.spring.common.entity.dto;
 
-import com.spring.common.enmu.SortType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -19,17 +16,15 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchModel implements Serializable {
+    private static final long serialVersionUID = -1242493306307174690L;
 
-    @NotBlank
     private String param;
 
-    @NotNull
     private int pageNum;
 
-    @NotNull
     private int pageSize;
 
-    private SortType sortType;
+    private int sortType;
 
     private String start;
 

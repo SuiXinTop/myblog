@@ -2,6 +2,7 @@ package com.spring.blog.controller.admin;
 
 import com.spring.blog.service.BlogService;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.security.annotation.PreRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,13 @@ import java.util.List;
 public class BlogManage {
     private final BlogService blogService;
 
+    @GetMapping("/normal")
+    @ApiOperation(value = "显示正常博客")
+    public RestMsg selectNormal(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+        return blogService.selectNormal(pageNum,pageSize);
+    }
+
     @GetMapping("/exception")
     @ApiOperation(value = "显示异常博客")
     public RestMsg selectException(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -29,13 +37,15 @@ public class BlogManage {
         return blogService.selectException(pageNum,pageSize);
     }
 
-    @DeleteMapping("")
+    @PreRole
+    @DeleteMapping
     @ApiOperation(value = "封禁博客")
     public RestMsg delete(@RequestBody List<Integer> blogIdList){
         return blogService.delete(blogIdList);
     }
 
-    @PutMapping("")
+    @PreRole
+    @PutMapping
     @ApiOperation(value = "恢复博客")
     public RestMsg recover(@RequestBody List<Integer> blogIdList){
         return blogService.recoverBlog(blogIdList);

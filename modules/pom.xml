@@ -15,7 +15,6 @@
     <modules>
         <module>blog</module>
         <module>file</module>
-        <module>task</module>
         <module>chat</module>
         <module>auth</module>
     </modules>

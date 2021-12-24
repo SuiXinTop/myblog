@@ -49,7 +49,7 @@ public class BlogServiceImpl implements BlogService {
         if (blogDao.insert(blog) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.INSERT_FAULT);
         }
-        return RestMsg.success(MsgConstant.INSERT_SUCCESS, null);
+        return RestMsg.success(MsgConstant.INSERT_SUCCESS, blog.getBlogId());
     }
 
     @Override
@@ -144,6 +144,16 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public  RestMsg selectNormal(int pageNum,int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        List<BlogVo> blogList = blogDao.selectNormal();
+        if (blogList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(blogList));
+    }
+
+    @Override
     public RestMsg selectException(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<BlogVo> blogList = blogDao.selectException();
@@ -182,6 +192,12 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public RestMsg selectNewByUserId(Integer userId){
+        List<Blog> blogList = blogDao.selectNewByUserId(userId);
+        return RestMsg.success(blogList);
+    }
+
+    @Override
     public void addView(History history) {
         history.setHistoryTime(new DateTime());
         rocketMQTemplate.sendOneWay(Topic.ADD_VIEW, history);
@@ -194,17 +210,18 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RestMsg insertTag(List<BlogTag> blogTagList) {
-        if (blogTagList.isEmpty()) {
+    public RestMsg insertTag(List<Integer> tagIdList,Integer blogId) {
+        if (tagIdList.isEmpty()) {
             throw new ServiceException(MsgConstant.INSERT_FAULT);
         }
-        blogTagList.forEach(myBlogTag -> {
-            if (blogTagDao.insert(myBlogTag) == Status.Exception.ordinal()) {
+        tagIdList.forEach(id -> {
+            BlogTag blogTag = new BlogTag();
+            blogTag.setBlogId(blogId);
+            blogTag.setTagId(id);
+            if (blogTagDao.insert(blogTag) == Status.Exception.ordinal()) {
                 throw new ServiceException(MsgConstant.INSERT_FAULT);
             }
         });
-
-        Integer blogId = blogTagList.get(0).getBlogId();
 
         Blog blog = Blog.builder().blogId(blogId).blogUpdateTime(new DateTime()).build();
         if (blogDao.updateById(blog) == Status.Exception.ordinal()) {
@@ -215,12 +232,12 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RestMsg deleteTag(List<Integer> blogTagIds, Integer blogId) {
-        if (blogTagIds.isEmpty()) {
+    public RestMsg deleteTag(List<Integer> blogTagIdList, Integer blogId) {
+        if (blogTagIdList.isEmpty()) {
             throw new ServiceException(MsgConstant.DELETE_FAULT);
         }
 
-        if (blogTagDao.deleteBatchIds(blogTagIds) == Status.Exception.ordinal()) {
+        if (blogTagDao.deleteBatchIds(blogTagIdList) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.DELETE_FAULT);
         }
 

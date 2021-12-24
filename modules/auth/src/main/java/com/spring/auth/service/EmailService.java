@@ -9,7 +9,7 @@ import com.spring.common.entity.dto.RestMsg;
 public interface EmailService {
 
     /**
-     * Send html mail.
+     * 发送验证邮件
      *
      * @param emailCode the email code
      * @return the rest msg
@@ -17,7 +17,15 @@ public interface EmailService {
     RestMsg sendVerifyEmail(EmailCode emailCode);
 
     /**
-     * Send register mail rest msg.
+     * 核验邮箱验证码
+     *
+     * @param emailCode the email code
+     * @return the rest msg
+     */
+    RestMsg verifyEmailCode(EmailCode emailCode);
+
+    /**
+     * 用于创建用户或更换新的邮箱
      *
      * @param emailCode the email code
      * @return the rest msg

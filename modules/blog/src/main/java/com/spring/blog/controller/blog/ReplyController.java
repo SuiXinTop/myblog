@@ -1,8 +1,9 @@
 package com.spring.blog.controller.blog;
 
 import com.spring.blog.service.ReplyService;
-import com.spring.common.entity.po.Reply;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.po.Reply;
+import com.spring.security.annotation.PreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,22 @@ import java.util.List;
 public class ReplyController {
     private final ReplyService replyService;
 
-    @PostMapping("")
+    @PreAuth
+    @PostMapping
     @ApiOperation(value = "新建回复")
     public RestMsg insert(@RequestBody Reply reply) {
         return replyService.insert(reply);
     }
 
-    @PutMapping("")
+    @PreAuth
+    @PutMapping
     @ApiOperation(value = "修改回复内容")
     public RestMsg update(@RequestBody Reply reply) {
         return replyService.update(reply);
     }
 
-    @DeleteMapping("")
+    @PreAuth
+    @DeleteMapping
     @ApiOperation(value = "删除回复")
     public RestMsg delete(List<Integer> replyIds) {
         return replyService.delete(replyIds);

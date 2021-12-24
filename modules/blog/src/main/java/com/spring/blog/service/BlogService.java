@@ -1,9 +1,8 @@
 package com.spring.blog.service;
 
-import com.spring.common.entity.po.Blog;
-import com.spring.common.entity.po.BlogTag;
-import com.spring.common.entity.po.History;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.po.Blog;
+import com.spring.common.entity.po.History;
 
 import java.util.List;
 
@@ -66,7 +65,16 @@ public interface BlogService {
      * @param pageSize the page size
      * @return the rest msg
      */
-    RestMsg selectBlogList(Integer userId,int pageNum,int pageSize);
+    RestMsg selectBlogList(Integer userId, int pageNum, int pageSize);
+
+    /**
+     * Select normal rest msg.
+     *
+     * @param pageNum  the page num
+     * @param pageSize the page size
+     * @return the rest msg
+     */
+    RestMsg selectNormal(int pageNum, int pageSize);
 
     /**
      * Select exception rest msg.
@@ -92,6 +100,14 @@ public interface BlogService {
     RestMsg selectNew();
 
     /**
+     * Select new by user id rest msg.
+     *
+     * @param userId the user id
+     * @return the rest msg
+     */
+    RestMsg selectNewByUserId(Integer userId);
+
+    /**
      * Add view.
      *
      * @param history the my history
@@ -108,10 +124,11 @@ public interface BlogService {
     /**
      * Insert tag rest msg.
      *
-     * @param blogTagList the my blog tag list
+     * @param tagIdList the tag id list
+     * @param blogId    the blog id
      * @return the rest msg
      */
-    RestMsg insertTag(List<BlogTag> blogTagList);
+    RestMsg insertTag(List<Integer> tagIdList, Integer blogId);
 
     /**
      * Delete tag rest msg.

@@ -3,6 +3,7 @@ package com.spring.blog.controller.blog;
 import com.spring.blog.service.TagService;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Tag;
+import com.spring.security.annotation.PreRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,14 @@ import java.util.List;
 public class TagController {
     private final TagService tagService;
 
+    @PreRole
     @PostMapping
     @ApiOperation(value = "新建标签")
     public RestMsg insert(@NotNull @RequestBody List<Tag> tagList) {
         return tagService.insert(tagList);
     }
 
+    @PreRole
     @DeleteMapping
     @ApiOperation(value = "删除标签")
     public RestMsg delete(@NotNull List<Integer> tagIdList) {

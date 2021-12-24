@@ -2,23 +2,22 @@ package com.spring.file.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import com.spring.common.constant.FileConstant;
-import com.spring.common.constant.HttpConstant;
 import com.spring.common.constant.MsgConstant;
+import com.spring.common.enmu.Status;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Blog;
 import com.spring.common.entity.po.User;
 import com.spring.common.exception.ServiceException;
 import com.spring.common.util.FileOperUtil;
 import com.spring.file.config.MinioConfig;
+import com.spring.file.dao.BlogDao;
+import com.spring.file.dao.UserDao;
 import com.spring.file.service.FileService;
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -27,10 +26,12 @@ import org.springframework.web.multipart.MultipartFile;
  * @author ruoyi
  */
 @Service("minioService")
+@Slf4j
 @RequiredArgsConstructor
 public class MinioFileServiceImpl implements FileService {
     private final MinioClient minioClient;
-    private final RestTemplate restTemplate;
+    private final UserDao userDao;
+    private final BlogDao blogDao;
 
     /**
      * 本地文件上传接口
@@ -47,14 +48,8 @@ public class MinioFileServiceImpl implements FileService {
 
         String path = MinioConfig.FILE_PREFIX + fileName;
         User user = User.builder().userId(userId).userImg(path).build();
-        HttpEntity<User> httpEntity = new HttpEntity<>(user);
-        ResponseEntity<RestMsg> responseEntity = this.restTemplate.exchange(
-                "http://localhost:8080/user/info",
-                HttpMethod.PUT, httpEntity, RestMsg.class);
-        RestMsg restMsg = responseEntity.getBody();
 
-        assert restMsg != null;
-        if (restMsg.getCode() != HttpConstant.SUCCESS) {
+        if (userDao.updateById(user) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.UPDATE_FAULT);
         }
 
@@ -69,14 +64,8 @@ public class MinioFileServiceImpl implements FileService {
 
         String path = MinioConfig.FILE_PREFIX + fileName;
         Blog blog = Blog.builder().blogId(blogId).blogImg(path).blogUpdateTime(new DateTime()).build();
-        HttpEntity<Blog> httpEntity = new HttpEntity<>(blog);
-        ResponseEntity<RestMsg> responseEntity = this.restTemplate.exchange(
-                "http://localhost:8080/blog",
-                HttpMethod.PUT, httpEntity, RestMsg.class);
-        RestMsg restMsg = responseEntity.getBody();
 
-        assert restMsg != null;
-        if (restMsg.getCode() != HttpConstant.SUCCESS) {
+        if (blogDao.updateById(blog) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.UPDATE_FAULT);
         }
 

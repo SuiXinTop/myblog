@@ -2,7 +2,6 @@ package com.spring.common.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
@@ -18,7 +17,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class UserLogin implements Serializable {
 
     private static final long serialVersionUID = -86422308011787984L;

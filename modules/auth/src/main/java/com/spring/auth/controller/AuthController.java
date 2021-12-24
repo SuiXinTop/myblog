@@ -70,6 +70,12 @@ public class AuthController {
         return emailService.sendVerifyEmail(emailCode);
     }
 
+    @PutMapping("/verifyEmail")
+    @ApiOperation(value = "核验邮箱验证码")
+    public RestMsg verifyEmailCode(@Validated @RequestBody EmailCode emailCode) {
+        return emailService.verifyEmailCode(emailCode);
+    }
+
     @PostMapping("/registerMail")
     @ApiOperation(value = "发送注册验证码")
     public RestMsg sendRegisterMail(@Validated @RequestBody EmailCode emailCode) {

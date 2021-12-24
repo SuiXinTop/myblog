@@ -2,9 +2,9 @@ package com.spring.auth.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.DesensitizedUtil;
-import cn.hutool.core.util.StrUtil;
 import com.spring.auth.dao.UserDao;
 import com.spring.auth.service.AuthService;
+import com.spring.auth.service.EmailService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.constant.RoleConstant;
@@ -15,7 +15,10 @@ import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.dto.UserLogin;
 import com.spring.common.entity.po.User;
 import com.spring.common.entity.vo.UserVo;
-import com.spring.common.exception.user.*;
+import com.spring.common.exception.user.UserDeleteException;
+import com.spring.common.exception.user.UserNotExistsException;
+import com.spring.common.exception.user.UserPasswordNotMatchException;
+import com.spring.common.exception.user.UserPasswordRetryLimitCountException;
 import com.spring.common.util.RequestUtil;
 import com.spring.common.util.SecurityUtil;
 import com.spring.common.util.TokenUtil;
@@ -38,6 +41,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserDao userDao;
+    private final EmailService emailService;
     private final RedisService redisService;
     private final HttpServletRequest request;
 
@@ -77,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
         result.setLoginIp(loginIp);
         result.setLoginTime(loginTime);
         result.setUserPassword(null);
-        result.setUserEmail(DesensitizedUtil.email(result.getUserEmail()));
+        result.setUserEmail(result.getUserEmail());
 
         String token = TokenUtil.createToken(result);
         String key = RedisConstant.TOKEN_PREFIX + SecurityUtil.getMd5Key(token, loginIp);
@@ -138,16 +142,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public RestMsg login(EmailCode emailCode) {
-
-        String valid = (String) redisService.get(RedisConstant.EMAIL_PREFIX + emailCode.getEmail());
-
-        if (StrUtil.isEmpty(valid)) {
-            throw new EmailCodeNotExitException();
-        }
-
-        if (!emailCode.getCode().equals(valid)) {
-            throw new EmailCodeNotMatchException();
-        }
+        emailService.verifyEmailCode(emailCode);
 
         UserVo result = userDao.selectAllByEmail(emailCode.getEmail());
 
@@ -168,7 +163,7 @@ public class AuthServiceImpl implements AuthService {
         result.setLoginIp(loginIp);
         result.setLoginTime(loginTime);
         result.setUserPassword(null);
-        result.setUserEmail(DesensitizedUtil.email(result.getUserEmail()));
+        result.setUserEmail(result.getUserEmail());
 
         String token = TokenUtil.createToken(result);
         String key = RedisConstant.TOKEN_PREFIX + SecurityUtil.getMd5Key(token, loginIp);

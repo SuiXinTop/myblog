@@ -16,7 +16,6 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class WebSocketMsg implements Serializable {
     private static final long serialVersionUID = -81872472727189387L;
 

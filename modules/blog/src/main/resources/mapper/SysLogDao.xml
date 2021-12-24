@@ -19,7 +19,9 @@
     </resultMap>
 
     <select id="selectAllByParam" resultMap="SysLogMap">
-        select * from sys_log
+        select log_id, log_name, business_type, method_name, request_method, oper_name, oper_type, oper_ip, oper_url,
+        oper_status, error_msg, oper_time
+        from sys_log
         where true
         <if test="param!=null and param != ''">
             and oper_status = #{status}

@@ -1,8 +1,8 @@
 package com.spring.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.vo.AttendVo;
 import com.spring.common.entity.po.Attend;
+import com.spring.common.entity.vo.AttendVo;
 
 import java.util.List;
 
@@ -28,4 +28,24 @@ public interface AttendDao extends BaseMapper<Attend> {
      * @return the list
      */
     List<AttendVo> selectAttend(Integer fansUserId);
+
+    /**
+     * Delete by attend user id and fans user id int.
+     *
+     * @param attend the attend
+     * @return the int
+     */
+    int deleteByAttendUserIdAndFansUserId(Attend attend);
+
+    /**
+     * Check has attend int.
+     *
+     * @param attend the attend
+     * @return the int
+     */
+    int checkHasAttend(Attend attend);
+
+    int getAttendCount(Integer userId);
+
+    int getFansCount(Integer userId);
 }

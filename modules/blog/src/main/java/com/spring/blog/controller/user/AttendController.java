@@ -3,6 +3,7 @@ package com.spring.blog.controller.user;
 import com.spring.blog.service.AttendService;
 import com.spring.common.entity.po.Attend;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.security.annotation.PreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,8 @@ import java.util.List;
 public class AttendController {
     private final AttendService attendService;
 
-    @PostMapping("")
+    @PreAuth
+    @PostMapping
     @ApiOperation(value = "添加关注")
     public RestMsg insert(@Validated @RequestBody Attend attend) {
         return attendService.insert(attend);
@@ -47,10 +49,24 @@ public class AttendController {
         return attendService.selectFans(attendUserId, pageNum, pageSize);
     }
 
-    @DeleteMapping("")
-    @ApiOperation(value = "逻辑删除关注或粉丝")
+    @PreAuth
+    @DeleteMapping("/one")
+    @ApiOperation(value = "删除好友（单个）")
+    public RestMsg delete(@Validated @RequestBody Attend attend) {
+        return attendService.deleteOne(attend);
+    }
+
+    @PreAuth
+    @DeleteMapping("/list")
+    @ApiOperation(value = "关注或粉丝（批量）")
     public RestMsg delete(@RequestBody List<Integer> attendIdList) {
         return attendService.delete(attendIdList);
+    }
+
+    @PostMapping("/hasAttend")
+    @ApiOperation(value = "是否已关注")
+    public boolean hasAttend(@Validated @RequestBody Attend attend){
+        return attendService.hasAttend(attend);
     }
 
 

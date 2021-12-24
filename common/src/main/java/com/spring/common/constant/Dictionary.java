@@ -12,6 +12,8 @@ public class Dictionary {
 
     public final static String OPER_TIME = "oper_time";
 
+    public final static String AMT_ID = "amt_id";
+
     public final static String AMT_TOP = "amt_top";
 
     public final static String AMT_TIME = "amt_time";

@@ -57,11 +57,24 @@ public class AttendServiceImpl implements AttendService {
     }
 
     @Override
+    public  RestMsg deleteOne(Attend attend){
+        if (attendDao.deleteByAttendUserIdAndFansUserId(attend) == Status.Exception.ordinal()) {
+            throw new ServiceException(MsgConstant.DELETE_FAULT);
+        }
+        return RestMsg.success(MsgConstant.DELETE_SUCCESS, null);
+    }
+
+    @Override
     public RestMsg delete(List<Integer> attendIds) {
         if (attendDao.deleteBatchIds(attendIds) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.DELETE_FAULT);
         }
         return RestMsg.success(MsgConstant.DELETE_SUCCESS, null);
+    }
+
+    @Override
+    public boolean hasAttend(Attend attend){
+        return attendDao.checkHasAttend(attend) != 0;
     }
 
 }

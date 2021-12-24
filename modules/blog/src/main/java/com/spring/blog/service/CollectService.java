@@ -37,7 +37,9 @@ public interface CollectService {
      * @param collectId the collect id
      * @return the rest msg
      */
-    RestMsg delete(List<Integer> collectId);
+    RestMsg deleteList(List<Integer> collectId);
+
+    RestMsg delete(Collect collect);
 
     /**
      * Has collect boolean.

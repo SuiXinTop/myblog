@@ -3,6 +3,7 @@ package com.spring.blog.controller.user;
 import com.spring.blog.service.CollectService;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Collect;
+import com.spring.security.annotation.PreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.List;
 public class CollectController {
     private final CollectService collectService;
 
-    @GetMapping("")
+    @GetMapping
     @ApiOperation(value = "查询个人收藏,默认时间倒序")
     public RestMsg select(@NotNull @RequestParam(value = "userId") int userId,
                           @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -34,26 +35,29 @@ public class CollectController {
         return collectService.select(pageNum, pageSize, userId, isAsc);
     }
 
-    @PostMapping("")
-    @ApiOperation(value = "添加收藏", notes = "blogId,userId")
+    @PreAuth
+    @PostMapping
+    @ApiOperation(value = "添加收藏")
     public RestMsg insert(@Validated @RequestBody Collect collect) {
         return collectService.insert(collect);
     }
 
+    @PreAuth
     @DeleteMapping("/inList")
     @ApiOperation(value = "个人中心删除收藏")
     public RestMsg deleteList(@RequestBody List<Integer> collectIdList) {
-        return collectService.delete(collectIdList);
+        return collectService.deleteList(collectIdList);
     }
 
+    @PreAuth
     @DeleteMapping("/inBlog")
     @ApiOperation(value = "博客删除收藏")
     public RestMsg delete(@Validated @RequestBody Collect collect) {
-        return RestMsg.success("");
-    }//TODO
+        return collectService.delete(collect);
+    }
 
     @PostMapping("/hasCollect")
-    @ApiOperation(value = "是否已收藏", notes = "blogId,userId")
+    @ApiOperation(value = "是否已收藏")
     public boolean hasCollect(@Validated @RequestBody Collect collect) {
         return collectService.hasCollect(collect);
     }

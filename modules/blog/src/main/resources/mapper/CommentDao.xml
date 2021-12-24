@@ -26,28 +26,26 @@
     </resultMap>
 
     <select id="selectAllByUserId" resultMap="CommentReplyMap" parameterType="integer">
-        select *
+        select com_id, blog_id, com_owner, com_body, com_time, com_state
         from my_comment
         where com_owner = #{userId}
         ORDER BY com_id DESC
     </select>
 
     <select id="selectByBlogId" resultMap="CommentUserMap" parameterType="integer">
-        select *
+        select com_id, blog_id, com_owner, com_body, com_time, com_state
         from my_comment
         where com_state = 1
           and blog_id = #{blogId}
     </select>
 
     <select id="selectAllByBlogId" resultMap="CommentReplyMap" parameterType="integer">
-        select *
+        select com_id, blog_id, com_owner, com_body, com_time, com_state
         from my_comment
         where com_state = 1
           and blog_id = #{blogId}
         ORDER BY com_id DESC
     </select>
-
-
 
 
     <!---->
@@ -61,7 +59,7 @@
     </select>
 
     <select id="getReply" resultMap="MyReplyUserMap">
-        select *
+        select reply_id, com_id, reply_owner, reply_body, reply_time, reply_state
         from my_reply
         where reply_state = 1
           and com_id = #{com_id}
@@ -74,6 +72,13 @@
                user_state
         from my_user
         where user_id = #{reply_owner}
+    </select>
+
+    <select id="getCommentCount" resultType="java.lang.Integer">
+        select count(com_id)
+        from my_comment
+        where com_owner = #{userId}
+          and com_state = 1
     </select>
 
 </mapper>

@@ -18,35 +18,71 @@
     <resultMap id="FansUserMap" type="com.spring.common.entity.vo.AttendVo" extends="AttendMap">
         <association property="fansUser" column="fans_user_id" select="getFansUser"/>
     </resultMap>
+    <delete id="deleteByAttendUserIdAndFansUserId" parameterType="com.spring.common.entity.po.Attend">
+        update my_attend
+        set attend_state = 0
+        where attend_state = 1
+          and fans_user_id = #{fansUserId}
+          and attend_user_id = #{attendUserId}
+    </delete>
 
-    <select id="selectFans" resultMap="AttendUserMap">
-        select *
+    <select id="selectFans" resultMap="FansUserMap">
+        select attend_id, attend_user_id, fans_user_id, attend_time, attend_state
         from my_attend
         where attend_state = 1
           and attend_user_id = #{attendUserId}
     </select>
 
-    <select id="selectAttend" resultMap="FansUserMap">
-        select *
+    <select id="selectAttend" resultMap="AttendUserMap">
+        select attend_id, attend_user_id, fans_user_id, attend_time, attend_state
         from my_attend
         where attend_state = 1
           and fans_user_id = #{fansUserId}
     </select>
 
-
+    <select id="checkHasAttend" resultType="java.lang.Integer">
+        select count(attend_id)
+        from my_attend
+        where attend_state = 1
+          and fans_user_id = #{fansUserId}
+          and attend_user_id = #{attendUserId}
+    </select>
 
 
     <!---->
     <select id="getAttendUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
-        select *
+        select user_id,
+               user_name,
+               user_img,
+               user_email,
+               user_state
         from my_user
         where user_id = #{attend_user_id}
     </select>
 
     <select id="getFansUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
-        select *
+        select user_id,
+               user_name,
+               user_img,
+               user_email,
+               user_state
         from my_user
         where user_id = #{fans_user_id}
     </select>
+
+    <select id="getAttendCount" resultType="java.lang.Integer">
+        select count(attend_id)
+        from my_attend
+        where fans_user_id = #{userId}
+          and attend_state = 1
+    </select>
+
+    <select id="getFansCount" resultType="java.lang.Integer">
+        select count(attend_id)
+        from my_attend
+        where attend_user_id = #{userId}
+          and attend_state = 1
+    </select>
+
 
 </mapper>

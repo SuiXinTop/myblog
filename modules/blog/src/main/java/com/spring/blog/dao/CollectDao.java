@@ -24,6 +24,8 @@ public interface CollectDao extends BaseMapper<Collect> {
      */
     List<CollectVo> selectAllByUserId(@Param("userId") int userId, @Param("isAsc") int isAsc);
 
+    int deleteByBlogIdAndUserId(Collect collect);
+
     /**
      * Has collect integer.
      *
@@ -32,4 +34,6 @@ public interface CollectDao extends BaseMapper<Collect> {
      */
     @Select("select count(*) from my_collect where blog_id = #{blogId} and user_id = #{userId} and collect_state = 1")
     int hasCollect(Collect collect);
+
+    int getCollectCount(Integer userId);
 }

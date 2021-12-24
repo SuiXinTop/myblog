@@ -51,6 +51,8 @@ public interface UserService {
      */
     RestMsg selectByUserId(Integer userId);
 
+    RestMsg selectNormal(int pageNum,int pageSize);
+
     RestMsg selectException(int pageNum, int pageSize);
 
     /**

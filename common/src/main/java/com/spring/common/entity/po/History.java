@@ -29,7 +29,6 @@ public class History implements Serializable {
     @NotNull(message = "博客ID不能为空")
     private Integer blogId;
 
-    @NotNull(message = "用户ID不能为空")
     private Integer userId;
 
     private Date historyTime;

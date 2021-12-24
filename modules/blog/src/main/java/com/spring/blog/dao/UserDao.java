@@ -1,8 +1,8 @@
 package com.spring.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.vo.UserVo;
 import com.spring.common.entity.po.User;
+import com.spring.common.entity.vo.UserVo;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -32,6 +32,13 @@ public interface UserDao extends BaseMapper<User> {
   UserVo selectAllByUserId(Integer userId);
 
   /**
+   * Select normal list.
+   *
+   * @return the list
+   */
+  List<UserVo> selectNormal();
+
+  /**
    * Select exception list.
    *
    * @return the list
@@ -54,6 +61,5 @@ public interface UserDao extends BaseMapper<User> {
    */
   @Update("update my_user set user_state = 1 where user_id = #{userId}")
   Integer updateUserState(Integer userId);
-
 
 }

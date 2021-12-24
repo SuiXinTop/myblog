@@ -22,18 +22,16 @@
     </resultMap>
 
     <select id="selectAllByOwner" resultMap="ReplyCommentMap">
-        select *
+        select reply_id, com_id, reply_owner, reply_body, reply_time, reply_state
         from my_reply
         where reply_state = 1
           and reply_owner = #{userId}
     </select>
 
 
-
-
     <!---->
     <select id="getComment" resultMap="CommentUserMap">
-        select *
+        select com_id, blog_id, com_owner, com_body, com_time, com_state
         from my_comment
         where com_id = #{com_id}
     </select>
@@ -43,12 +41,7 @@
                user_name,
                user_img,
                user_email,
-               user_address,
-               user_sex,
-               user_state,
-               login_ip,
-               login_time,
-               register_time
+               user_state
         from my_user
         where user_id = #{com_owner}
     </select>

@@ -36,27 +36,27 @@ public class UserController {
 
     @PreAuth
     @PutMapping("/info")
-    @ApiOperation(value = "修改用户信息", notes = "基本信息")
+    @ApiOperation(value = "修改用户信息", notes = "基本信息,密码")
     public RestMsg update(@RequestBody User user) {
         return userService.update(user);
     }
 
     @PreAuth
     @PutMapping("/security")
-    @ApiOperation(value = "修改用户验证信息", notes = "密码,邮箱")
+    @ApiOperation(value = "修改用户邮箱", notes = "邮箱")
     public RestMsg updateSecurity(@RequestBody UserSecurity user) {
         return userService.updateSecurity(user);
     }
 
-    @GetMapping("/userId")
+    @GetMapping("/userId/{userId}")
     @ApiOperation(value = "查询个人信息")
-    public RestMsg selectByUserId(@NotNull @RequestParam(value = "userId") Integer userId) {
+    public RestMsg selectByUserId(@NotNull @PathVariable(value = "userId") Integer userId) {
         return userService.selectByUserId(userId);
     }
 
-    @GetMapping("/userName")
+    @GetMapping("/userName/{userName}")
     @ApiOperation(value = "查询个人信息")
-    public RestMsg selectByUserName(@NotBlank @RequestParam(value = "userName") String userName,
+    public RestMsg selectByUserName(@NotBlank @PathVariable(value = "userName") String userName,
                                     @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return userService.selectByUserName(userName, pageNum, pageSize);

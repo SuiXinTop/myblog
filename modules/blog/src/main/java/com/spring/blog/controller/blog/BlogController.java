@@ -5,7 +5,6 @@ import com.spring.common.enmu.BusinessType;
 import com.spring.common.enmu.OperatorType;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Blog;
-import com.spring.common.entity.po.BlogTag;
 import com.spring.common.entity.po.History;
 import com.spring.security.annotation.Log;
 import com.spring.security.annotation.PreAuth;
@@ -87,13 +86,18 @@ public class BlogController {
         return blogService.selectNew();
     }
 
+    @GetMapping("/new/{userId}")
+    @ApiOperation(value = "获取该用户最新博客10条")
+    public RestMsg selectNewByUserId(@NotNull @PathVariable(value = "userId") Integer userId) {
+        return blogService.selectNewByUserId(userId);
+    }
+
     @GetMapping("/hot")
     @ApiOperation(value = "热搜榜")
     public RestMsg selectByHot() {
         return blogService.selectHot();
     }
 
-    @PreAuth
     @PostMapping("/view")
     @ApiOperation(value = "增加浏览量")
     public void addView(@Validated @RequestBody History history) {
@@ -103,23 +107,24 @@ public class BlogController {
     @PreAuth
     @PostMapping("/like")
     @ApiOperation(value = "增加点赞数")
-    public void addLike(@NotNull(message = "博客ID不能为空") @RequestParam(value = "blogId") Integer blogId) {
+    public void addLike(@NotNull @RequestParam(value = "blogId") Integer blogId) {
         blogService.addLike(blogId);
     }
 
     @PreAuth
     @PostMapping("/tag")
     @ApiOperation(value = "新建标签关联")
-    public RestMsg insertTag(@RequestBody List<BlogTag> blogTagList) {
-        return blogService.insertTag(blogTagList);
+    public RestMsg insertTag(@RequestBody List<Integer> tagIdList,
+                             @NotNull(message = "博客ID不能为空") @RequestParam(value = "blogId") Integer blogId) {
+        return blogService.insertTag(tagIdList,blogId);
     }
 
     @PreAuth
     @DeleteMapping("/tag")
     @ApiOperation(value = "删除标签关联")
-    public RestMsg deleteTag(@RequestBody List<Integer> blogTagIds,
+    public RestMsg deleteTag(@RequestBody List<Integer> blogTagIdList,
                              @NotNull(message = "博客ID不能为空") @RequestParam(value = "blogId") Integer blogId) {
-        return blogService.deleteTag(blogTagIds, blogId);
+        return blogService.deleteTag(blogTagIdList, blogId);
     }
 
 }

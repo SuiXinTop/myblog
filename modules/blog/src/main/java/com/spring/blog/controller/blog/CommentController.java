@@ -1,8 +1,9 @@
 package com.spring.blog.controller.blog;
 
 import com.spring.blog.service.CommentService;
-import com.spring.common.entity.po.Comment;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.po.Comment;
+import com.spring.security.annotation.PreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +25,21 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
+    @PreAuth
     @PostMapping
     @ApiOperation(value = "新建评论")
     public RestMsg insert(@Validated @RequestBody Comment comment) {
         return commentService.insert(comment);
     }
 
-    @Deprecated
+    @PreAuth
     @PutMapping
     @ApiOperation(value = "修改评论内容")
     public RestMsg update(@RequestBody Comment comment) {
         return commentService.update(comment);
     }
 
+    @PreAuth
     @DeleteMapping
     @ApiOperation(value = "删除评论")
     public RestMsg delete(@RequestBody List<Integer> comIds) {

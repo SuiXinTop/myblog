@@ -1,7 +1,6 @@
 package com.spring.blog.search;
 
 import com.spring.common.entity.dto.RestMsg;
-import com.spring.common.entity.dto.SearchModel;
 
 /**
  * The interface Search service.
@@ -13,10 +12,12 @@ public interface SearchService {
     /**
      * Bool search blog rest msg.
      *
-     * @param model the model
+     * @param param    the param
+     * @param pageNum  the page num
+     * @param pageSize the page size
      * @return the rest msg
      */
-    RestMsg searchBlogByParam(SearchModel model);
+    RestMsg searchBlogByParam(String param,int pageNum,int pageSize);
 
     /**
      * Search blog by tag id rest msg.

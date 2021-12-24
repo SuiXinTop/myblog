@@ -14,7 +14,7 @@
     </resultMap>
 
     <select id="selectByBlogId" resultMap="BlogTagTagMap" parameterType="integer">
-        select *
+        select blog_tag_id, blog_id, tag_id
         from my_blog_tag
         where blog_id = #{blog_id}
     </select>

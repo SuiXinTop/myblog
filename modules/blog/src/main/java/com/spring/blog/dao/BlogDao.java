@@ -8,15 +8,12 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 /**
- * (MyBlog)表数据库访问层
- *
- * @author makejava
- * @since 2021 -11-13 11:53:17
+ * @author STARS
  */
 public interface BlogDao extends BaseMapper<Blog> {
 
     /**
-     * Select by blog id my blog.
+     * 获取博客内容
      *
      * @param blogId the blog id
      * @return the my blog
@@ -24,7 +21,7 @@ public interface BlogDao extends BaseMapper<Blog> {
     BlogVo selectByBlogId(Integer blogId);
 
     /**
-     * Select by user id blog vo.
+     * 获取某用户的所有博客
      *
      * @param userId the user id
      * @return the blog vo
@@ -32,7 +29,7 @@ public interface BlogDao extends BaseMapper<Blog> {
     List<BlogVo> selectByUserId(Integer userId);
 
     /**
-     * Select by tag id list.
+     * 获取该标签的所有博客
      *
      * @param tagId the tag id
      * @return the list
@@ -40,28 +37,51 @@ public interface BlogDao extends BaseMapper<Blog> {
     List<BlogVo> selectByTagId(Integer tagId);
 
     /**
-     * Select exception list.
+     * 查询正常博客
+     *
+     * @return the list
+     */
+    List<BlogVo> selectNormal();
+
+    /**
+     * 查询回收站的博客
      *
      * @return the list
      */
     List<BlogVo> selectException();
 
     /**
-     * Select hot list.
+     * 查询最热博客 limit 20
      *
      * @return the list
      */
     List<BlogVo> selectHot();
 
     /**
-     * Select new list.
+     * 查询最新博客 limit 20
      *
      * @return the list
      */
     List<BlogVo> selectNew();
 
     /**
-     * Update blog state integer.
+     * 查询该用户最近发布的博客
+     *
+     * @param userId the user id
+     * @return the list
+     */
+    List<Blog> selectNewByUserId(Integer userId);
+
+    /**
+     * 关键词全文搜索
+     *
+     * @param param the param
+     * @return the list
+     */
+    List<BlogVo> selectAllByParam(String param);
+
+    /**
+     * 将博客状态变为删除
      *
      * @param blogId the blog id
      * @return the integer
@@ -70,7 +90,23 @@ public interface BlogDao extends BaseMapper<Blog> {
     Integer updateBlogState(Integer blogId);
 
     /**
-     * Add collect.
+     * 博客浏览量+1
+     *
+     * @param blogId the blog id
+     */
+    @Update("update my_blog set blog_view = blog_view + 1 where blog_id =#{blogId}")
+    void addView(Integer blogId);
+
+    /**
+     * 博客赞数+1
+     *
+     * @param blogId the blog id
+     */
+    @Update("update my_blog set blog_like = blog_like + 1 where blog_id =#{blogId}")
+    void addLike(Integer blogId);
+
+    /**
+     * 博客收藏数+1
      *
      * @param blogId the blog id
      * @return the integer
@@ -79,7 +115,7 @@ public interface BlogDao extends BaseMapper<Blog> {
     Integer addCollect(Integer blogId);
 
     /**
-     * Sub collect integer.
+     * 博客收藏数-1
      *
      * @param blogId the blog id
      * @return the integer
@@ -88,7 +124,7 @@ public interface BlogDao extends BaseMapper<Blog> {
     Integer subCollect(Integer blogId);
 
     /**
-     * Add comment.
+     * 博客评论数+1
      *
      * @param blogId the blog id
      * @return the integer
@@ -97,11 +133,13 @@ public interface BlogDao extends BaseMapper<Blog> {
     Integer addComment(Integer blogId);
 
     /**
-     * Sub comment.
+     * 博客评论数-1
      *
      * @param blogId the blog id
      * @return the integer
      */
     @Update("update my_blog set blog_comment = blog_comment - 1 where blog_id = #{blogId}")
     Integer subComment(Integer blogId);
+
+    int getBlogCount(Integer userId);
 }

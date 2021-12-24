@@ -29,14 +29,36 @@
     </resultMap>
 
     <select id="selectByBlogId" resultMap="BlogUserMap" parameterType="integer">
-        SELECT *
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         FROM my_blog
         WHERE blog_state = 1
           AND blog_id = #{blogId}
     </select>
 
     <select id="selectByUserId" resultMap="BlogUserMap" parameterType="integer">
-        SELECT *
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         FROM my_blog
         WHERE blog_state = 1
           AND user_id = #{userId}
@@ -44,23 +66,71 @@
     </select>
 
     <select id="selectByTagId" resultMap="BlogUserMap" parameterType="integer">
-        select *
+        select blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         from my_blog
         where blog_state = 1
           and blog_id in (select mbt.blog_id from my_blog_tag mbt where mbt.tag_id = #{tagId})
         ORDER BY blog_id DESC
+    </select>
 
+    <select id="selectNormal" resultMap="BlogUserMap">
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
+        FROM my_blog
+        WHERE blog_state = 1
     </select>
 
     <select id="selectException" resultMap="BlogUserMap">
-        SELECT *
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         FROM my_blog
         WHERE blog_state = 0
     </select>
 
-
     <select id="selectHot" resultMap="BlogUserMap">
-        SELECT *
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         FROM my_blog
         WHERE blog_state = 1
         ORDER BY blog_view DESC
@@ -68,17 +138,56 @@
     </select>
 
     <select id="selectNew" resultMap="BlogUserMap">
-        SELECT *
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         FROM my_blog
         WHERE blog_state = 1
         ORDER BY blog_id DESC
         LIMIT 20
     </select>
 
+    <select id="selectNewByUserId" resultType="com.spring.common.entity.po.Blog">
+        select blog_id, blog_title, blog_img, blog_time
+        from my_blog
+        where user_id = #{userId}
+          and blog_state = 1
+        order by blog_id desc
+        limit 10
+    </select>
+
+    <select id="selectAllByParam" resultMap="BlogUserMap">
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
+        FROM my_blog
+        WHERE match(blog_title) against(CONCAT('*', #{param}, '*') in boolean mode)
+          and blog_state = 1
+        ORDER BY blog_id DESC
+    </select>
+
 
     <!---->
     <select id="getBlogTag" resultMap="BlogTagMap">
-        select distinct *
+        select distinct blog_tag_id, blog_id, tag_id
         from my_blog_tag
         where blog_id = #{blog_id}
     </select>
@@ -90,9 +199,16 @@
     </select>
 
     <select id="getTag" resultMap="com.spring.blog.dao.TagDao.TagMap">
-        select *
+        select tag_id, tag_name
         from my_tag
         where tag_id = #{tag_id}
+    </select>
+
+    <select id="getBlogCount" resultType="java.lang.Integer">
+        select count(blog_id)
+        from my_blog
+        where user_id = #{userId}
+          and blog_state = 1
     </select>
 
 

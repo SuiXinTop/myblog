@@ -40,6 +40,9 @@ public interface AttendService {
      */
     RestMsg selectFans(Integer attendUserId, int pageNum, int pageSize);
 
+
+    RestMsg deleteOne(Attend attend);
+
     /**
      * Delete rest msg.
      *
@@ -47,4 +50,6 @@ public interface AttendService {
      * @return the rest msg
      */
     RestMsg delete(List<Integer> attendIds);
+
+    boolean hasAttend(Attend attend);
 }

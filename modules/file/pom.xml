@@ -23,11 +23,25 @@
         </dependency>
         <dependency>
             <groupId>com.spring</groupId>
+            <artifactId>elastic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spring</groupId>
             <artifactId>swagger</artifactId>
         </dependency>
         <dependency>
             <groupId>com.spring</groupId>
             <artifactId>security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spring</groupId>
+            <artifactId>datasource</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.pagehelper</groupId>
+                    <artifactId>pagehelper-spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

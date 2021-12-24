@@ -61,9 +61,11 @@ public class UseServiceImpl implements UserService {
 
     @Override
     public RestMsg update(User user) {
+        redisService.del(RedisConstant.USER_INFO + user.getUserId());
         if (userDao.updateById(user) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.UPDATE_FAULT);
         }
+        redisService.del(RedisConstant.USER_INFO + user.getUserId());
         return RestMsg.success(MsgConstant.UPDATE_SUCCESS, null);
     }
 
@@ -117,15 +119,35 @@ public class UseServiceImpl implements UserService {
 
     @Override
     public RestMsg selectByUserId(Integer userId) {
+        UserVo user;
+        if (redisService.hasKey(RedisConstant.USER_INFO + userId)) {
+            user = (UserVo) redisService.get(RedisConstant.USER_INFO + userId);
+            return RestMsg.success(user);
+        }
 
-        UserVo result = userDao.selectAllByUserId(userId);
-        if (result == null) {
+        user = userDao.selectAllByUserId(userId);
+        if (user == null) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        user.setUserEmail(DesensitizedUtil.email(user.getUserEmail()));
+
+        redisService.setExpire(RedisConstant.USER_INFO + userId, user, RedisConstant.USER_INFO_EXPIRE_TIME);
+
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, user);
+    }
+
+    @Override
+    public RestMsg selectNormal(int pageNum,int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserVo> userVoList = userDao.selectNormal();
+        if (userVoList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
 
-        result.setUserEmail(DesensitizedUtil.email(result.getUserEmail()));
+        userVoList.stream().map(User::getUserEmail)
+                .forEach(DesensitizedUtil::email);
 
-        return RestMsg.success(MsgConstant.SELECT_SUCCESS, result);
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(userVoList));
     }
 
     @Override

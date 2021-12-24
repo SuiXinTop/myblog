@@ -2,12 +2,12 @@ package com.spring.blog.controller.system;
 
 import com.spring.blog.search.SearchService;
 import com.spring.common.entity.dto.RestMsg;
-import com.spring.common.entity.dto.SearchModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,18 +21,20 @@ import javax.validation.constraints.NotNull;
 @Api(tags = "搜索引擎")
 public class SearchController {
 
-    @Resource(name = "esSearch")
+    @Resource(name = "dbSearch")
     private SearchService searchService;
 
-    @GetMapping("/blog")
+    @GetMapping("/param")
     @ApiOperation(value = "搜索引擎es")
-    public RestMsg searchBlogEs(@RequestBody SearchModel searchModel) {
-        return searchService.searchBlogByParam(searchModel);
+    public RestMsg searchBlogEs(@NotBlank String param,
+                                @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        return searchService.searchBlogByParam(param, pageNum, pageSize);
     }
 
-    @GetMapping("/blog/tag")
+    @GetMapping("/blog/{tagId}")
     @ApiOperation(value = "通过tagId获取博客列表")
-    public RestMsg searchBlogByTagId(@NotNull @RequestParam(value = "tagId") Integer tagId,
+    public RestMsg searchBlogByTagId(@NotNull @PathVariable(value = "tagId") Integer tagId,
                                      @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return searchService.searchBlogByTagId(tagId, pageNum, pageSize);

@@ -23,7 +23,18 @@
     </resultMap>
 
     <select id="selectAllByEmail" resultMap="UserRoleMap">
-        select *
+        select user_id,
+               user_name,
+               user_password,
+               user_img,
+               user_email,
+               user_address,
+               user_sex,
+               user_state,
+               login_ip,
+               login_time,
+               register_time,
+               role_id
         from my_user
         where user_email = #{userEmail,jdbcType=VARCHAR}
     </select>
@@ -42,6 +53,23 @@
                role_id
         from my_user
         where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectNormal" resultMap="UserRoleMap">
+        select user_id,
+               user_name,
+               user_img,
+               user_email,
+               user_address,
+               user_sex,
+               user_state,
+               login_ip,
+               login_time,
+               register_time,
+               role_id
+        from my_user
+        where user_state = 1
+        order by login_time desc
     </select>
 
     <select id="selectException" resultMap="UserRoleMap">
@@ -74,16 +102,14 @@
                register_time,
                role_id
         from my_user
-        where user_name LIKE CONCAT('%',#{userName},'%')
+        where user_name LIKE CONCAT('%', #{userName}, '%')
         order by login_time desc
     </select>
 
 
-
-
     <!---->
     <select id="getRole" resultMap="com.spring.blog.dao.RoleDao.RoleMap">
-        select *
+        select role_id, role_key, role_name
         from my_role
         where role_id = #{role_id}
     </select>

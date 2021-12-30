@@ -62,4 +62,6 @@ public interface UserDao extends BaseMapper<User> {
   @Update("update my_user set user_state = 1 where user_id = #{userId}")
   Integer updateUserState(Integer userId);
 
+  int selectCount();
+
 }

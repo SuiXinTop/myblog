@@ -24,8 +24,8 @@ public class DataDisplayController {
     private final DataDisplayService dataDisplayService;
 
     @GetMapping("/admin")
-    public RestMsg getAdminDetailCount(Integer userId) {
-        return dataDisplayService.getUserDetailCount(userId);
+    public RestMsg getAdminDetailCount() {
+        return dataDisplayService.getAdminDetailData();
     }
 
     @GetMapping("/user")

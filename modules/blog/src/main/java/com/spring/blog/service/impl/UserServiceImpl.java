@@ -8,14 +8,15 @@ import com.spring.blog.service.UserService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.vo.UserVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.dto.UserRegister;
 import com.spring.common.entity.dto.UserSecurity;
 import com.spring.common.entity.po.User;
+import com.spring.common.entity.vo.UserVo;
 import com.spring.common.exception.ServiceException;
 import com.spring.common.exception.user.EmailCodeNotExitException;
 import com.spring.common.exception.user.EmailCodeNotMatchException;
+import com.spring.common.util.SecurityUtil;
 import com.spring.common.util.UserUtil;
 import com.spring.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class UseServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final RedisService redisService;
 
@@ -40,12 +41,10 @@ public class UseServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public RestMsg register(UserRegister user) {
 
-        String email = user.getUserEmail();
-
-        if (!redisService.hasKey(RedisConstant.EMAIL_PREFIX + email)) {
+        if (!redisService.hasKey(RedisConstant.EMAIL_PREFIX + user.getUserEmail())) {
             throw new EmailCodeNotExitException();
         }
-        if (!user.getCode().equals(redisService.get(RedisConstant.EMAIL_PREFIX + email))) {
+        if (!user.getCode().equals(redisService.get(RedisConstant.EMAIL_PREFIX + user.getUserEmail()))) {
             throw new EmailCodeNotMatchException();
         }
 
@@ -62,9 +61,15 @@ public class UseServiceImpl implements UserService {
     @Override
     public RestMsg update(User user) {
         redisService.del(RedisConstant.USER_INFO + user.getUserId());
+
+        if (user.getUserPassword() != null) {
+            user.setUserPassword(SecurityUtil.getMd5Hex(user.getUserPassword()));
+        }
+
         if (userDao.updateById(user) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.UPDATE_FAULT);
         }
+
         redisService.del(RedisConstant.USER_INFO + user.getUserId());
         return RestMsg.success(MsgConstant.UPDATE_SUCCESS, null);
     }
@@ -103,12 +108,7 @@ public class UseServiceImpl implements UserService {
             throw new EmailCodeNotMatchException();
         }
 
-        User update;
-        if (user.getUserPassword() != null) {
-            update = UserUtil.createSecurityPassword(user);
-        } else {
-            update = UserUtil.createSecurityEmail(user);
-        }
+        User update = UserUtil.createSecurityEmail(user);
 
         if (userDao.updateById(update) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.UPDATE_FAULT);
@@ -137,7 +137,7 @@ public class UseServiceImpl implements UserService {
     }
 
     @Override
-    public RestMsg selectNormal(int pageNum,int pageSize){
+    public RestMsg selectNormal(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<UserVo> userVoList = userDao.selectNormal();
         if (userVoList.isEmpty()) {

@@ -1,10 +1,9 @@
 package com.spring.blog.service.impl;
 
-import com.spring.blog.dao.AttendDao;
-import com.spring.blog.dao.BlogDao;
-import com.spring.blog.dao.CollectDao;
+import com.spring.blog.dao.*;
 import com.spring.blog.service.DataDisplayService;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.dto.SystemData;
 import com.spring.common.entity.dto.UserDetailData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DataDisplayServiceImpl implements DataDisplayService {
     private final BlogDao blogDao;
+    private final UserDao userDao;
     private final CollectDao collectDao;
     private final AttendDao attendDao;
+    private final AnnouncementDao announcementDao;
 
     @Override
     public RestMsg getUserDetailCount(Integer userId) {
@@ -30,5 +31,14 @@ public class DataDisplayServiceImpl implements DataDisplayService {
         detailData.setFansCount(attendDao.getFansCount(userId));
         detailData.setCollectCount(collectDao.getCollectCount(userId));
         return RestMsg.success(detailData);
+    }
+
+    @Override
+    public RestMsg getAdminDetailData(){
+        SystemData systemData=new SystemData();
+        systemData.setUserCount(userDao.selectCount());
+        systemData.setBlogCount(blogDao.getBlogCountAll());
+        systemData.setAnnounceCount(announcementDao.getAnnounceCount());
+        return RestMsg.success(systemData);
     }
 }

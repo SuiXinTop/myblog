@@ -1,7 +1,10 @@
 package com.spring.blog.controller.admin;
 
 import com.spring.blog.service.BlogService;
+import com.spring.common.enmu.BusinessType;
+import com.spring.common.enmu.OperatorType;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.security.annotation.Log;
 import com.spring.security.annotation.PreRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +43,7 @@ public class BlogManage {
     @PreRole
     @DeleteMapping
     @ApiOperation(value = "封禁博客")
+    @Log(logName = "封禁博客", businessType = BusinessType.DELETE, operatorType = OperatorType.MANAGE)
     public RestMsg delete(@RequestBody List<Integer> blogIdList){
         return blogService.delete(blogIdList);
     }
@@ -47,6 +51,7 @@ public class BlogManage {
     @PreRole
     @PutMapping
     @ApiOperation(value = "恢复博客")
+    @Log(logName = "恢复博客", businessType = BusinessType.UPDATE, operatorType = OperatorType.MANAGE)
     public RestMsg recover(@RequestBody List<Integer> blogIdList){
         return blogService.recoverBlog(blogIdList);
     }

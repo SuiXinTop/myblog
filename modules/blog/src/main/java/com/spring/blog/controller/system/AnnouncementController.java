@@ -1,10 +1,13 @@
 package com.spring.blog.controller.system;
 
-import com.spring.security.annotation.PreRole;
 import com.spring.blog.service.AnnouncementService;
 import com.spring.common.constant.RoleConstant;
-import com.spring.common.entity.po.Announcement;
+import com.spring.common.enmu.BusinessType;
+import com.spring.common.enmu.OperatorType;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.po.Announcement;
+import com.spring.security.annotation.Log;
+import com.spring.security.annotation.PreRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class AnnouncementController {
     @PostMapping
     @ApiOperation(value = "新建系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
+    @Log(logName = "新建系统公告", businessType = BusinessType.INSERT, operatorType = OperatorType.MANAGE)
     public RestMsg insert(@RequestBody Announcement announcement) {
         return announcementService.insert(announcement);
     }
@@ -49,6 +53,7 @@ public class AnnouncementController {
     @PutMapping("/top")
     @ApiOperation(value = "置顶系统公告")
     @PreRole(role = RoleConstant.SUPER_ADMIN)
+    @Log(logName = "置顶系统公告", businessType = BusinessType.UPDATE, operatorType = OperatorType.MANAGE)
     public RestMsg top(@RequestBody List<Integer> amtIdList) {
         return announcementService.top(amtIdList);
     }
@@ -61,7 +66,7 @@ public class AnnouncementController {
     }
 
     @GetMapping
-    @ApiOperation(value = "查看非置顶系统公告")
+    @ApiOperation(value = "查看系统公告")
     public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                           @RequestParam(value = "isAsc", defaultValue = "0") int isAsc) {

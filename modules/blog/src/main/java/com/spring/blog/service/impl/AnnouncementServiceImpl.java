@@ -69,10 +69,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public RestMsg select(int pageNum, int pageSize, int isAsc) {
         QueryWrapper<Announcement> queryWrapper = new QueryWrapper<>();
         queryWrapper
-                .orderByAsc(isAsc == 1, Dictionary.AMT_TIME)
-                .orderByDesc(isAsc == 0, Dictionary.AMT_TIME)
-                        .eq(Dictionary.AMT_TOP,0);
-
+                .orderByAsc(isAsc == 1, Dictionary.AMT_ID)
+                .orderByDesc(isAsc == 0, Dictionary.AMT_ID);
         PageHelper.startPage(pageNum, pageSize);
         List<Announcement> announcementList = announcementDao.selectList(queryWrapper);
         if (announcementList.isEmpty()) {

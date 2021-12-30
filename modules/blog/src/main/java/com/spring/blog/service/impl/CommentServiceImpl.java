@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
             throw new ServiceException(MsgConstant.INSERT_FAULT);
         }
 
-        return RestMsg.success(MsgConstant.INSERT_SUCCESS, "");
+        return RestMsg.success(MsgConstant.INSERT_SUCCESS, null);
     }
 
     @Override

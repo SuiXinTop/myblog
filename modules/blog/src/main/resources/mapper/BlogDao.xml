@@ -211,5 +211,10 @@
           and blog_state = 1
     </select>
 
+    <select id="getBlogCountAll" resultType="java.lang.Integer">
+        select count(blog_id)
+        from my_blog
+        where blog_state = 1
+    </select>
 
 </mapper>

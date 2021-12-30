@@ -8,5 +8,11 @@
         <result property="amtBody" column="amt_body" jdbcType="VARCHAR"/>
         <result property="amtTop" column="amt_top" jdbcType="INTEGER"/>
     </resultMap>
+    <select id="getAnnounceCount" resultType="java.lang.Integer">
+        select count(amt_id)
+        from my_announcement
+        where amt_state = 1
+    </select>
+
 
 </mapper>

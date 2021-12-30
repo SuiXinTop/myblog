@@ -29,8 +29,8 @@ public class SysLogController {
     public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                           @RequestParam(value = "status", defaultValue = "2") Integer status,
-                          @RequestParam(value = "startTime", defaultValue = "") String startTime,
-                          @RequestParam(value = "endTime", defaultValue = "") String endTime) {
+                          @RequestParam(value = "startTime", required = false) String startTime,
+                          @RequestParam(value = "endTime", required = false) String endTime) {
         return sysLogService.select(status, startTime, endTime, pageNum, pageSize);
     }
 

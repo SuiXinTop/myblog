@@ -25,7 +25,7 @@ public class SearchController {
     private SearchService searchService;
 
     @GetMapping("/param")
-    @ApiOperation(value = "搜索引擎es")
+    @ApiOperation(value = "搜索引擎")
     public RestMsg searchBlogEs(@NotBlank String param,
                                 @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {

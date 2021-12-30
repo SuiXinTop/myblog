@@ -106,6 +106,12 @@
         order by login_time desc
     </select>
 
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(user_id)
+        from my_user
+        where user_state = 1
+    </select>
+
 
     <!---->
     <select id="getRole" resultMap="com.spring.blog.dao.RoleDao.RoleMap">

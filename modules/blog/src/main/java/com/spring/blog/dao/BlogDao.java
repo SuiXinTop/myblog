@@ -142,4 +142,6 @@ public interface BlogDao extends BaseMapper<Blog> {
     Integer subComment(Integer blogId);
 
     int getBlogCount(Integer userId);
+
+    int getBlogCountAll();
 }

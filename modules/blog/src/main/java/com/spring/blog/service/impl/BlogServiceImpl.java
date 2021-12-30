@@ -120,7 +120,6 @@ public class BlogServiceImpl implements BlogService {
         }
         redisService.setExpire(RedisConstant.BLOG_PREFIX + blog.getBlogId(), blog, RedisConstant.BLOG_EXPIRE_TIME);
 
-
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, blog);
     }
 

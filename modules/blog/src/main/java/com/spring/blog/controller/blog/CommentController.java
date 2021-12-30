@@ -1,8 +1,11 @@
 package com.spring.blog.controller.blog;
 
 import com.spring.blog.service.CommentService;
+import com.spring.common.enmu.BusinessType;
+import com.spring.common.enmu.OperatorType;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Comment;
+import com.spring.security.annotation.Log;
 import com.spring.security.annotation.PreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +31,7 @@ public class CommentController {
     @PreAuth
     @PostMapping
     @ApiOperation(value = "新建评论")
+    @Log(logName = "新建评论", businessType = BusinessType.INSERT, operatorType = OperatorType.USER)
     public RestMsg insert(@Validated @RequestBody Comment comment) {
         return commentService.insert(comment);
     }

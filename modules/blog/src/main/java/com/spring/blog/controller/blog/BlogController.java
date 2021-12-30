@@ -48,6 +48,7 @@ public class BlogController {
     @PreAuth
     @PutMapping
     @ApiOperation(value = "修改博客")
+    @Log(logName = "修改博客", businessType = BusinessType.UPDATE, operatorType = OperatorType.USER)
     public RestMsg update(@Validated(value = Blog.Update.class) @RequestBody Blog blog) {
         return blogService.update(blog);
     }
@@ -55,6 +56,7 @@ public class BlogController {
     @PreAuth
     @DeleteMapping
     @ApiOperation(value = "逻辑删除博客")
+    @Log(logName = "删除博客", businessType = BusinessType.DELETE, operatorType = OperatorType.USER)
     public RestMsg delete(@RequestBody List<Integer> blogIdList) {
         return blogService.delete(blogIdList);
     }

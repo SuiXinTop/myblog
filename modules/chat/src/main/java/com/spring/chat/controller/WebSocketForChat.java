@@ -128,13 +128,12 @@ public class WebSocketForChat {
         //如果对方不在线，则不发送给对方，只转发给自己
         if (!webSocketPool.containsKey(otherChannelId.toString())) {
             chatMsg.setMsgStatus(0);
-            redisTemplate.opsForList().rightPush("channel:" + otherChannelId,(Object) webSocketMsg);
+            redisTemplate.opsForList().rightPush("channel:" + otherChannelId, webSocketMsg);
             sendToFrom(webSocketMsg);
         } else {
             //如果对方在线，则发送给双方
             sendToAll(webSocketMsg);
         }
-
         //存储记录
         chatService.insertMsg(chatMsg);
     }

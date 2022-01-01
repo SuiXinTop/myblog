@@ -16,6 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchModel implements Serializable {
+    private static final long serialVersionUID = -1242493306307174690L;
 
     private String param;
 

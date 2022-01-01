@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.file.dao.BlogDao">
 
-    <resultMap id="BlogMap" type="com.spring.common.entity.po.Blog">
+
+    <resultMap id="BaseBlogResultMap" type="com.spring.common.entity.po.Blog">
         <!--@Table my_blog-->
         <id property="blogId" column="blog_id" jdbcType="INTEGER"/>
         <result property="blogTitle" column="blog_title" jdbcType="VARCHAR"/>
@@ -18,5 +19,63 @@
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
     </resultMap>
 
+    <resultMap id="BlogUserMap" type="com.spring.common.entity.vo.BlogVo" extends="BaseBlogResultMap">
+        <association property="user" column="user_id" select="getUserByUserId"/>
+        <collection property="blogTagList" column="blog_id" select="getBlogTag"/>
+    </resultMap>
+
+    <resultMap id="UserMap" type="com.spring.common.entity.po.User">
+        <id property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userImg" column="user_img" jdbcType="VARCHAR"/>
+        <result property="userEmail" column="user_email" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BlogTagMap" type="com.spring.common.entity.vo.BlogTagVo">
+        <id property="blogTagId" column="blog_tag_id" jdbcType="INTEGER"/>
+        <result property="blogId" column="blog_id" jdbcType="INTEGER"/>
+        <result property="tagId" column="tag_id" jdbcType="INTEGER"/>
+        <association property="tag" column="tag_id" select="getTag"/>
+    </resultMap>
+
+    <resultMap id="TagMap" type="com.spring.common.entity.po.Tag">
+        <id property="tagId" column="tag_id" jdbcType="INTEGER"/>
+        <result property="tagName" column="tag_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectUpdate" resultMap="BlogUserMap" parameterType="date">
+        SELECT blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
+        FROM my_blog
+        WHERE blog_update_time between #{before} and #{now}
+    </select>
+
+    <select id="getUserByUserId" resultMap="UserMap">
+        select user_id, user_name, user_img, user_email, user_state
+        from my_user
+        where user_id = #{user_id}
+    </select>
+
+    <select id="getBlogTag" resultMap="BlogTagMap">
+        select blog_tag_id, blog_id, tag_id
+        from my_blog_tag
+        where blog_id = #{blog_id}
+    </select>
+
+    <select id="getTag" resultMap="TagMap">
+        select tag_id, tag_name
+        from my_tag
+        where tag_id = #{tag_id}
+    </select>
 
 </mapper>

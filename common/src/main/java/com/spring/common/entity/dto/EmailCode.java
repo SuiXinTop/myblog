@@ -3,7 +3,9 @@ package com.spring.common.entity.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 
 /**
@@ -16,6 +18,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmailCode implements Serializable {
+
+    @Email
     private String email;
+
+    @Length(min=4, max=4)
     private String code;
 }

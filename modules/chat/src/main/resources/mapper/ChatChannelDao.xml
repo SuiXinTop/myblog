@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.chat.dao.ChatChannelDao">
+
+    <resultMap id="ChatChannelMap" type="com.spring.common.entity.po.ChatChannel">
+        <!--@Table chat_channel-->
+        <id property="channelId" column="channel_id" jdbcType="INTEGER"/>
+        <result property="fromUser" column="from_user" jdbcType="INTEGER"/>
+        <result property="toUser" column="to_user" jdbcType="INTEGER"/>
+        <result property="lastChatTime" column="last_chat_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="ChatChannelUserMap" type="com.spring.common.entity.vo.ChatChannelVo" extends="ChatChannelMap">
+        <association property="fromUserMap" column="from_user" select="getFromUser"/>
+        <association property="toUserMap" column="to_user" select="getToUser"/>
+    </resultMap>
+
+    <resultMap id="UserMap" type="com.spring.common.entity.po.User">
+        <id property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userImg" column="user_img" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getChannelList" resultMap="ChatChannelUserMap">
+        select *
+        from chat_channel
+        where from_user = #{userId}
+        order by last_chat_time desc
+    </select>
+
+    <select id="getChannel" resultMap="ChatChannelUserMap" parameterType="integer">
+        select *
+        from chat_channel
+        where channel_id = #{channelId}
+    </select>
+
+    <select id="getChannelId" resultType="java.lang.Integer">
+        select channel_id
+        from chat_channel
+        where to_user = #{fromUser}
+          and from_user = #{toUser}
+    </select>
+
+    <select id="hasChannel" resultType="java.lang.Integer">
+        select count(channel_id)
+        from chat_channel
+        where from_user = #{fromUser}
+          and to_user = #{toUser}
+    </select>
+
+
+    <select id="getFromUser" resultMap="UserMap">
+        select user_id, user_name, user_img
+        from my_user
+        where user_id = #{from_user}
+    </select>
+
+    <select id="getToUser" resultMap="UserMap">
+        select user_id, user_name, user_img
+        from my_user
+        where user_id = #{to_user}
+    </select>
+
+</mapper>

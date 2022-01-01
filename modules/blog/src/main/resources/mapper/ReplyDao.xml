@@ -12,28 +12,26 @@
         <result property="replyState" column="reply_state" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="ReplyCommentMap" type="com.spring.common.entity.bo.ReplyMap" extends="ReplyMap">
+    <resultMap id="ReplyCommentMap" type="com.spring.common.entity.vo.ReplyVo" extends="ReplyMap">
         <association property="comment" column="com_id" select="getComment"/>
     </resultMap>
 
-    <resultMap id="CommentUserMap" type="com.spring.common.entity.bo.CommentMap"
+    <resultMap id="CommentUserMap" type="com.spring.common.entity.vo.CommentVo"
                extends="com.spring.blog.dao.CommentDao.CommentMap">
         <association property="owner" column="com_owner" select="getUser"/>
     </resultMap>
 
     <select id="selectAllByOwner" resultMap="ReplyCommentMap">
-        select *
+        select reply_id, com_id, reply_owner, reply_body, reply_time, reply_state
         from my_reply
         where reply_state = 1
           and reply_owner = #{userId}
     </select>
 
 
-
-
     <!---->
     <select id="getComment" resultMap="CommentUserMap">
-        select *
+        select com_id, blog_id, com_owner, com_body, com_time, com_state
         from my_comment
         where com_id = #{com_id}
     </select>
@@ -43,12 +41,7 @@
                user_name,
                user_img,
                user_email,
-               user_address,
-               user_sex,
-               user_state,
-               login_ip,
-               login_time,
-               register_time
+               user_state
         from my_user
         where user_id = #{com_owner}
     </select>

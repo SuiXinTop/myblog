@@ -14,6 +14,7 @@ import com.spring.common.entity.po.SysLog;
 import com.spring.common.exception.ServiceException;
 import com.spring.common.entity.dto.RestMsg;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
  * @author makejava
  * @since 2021-11-13 12:54:13
  */
+@Slf4j
 @Service("sysLogService")
 @RequiredArgsConstructor
 public class SysLogServiceImpl implements SysLogService {
@@ -37,8 +39,9 @@ public class SysLogServiceImpl implements SysLogService {
             queryWrapper.eq(Dictionary.OPER_STATUS, status);
         }
         queryWrapper.between(StrUtil.isNotEmpty(startTime) && StrUtil.isNotEmpty(endTime),
-                        Dictionary.OPER_TIME, DateUtil.parse(startTime), DateUtil.parse(endTime))
-                .orderByDesc(Dictionary.OPER_TIME);
+                        Dictionary.OPER_TIME, DateUtil.parse(startTime), DateUtil.parse(endTime));
+
+        queryWrapper.orderByDesc(Dictionary.LOG_ID);
 
         PageHelper.startPage(pageNum, pageSize);
         List<SysLog> list = sysLogDao.selectList(queryWrapper);

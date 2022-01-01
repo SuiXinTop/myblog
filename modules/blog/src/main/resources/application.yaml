@@ -19,8 +19,9 @@ spring:
       minimum-idle: 3
       maximum-pool-size: 20
   jackson:
-    time-zone: GMT+8
-    date-format: yyyy年MM月dd日 HH:mm:ss
+    serialization: {WRITE_DATES_AS_TIMESTAMPS: true}
+#    time-zone: GMT+8
+#    date-format: yyyy年MM月dd日 HH:mm:ss
   elasticsearch:
     rest:
       uris: 47.98.209.26:9200
@@ -28,16 +29,13 @@ spring:
   redis:
     host: 118.31.15.127
     database: 0
-    timeout: 1000
-  servlet:
-    multipart:
-      max-file-size: 5MB
-      max-request-size: 50MB
+    timeout: 3000
+    password: Zkm229544074
 
 #指定mybatisPlus扫描的xml文件
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     use-column-label: true
   mapper-locations: classpath*:mapper/**.xml
 

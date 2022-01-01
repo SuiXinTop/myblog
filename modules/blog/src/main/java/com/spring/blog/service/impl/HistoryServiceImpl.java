@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.spring.blog.dao.HistoryDao;
 import com.spring.blog.service.HistoryService;
 import com.spring.common.constant.MsgConstant;
-import com.spring.common.entity.bo.HistoryMap;
+import com.spring.common.entity.vo.HistoryVo;
 import com.spring.common.entity.dto.RestMsg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public RestMsg select(int pageNum, int pageSize, int isAsc, Integer userId) {
         PageHelper.startPage(pageNum,pageSize);
-        List<HistoryMap> myHistories = historyDao.selectAllByUserId(userId,isAsc);
+        List<HistoryVo> myHistories = historyDao.selectAllByUserId(userId,isAsc);
         if(myHistories.isEmpty()){
             return RestMsg.fail(MsgConstant.NO_DATA);
         }

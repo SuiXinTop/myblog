@@ -2,7 +2,6 @@ package com.spring.blog.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.spring.blog.dao.AnnouncementDao;
@@ -10,9 +9,9 @@ import com.spring.blog.service.AnnouncementService;
 import com.spring.common.constant.Dictionary;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.enmu.Status;
+import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Announcement;
 import com.spring.common.exception.ServiceException;
-import com.spring.common.entity.dto.RestMsg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ import java.util.List;
  */
 @Service("announcementService")
 @RequiredArgsConstructor
-public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementDao,Announcement> implements AnnouncementService {
+public class AnnouncementServiceImpl implements AnnouncementService {
     private final AnnouncementDao announcementDao;
 
     @Override
@@ -69,16 +68,26 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementDao,Announc
     @Override
     public RestMsg select(int pageNum, int pageSize, int isAsc) {
         QueryWrapper<Announcement> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByAsc(isAsc == 1, Dictionary.AMT_TOP)
-                .orderByAsc(isAsc == 1, Dictionary.AMT_TIME)
-                .orderByDesc(isAsc == 0, Dictionary.AMT_TOP)
-                .orderByDesc(isAsc == 0, Dictionary.AMT_TIME);
-
+        queryWrapper
+                .orderByAsc(isAsc == 1, Dictionary.AMT_ID)
+                .orderByDesc(isAsc == 0, Dictionary.AMT_ID);
         PageHelper.startPage(pageNum, pageSize);
         List<Announcement> announcementList = announcementDao.selectList(queryWrapper);
-        if(announcementList.isEmpty()){
+        if (announcementList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
-        return RestMsg.success(MsgConstant.SELECT_SUCCESS,new PageInfo<>(announcementList));
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(announcementList));
+    }
+
+    @Override
+    public RestMsg selectTop() {
+        QueryWrapper<Announcement> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(Dictionary.AMT_TOP,1).orderByDesc(Dictionary.AMT_ID);
+
+        List<Announcement> announcementList = announcementDao.selectList(queryWrapper);
+        if (announcementList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, announcementList);
     }
 }

@@ -1,7 +1,7 @@
 package com.spring.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.bo.CollectMap;
+import com.spring.common.entity.vo.CollectVo;
 import com.spring.common.entity.po.Collect;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -22,7 +22,9 @@ public interface CollectDao extends BaseMapper<Collect> {
      * @param isAsc  the is asc
      * @return the list
      */
-    List<CollectMap> selectAllByUserId(@Param("userId") int userId, @Param("isAsc") int isAsc);
+    List<CollectVo> selectAllByUserId(@Param("userId") int userId, @Param("isAsc") int isAsc);
+
+    int deleteByBlogIdAndUserId(Collect collect);
 
     /**
      * Has collect integer.
@@ -32,4 +34,6 @@ public interface CollectDao extends BaseMapper<Collect> {
      */
     @Select("select count(*) from my_collect where blog_id = #{blogId} and user_id = #{userId} and collect_state = 1")
     int hasCollect(Collect collect);
+
+    int getCollectCount(Integer userId);
 }

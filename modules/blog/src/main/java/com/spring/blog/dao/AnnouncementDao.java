@@ -4,11 +4,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.spring.common.entity.po.Announcement;
 
 /**
- * (MyAnnouncement)表数据库访问层
- *
- * @author makejava
- * @since 2021-11-13 11:52:23
+ * @author STARS
  */
 public interface AnnouncementDao extends BaseMapper<Announcement> {
 
+   int getAnnounceCount();
 }

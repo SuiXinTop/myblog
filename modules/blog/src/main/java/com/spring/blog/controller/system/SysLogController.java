@@ -19,18 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("sysLog")
-@Api(tags = "系统日志模块")
+@Api(tags = "系统日志模块",consumes = "admin")
 public class SysLogController {
 
     private final SysLogService sysLogService;
 
-    @GetMapping("/select")
+    @GetMapping
     @ApiOperation(value = "日志查询")
     public RestMsg select(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                           @RequestParam(value = "status", defaultValue = "2") Integer status,
-                          @RequestParam(value = "startTime", defaultValue = "") String startTime,
-                          @RequestParam(value = "endTime", defaultValue = "") String endTime) {
+                          @RequestParam(value = "startTime", required = false) String startTime,
+                          @RequestParam(value = "endTime", required = false) String endTime) {
         return sysLogService.select(status, startTime, endTime, pageNum, pageSize);
     }
 

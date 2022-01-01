@@ -10,32 +10,36 @@
         <result property="historyTime" column="history_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <resultMap id="HistoryBlogMap" type="com.spring.common.entity.bo.HistoryMap" extends="HistoryMap">
+    <resultMap id="HistoryBlogMap" type="com.spring.common.entity.vo.HistoryVo" extends="HistoryMap">
         <association property="blog" column="blog_id" select="getBlog"/>
     </resultMap>
 
-    <resultMap id="BlogMap" type="com.spring.common.entity.bo.BlogMap" extends="com.spring.blog.dao.BlogDao.BlogMap">
+    <resultMap id="BlogMap" type="com.spring.common.entity.vo.BlogVo" extends="com.spring.blog.dao.BlogDao.BlogMap">
         <association property="user" column="user_id" select="getUser"/>
     </resultMap>
 
     <select id="selectAllByUserId" resultMap="HistoryBlogMap">
-        select *
+        select history_id, blog_id, user_id, history_time
         from my_history
         where user_id = #{userId}
-        <if test="isAsc == '0'">
-            order by history_time desc
-        </if>
-        <if test="isAsc == '1'">
-            order by history_time asc
-        </if>
+        order by history_id desc
     </select>
-
-
 
 
     <!---->
     <select id="getBlog" resultMap="BlogMap">
-        select *
+        select blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         from my_blog
         where blog_id = #{blog_id}
     </select>

@@ -24,22 +24,13 @@ spring:
   redis:
     host: 118.31.15.127
     database: 0
-    timeout: 1000
+    timeout: 3000
+    password: Zkm229544074
+
   servlet:
     multipart:
       max-file-size: 5MB
       max-request-size: 50MB
-
-#指定mybatisPlus扫描的xml文件
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    use-column-label: true
-  mapper-locations: classpath*:mapper/**.xml
-
-# PageHelper分页插件
-pagehelper:
-  helperDialect: mysql
 
 rocketmq:
   name-server: 47.98.209.26:9876

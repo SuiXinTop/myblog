@@ -1,7 +1,7 @@
 package com.spring.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.spring.common.entity.bo.HistoryMap;
+import com.spring.common.entity.vo.HistoryVo;
 import com.spring.common.entity.po.History;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,5 +21,5 @@ public interface HistoryDao extends BaseMapper<History> {
      * @param isAsc  the is asc
      * @return the list
      */
-    List<HistoryMap> selectAllByUserId(@Param("userId") Integer userId, @Param("isAsc") int isAsc);
+    List<HistoryVo> selectAllByUserId(@Param("userId") Integer userId, @Param("isAsc") int isAsc);
 }

@@ -64,18 +64,14 @@ public class LogAdvice {
                     .logName(controllerLog.logName())
                     .operTime(new DateTime())
                     .operType(controllerLog.operatorType().ordinal())
-                    .requestMethod("")
                     .build();
 
-            log.info("日志对象已加载");
             if (e != null) {
                 operLog.setOperStatus(BusinessStatus.FAIL.ordinal());
                 operLog.setErrorMsg(e.getMessage());
             }
 
-            // 保存数据库
             rocketMQTemplate.sendOneWay(Topic.SYS_OPER_LOG,operLog);
-            log.info("日志消息已发送");
         } catch (Exception exp) {
             // 记录本地异常日志
             log.error("==前置通知异常==");

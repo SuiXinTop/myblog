@@ -18,6 +18,14 @@
             <artifactId>minio</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spring</groupId>
+            <artifactId>elastic</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.spring</groupId>
             <artifactId>swagger</artifactId>
         </dependency>
@@ -28,6 +36,12 @@
         <dependency>
             <groupId>com.spring</groupId>
             <artifactId>datasource</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.pagehelper</groupId>
+                    <artifactId>pagehelper-spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -38,6 +52,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.5.6</version>
+                <configuration>
+                    <excludeGroupIds>org.projectlombok</excludeGroupIds>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>

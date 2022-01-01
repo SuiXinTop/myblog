@@ -17,7 +17,7 @@ public class ForbiddenException extends RuntimeException {
 
     private static final long serialVersionUID = -4552488542483342775L;
 
-    private static final String DEFAULT_MSG = "forbidden";
+    private static final String DEFAULT_MSG = "权限不足，拒绝访问";
 
     public ForbiddenException(String msg) {
         super(msg);

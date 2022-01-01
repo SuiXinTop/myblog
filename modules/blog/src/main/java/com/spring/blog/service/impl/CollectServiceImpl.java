@@ -8,12 +8,13 @@ import com.spring.blog.dao.CollectDao;
 import com.spring.blog.service.CollectService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.bo.CollectMap;
+import com.spring.common.entity.vo.CollectVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Collect;
 import com.spring.common.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class CollectServiceImpl implements CollectService {
     @Override
     public RestMsg select(int pageNum, int pageSize, int userId, int isAsc) {
         PageHelper.startPage(pageNum, pageSize);
-        List<CollectMap> list = collectDao.selectAllByUserId(userId, isAsc);
+        List<CollectVo> list = collectDao.selectAllByUserId(userId, isAsc);
         if (list.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
@@ -40,6 +41,7 @@ public class CollectServiceImpl implements CollectService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public RestMsg insert(Collect collect) {
         collect.setCollectTime(new DateTime());
         if (collectDao.insert(collect) == Status.Exception.ordinal()) {
@@ -53,7 +55,8 @@ public class CollectServiceImpl implements CollectService {
     }
 
     @Override
-    public RestMsg delete(List<Integer> collectIds) {
+    @Transactional(rollbackFor = Exception.class)
+    public RestMsg deleteList(List<Integer> collectIds) {
         List<Collect> collectList = collectDao.selectBatchIds(collectIds);
 
         collectList.forEach(i -> {
@@ -65,8 +68,21 @@ public class CollectServiceImpl implements CollectService {
         if (collectDao.deleteBatchIds(collectIds) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.DELETE_FAULT);
         }
-        return RestMsg.success(MsgConstant.DELETE_SUCCESS, "");
+        return RestMsg.success(MsgConstant.DELETE_SUCCESS, null);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public RestMsg delete(Collect collect) {
+        if (collectDao.deleteByBlogIdAndUserId(collect) == Status.Exception.ordinal()) {
+            throw new ServiceException(MsgConstant.DELETE_FAULT);
+        }
+        if (blogDao.subCollect(collect.getBlogId()) == Status.Exception.ordinal()) {
+            throw new ServiceException(MsgConstant.DELETE_FAULT);
+        }
+        return RestMsg.success(MsgConstant.DELETE_SUCCESS, null);
+    }
+
 
     @Override
     public boolean hasCollect(Collect collect) {

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
@@ -19,7 +21,9 @@ public class UserLogin implements Serializable {
 
     private static final long serialVersionUID = -86422308011787984L;
 
+    @Email
     private String userEmail;
 
+    @NotEmpty
     private String userPassword;
 }

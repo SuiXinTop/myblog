@@ -1,8 +1,7 @@
 package com.spring.blog.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.spring.common.entity.po.Announcement;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.po.Announcement;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
  * @author makejava
  * @since 2021 -11-13 11:52:24
  */
-public interface AnnouncementService extends IService<Announcement> {
+public interface AnnouncementService {
     /**
      * Insert rest msg.
      *
@@ -54,4 +53,11 @@ public interface AnnouncementService extends IService<Announcement> {
      * @return the rest msg
      */
     RestMsg select(int pageNum, int pageSize, int isAsc);
+
+    /**
+     * Select top rest msg.
+     *
+     * @return the rest msg
+     */
+    RestMsg selectTop();
 }

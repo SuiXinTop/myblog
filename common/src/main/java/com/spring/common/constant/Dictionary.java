@@ -8,9 +8,13 @@ package com.spring.common.constant;
  */
 public class Dictionary {
 
+    public final static String LOG_ID = "log_id";
+
     public final static String OPER_STATUS = "oper_status";
 
     public final static String OPER_TIME = "oper_time";
+
+    public final static String AMT_ID = "amt_id";
 
     public final static String AMT_TOP = "amt_top";
 

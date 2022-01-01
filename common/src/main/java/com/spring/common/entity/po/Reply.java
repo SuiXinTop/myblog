@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -26,11 +27,14 @@ public class Reply implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer replyId;
-    
+
+    @NotBlank
     private Integer comId;
-    
+
+    @NotBlank
     private Integer replyOwner;
-    
+
+    @NotBlank
     private String replyBody;
 
     private Date replyTime;

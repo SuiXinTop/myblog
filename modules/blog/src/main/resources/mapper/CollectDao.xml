@@ -11,38 +11,65 @@
         <result property="collectState" column="collect_state" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="CollectBlogMap" type="com.spring.common.entity.bo.CollectMap" extends="CollectMap">
+    <resultMap id="CollectBlogMap" type="com.spring.common.entity.vo.CollectVo" extends="CollectMap">
         <association property="blog" column="blog_id" select="getBlog"/>
     </resultMap>
 
-    <resultMap id="BlogUserMap" type="com.spring.common.entity.bo.BlogMap"
+    <resultMap id="BlogUserMap" type="com.spring.common.entity.vo.BlogVo"
                extends="com.spring.blog.dao.BlogDao.BlogMap">
         <association property="user" column="user_id" select="getUser"/>
     </resultMap>
 
     <select id="selectAllByUserId" resultMap="CollectBlogMap">
-        select * from my_collect
+        select collect_id, blog_id, user_id, collect_time, collect_state
+        from my_collect
         where collect_state=1 and user_id = #{userId}
         order by collect_time
-        <if test="isAsc==1">
-            ASC
-        </if>
         <if test="isAsc==0">
             DESC
         </if>
     </select>
 
+    <delete id="deleteByBlogIdAndUserId" parameterType="com.spring.common.entity.po.Collect">
+        update my_collect
+        set collect_state=0
+        where collect_state = 1
+          and user_id = #{userId}
+          and blog_id = #{blogId}
+    </delete>
 
     <!---->
     <select id="getBlog" resultMap="BlogUserMap">
-        select *
+        select blog_id,
+               blog_title,
+               blog_body,
+               blog_img,
+               blog_time,
+               blog_update_time,
+               blog_collect,
+               blog_view,
+               blog_like,
+               blog_comment,
+               blog_state,
+               user_id
         from my_blog
         where blog_id = #{blog_id}
     </select>
 
     <select id="getUser" resultMap="com.spring.blog.dao.UserDao.UserMap">
-        select *
+        select user_id,
+               user_name,
+               user_img,
+               user_email,
+               user_state
         from my_user
         where user_id = #{user_id}
+    </select>
+
+    <select id="getCollectCount" resultType="java.lang.Integer">
+        select count(collect_id)
+        from my_collect
+        where collect_state = 1
+          and user_id = #{userId}
     </select>
 </mapper>

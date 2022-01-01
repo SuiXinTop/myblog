@@ -1,7 +1,8 @@
 package com.spring.security.advice;
 
+import com.spring.common.exception.ForbiddenException;
 import com.spring.security.annotation.PreRole;
-import com.spring.common.entity.bo.UserMap;
+import com.spring.common.entity.vo.UserVo;
 import com.spring.common.exception.user.RoleBlockedException;
 import com.spring.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +35,12 @@ public class RoleAdvice {
     @Before(value = "@annotation(preRole)")
     public void roleAdvice(PreRole preRole) {
         String key = tokenAdvice.logAdvice();
-        UserMap user = (UserMap) redisService.get(key);
+        UserVo user = (UserVo) redisService.get(key);
         log.info(user.toString());
         String roleKey = user.getRole().getRoleKey();
         List<String> roles = Arrays.asList(preRole.role());
         if (roles.stream().noneMatch(s -> s.equals(roleKey))) {
-            throw new RoleBlockedException();
+            throw new ForbiddenException();
         }
     }
 }

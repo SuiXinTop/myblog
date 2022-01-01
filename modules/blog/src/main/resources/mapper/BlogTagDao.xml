@@ -9,12 +9,12 @@
         <result property="tagId" column="tag_id" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="BlogTagTagMap" type="com.spring.common.entity.bo.BlogTagMap" extends="BlogTagMap">
+    <resultMap id="BlogTagTagMap" type="com.spring.common.entity.vo.BlogTagVo" extends="BlogTagMap">
         <association property="tag" column="tag_id" select="getTag"/>
     </resultMap>
 
     <select id="selectByBlogId" resultMap="BlogTagTagMap" parameterType="integer">
-        select *
+        select blog_tag_id, blog_id, tag_id
         from my_blog_tag
         where blog_id = #{blog_id}
     </select>

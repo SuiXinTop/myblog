@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,11 +31,14 @@ public class Comment implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer comId;
-    
+
+    @NotNull(message = "博客ID不能为空")
     private Integer blogId;
-    
+
+    @NotNull(message = "用户ID不能为空")
     private Integer comOwner;
 
+    @NotBlank(message = "评论内容不能为空")
     private String comBody;
 
     private Date comTime;

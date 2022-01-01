@@ -23,9 +23,9 @@ public class BlogTag implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Integer blogTagId;
-    
+
     private Integer blogId;
-    
+
     private Integer tagId;
 
 

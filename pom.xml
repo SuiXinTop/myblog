@@ -76,9 +76,19 @@
                 <version>1.2.78</version>
             </dependency>
             <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.1.70.Final</version>
+            </dependency>
+            <dependency>
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>8.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>2.2.6</version>
             </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>

@@ -1,9 +1,8 @@
 package com.spring.blog.service;
 
-import com.spring.common.entity.po.Blog;
-import com.spring.common.entity.po.BlogTag;
-import com.spring.common.entity.po.History;
 import com.spring.common.entity.dto.RestMsg;
+import com.spring.common.entity.po.Blog;
+import com.spring.common.entity.po.History;
 
 import java.util.List;
 
@@ -22,6 +21,8 @@ public interface BlogService {
      */
     RestMsg insert(Blog blog);
 
+    RestMsg saveTemp(Blog blog);
+
     /**
      * Update rest msg.
      *
@@ -29,6 +30,14 @@ public interface BlogService {
      * @return the rest msg
      */
     RestMsg update(Blog blog);
+
+    /**
+     * Recover blog rest msg.
+     *
+     * @param blogIdList the blog id list
+     * @return the rest msg
+     */
+    RestMsg recoverBlog(List<Integer> blogIdList);
 
     /**
      * Delete rest msg.
@@ -46,6 +55,36 @@ public interface BlogService {
      */
     RestMsg select(Integer blogId);
 
+    RestMsg getTemp(Integer userId);
+
+    /**
+     * Select blog list rest msg.
+     *
+     * @param userId   the user id
+     * @param pageNum  the page num
+     * @param pageSize the page size
+     * @return the rest msg
+     */
+    RestMsg selectBlogList(Integer userId, int pageNum, int pageSize);
+
+    /**
+     * Select normal rest msg.
+     *
+     * @param pageNum  the page num
+     * @param pageSize the page size
+     * @return the rest msg
+     */
+    RestMsg selectNormal(int pageNum, int pageSize);
+
+    /**
+     * Select exception rest msg.
+     *
+     * @param pageNum  the page num
+     * @param pageSize the page size
+     * @return the rest msg
+     */
+    RestMsg selectException(int pageNum, int pageSize);
+
     /**
      * Select by hot rest msg.
      *
@@ -59,6 +98,14 @@ public interface BlogService {
      * @return the rest msg
      */
     RestMsg selectNew();
+
+    /**
+     * Select new by user id rest msg.
+     *
+     * @param userId the user id
+     * @return the rest msg
+     */
+    RestMsg selectNewByUserId(Integer userId);
 
     /**
      * Add view.
@@ -77,10 +124,11 @@ public interface BlogService {
     /**
      * Insert tag rest msg.
      *
-     * @param blogTagList the my blog tag list
+     * @param tagIdList the tag id list
+     * @param blogId    the blog id
      * @return the rest msg
      */
-    RestMsg insertTag(List<BlogTag> blogTagList);
+    RestMsg insertTag(List<Integer> tagIdList, Integer blogId);
 
     /**
      * Delete tag rest msg.
@@ -89,5 +137,5 @@ public interface BlogService {
      * @param blogId     the blog id
      * @return the rest msg
      */
-    RestMsg deleteTag(List<Integer> blogTagIds,Integer blogId);
+    RestMsg deleteTag(List<Integer> blogTagIds, Integer blogId);
 }

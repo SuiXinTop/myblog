@@ -7,7 +7,7 @@ import com.spring.blog.dao.AttendDao;
 import com.spring.blog.service.AttendService;
 import com.spring.common.constant.MsgConstant;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.bo.AttendMap;
+import com.spring.common.entity.vo.AttendVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Attend;
 import com.spring.common.exception.ServiceException;
@@ -39,7 +39,7 @@ public class AttendServiceImpl implements AttendService {
     @Override
     public RestMsg selectAttend(Integer fansUserId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<AttendMap> attendList = attendDao.selectAttend(fansUserId);
+        List<AttendVo> attendList = attendDao.selectAttend(fansUserId);
         if (attendList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
@@ -49,11 +49,19 @@ public class AttendServiceImpl implements AttendService {
     @Override
     public RestMsg selectFans(Integer attendUserId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<AttendMap> myFansList = attendDao.selectFans(attendUserId);
+        List<AttendVo> myFansList = attendDao.selectFans(attendUserId);
         if (myFansList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(myFansList));
+    }
+
+    @Override
+    public  RestMsg deleteOne(Attend attend){
+        if (attendDao.deleteByAttendUserIdAndFansUserId(attend) == Status.Exception.ordinal()) {
+            throw new ServiceException(MsgConstant.DELETE_FAULT);
+        }
+        return RestMsg.success(MsgConstant.DELETE_SUCCESS, null);
     }
 
     @Override
@@ -62,6 +70,11 @@ public class AttendServiceImpl implements AttendService {
             throw new ServiceException(MsgConstant.DELETE_FAULT);
         }
         return RestMsg.success(MsgConstant.DELETE_SUCCESS, null);
+    }
+
+    @Override
+    public boolean hasAttend(Attend attend){
+        return attendDao.checkHasAttend(attend) != 0;
     }
 
 }

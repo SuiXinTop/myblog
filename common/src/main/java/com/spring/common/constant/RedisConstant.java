@@ -13,9 +13,9 @@ public class RedisConstant {
     /**
      * 刷新的时间点，单位：s
      */
-    public final static long TOKEN_REFRESH_TIME = 3600L;
+    public final static long TOKEN_REFRESH_TIME = 18*60L;
 
-    public final static long REFRESH_EXPIRE_TIME = 60L;
+    public final static long REFRESH_EXPIRE_TIME = 4*60L;
 
     public final static long TOKEN_EXPIRE_TIME = 24*60L;
 
@@ -36,4 +36,19 @@ public class RedisConstant {
     public final static String BLOG_HOT= "blog:hot";
 
     public final static long HOT_EXPIRE_TIME = 10L;
+
+    public final static String BLOG_NEW= "blog:new";
+
+    public final static long NEW_EXPIRE_TIME = 10L;
+
+    public final static String BLOG_TEMP= "blog:temp:";
+
+    public final static String USER_NEW_BLOG= "user:new:blog:";
+
+    public final static long USER_NEW_BLOG_EXPIRE_TIME = 10L;
+
+    public final static String USER_INFO="user:info:";
+
+    public final static long USER_INFO_EXPIRE_TIME = 5L;
+
 }

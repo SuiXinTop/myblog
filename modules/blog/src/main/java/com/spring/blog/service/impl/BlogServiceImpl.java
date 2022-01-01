@@ -1,6 +1,8 @@
 package com.spring.blog.service.impl;
 
 import cn.hutool.core.date.DateTime;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.spring.blog.dao.BlogDao;
 import com.spring.blog.dao.BlogTagDao;
 import com.spring.blog.service.BlogService;
@@ -8,7 +10,7 @@ import com.spring.common.constant.MsgConstant;
 import com.spring.common.constant.RedisConstant;
 import com.spring.common.constant.Topic;
 import com.spring.common.enmu.Status;
-import com.spring.common.entity.bo.BlogMap;
+import com.spring.common.entity.vo.BlogVo;
 import com.spring.common.entity.dto.RestMsg;
 import com.spring.common.entity.po.Blog;
 import com.spring.common.entity.po.BlogTag;
@@ -47,6 +49,17 @@ public class BlogServiceImpl implements BlogService {
         if (blogDao.insert(blog) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.INSERT_FAULT);
         }
+        return RestMsg.success(MsgConstant.INSERT_SUCCESS, blog.getBlogId());
+    }
+
+    @Override
+    public RestMsg saveTemp(Blog blog) {
+        Date now = new DateTime();
+        blog.setBlogUpdateTime(now);
+        blog.setBlogTime(now);
+        if (!redisService.set(RedisConstant.BLOG_TEMP + blog.getUserId(), blog)) {
+            return RestMsg.fail(MsgConstant.INSERT_FAULT);
+        }
         return RestMsg.success(MsgConstant.INSERT_SUCCESS, null);
     }
 
@@ -60,6 +73,20 @@ public class BlogServiceImpl implements BlogService {
             throw new ServiceException(MsgConstant.UPDATE_FAULT);
         }
         redisService.del(RedisConstant.BLOG_PREFIX + blog.getBlogId());
+        return RestMsg.success(MsgConstant.UPDATE_SUCCESS, null);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public RestMsg recoverBlog(List<Integer> blogIdList) {
+        if (blogIdList.isEmpty()) {
+            throw new ServiceException(MsgConstant.UPDATE_FAULT);
+        }
+        blogIdList.forEach(blogId -> {
+            if (blogDao.updateBlogState(blogId) == Status.Exception.ordinal()) {
+                throw new ServiceException(MsgConstant.UPDATE_FAULT);
+            }
+        });
         return RestMsg.success(MsgConstant.UPDATE_SUCCESS, null);
     }
 
@@ -82,9 +109,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public RestMsg select(Integer blogId) {
-        BlogMap blog;
+        BlogVo blog;
         if (redisService.hasKey(RedisConstant.BLOG_PREFIX + blogId)) {
-            blog = (BlogMap) redisService.get(RedisConstant.BLOG_PREFIX + blogId);
+            blog = (BlogVo) redisService.get(RedisConstant.BLOG_PREFIX + blogId);
             return RestMsg.success(MsgConstant.SELECT_SUCCESS, blog);
         }
         blog = blogDao.selectByBlogId(blogId);
@@ -93,28 +120,80 @@ public class BlogServiceImpl implements BlogService {
         }
         redisService.setExpire(RedisConstant.BLOG_PREFIX + blog.getBlogId(), blog, RedisConstant.BLOG_EXPIRE_TIME);
 
-
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, blog);
+    }
+
+    @Override
+    public RestMsg getTemp(Integer userId) {
+        Blog blog = (Blog) redisService.get(RedisConstant.BLOG_TEMP+userId);
+        if (blog==null){
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(blog);
+    }
+
+    @Override
+    public RestMsg selectBlogList(Integer userId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<BlogVo> blogList = blogDao.selectByUserId(userId);
+        if (blogList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(blogList));
+    }
+
+    @Override
+    public  RestMsg selectNormal(int pageNum,int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        List<BlogVo> blogList = blogDao.selectNormal();
+        if (blogList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(blogList));
+    }
+
+    @Override
+    public RestMsg selectException(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<BlogVo> blogList = blogDao.selectException();
+        if (blogList.isEmpty()) {
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, new PageInfo<>(blogList));
     }
 
     @Override
     public RestMsg selectHot() {
         if (redisService.hasKey(RedisConstant.BLOG_HOT)) {
-            List<BlogMap> redis = (List<BlogMap>) redisService.get(RedisConstant.BLOG_HOT);
+            List<BlogVo> redis = (List<BlogVo>) redisService.get(RedisConstant.BLOG_HOT);
             return RestMsg.success(MsgConstant.SELECT_SUCCESS, redis);
         }
-        List<BlogMap> list = blogDao.selectHot();
-        redisService.setExpire(RedisConstant.BLOG_HOT, list, RedisConstant.HOT_EXPIRE_TIME);
-        return RestMsg.success(MsgConstant.SELECT_SUCCESS, list);
+        List<BlogVo> blogList = blogDao.selectHot();
+        if(blogList.isEmpty()){
+            throw new ServiceException(MsgConstant.NO_DATA);
+        }
+        redisService.setExpire(RedisConstant.BLOG_HOT, blogList, RedisConstant.HOT_EXPIRE_TIME);
+        return RestMsg.success(MsgConstant.SELECT_SUCCESS, blogList);
     }
 
     @Override
     public RestMsg selectNew() {
-        List<BlogMap> blogList = blogDao.selectHot();
+        if (redisService.hasKey(RedisConstant.BLOG_NEW)) {
+            List<BlogVo> redis = (List<BlogVo>) redisService.get(RedisConstant.BLOG_NEW);
+            return RestMsg.success(MsgConstant.SELECT_SUCCESS, redis);
+        }
+        List<BlogVo> blogList = blogDao.selectNew();
         if (blogList.isEmpty()) {
             throw new ServiceException(MsgConstant.NO_DATA);
         }
+        redisService.setExpire(RedisConstant.BLOG_NEW, blogList, RedisConstant.NEW_EXPIRE_TIME);
         return RestMsg.success(MsgConstant.SELECT_SUCCESS, blogList);
+    }
+
+    @Override
+    public RestMsg selectNewByUserId(Integer userId){
+        List<Blog> blogList = blogDao.selectNewByUserId(userId);
+        return RestMsg.success(blogList);
     }
 
     @Override
@@ -130,17 +209,18 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RestMsg insertTag(List<BlogTag> blogTagList) {
-        if (blogTagList.isEmpty()) {
+    public RestMsg insertTag(List<Integer> tagIdList,Integer blogId) {
+        if (tagIdList.isEmpty()) {
             throw new ServiceException(MsgConstant.INSERT_FAULT);
         }
-        blogTagList.forEach(myBlogTag -> {
-            if (blogTagDao.insert(myBlogTag) == Status.Exception.ordinal()) {
+        tagIdList.forEach(id -> {
+            BlogTag blogTag = new BlogTag();
+            blogTag.setBlogId(blogId);
+            blogTag.setTagId(id);
+            if (blogTagDao.insert(blogTag) == Status.Exception.ordinal()) {
                 throw new ServiceException(MsgConstant.INSERT_FAULT);
             }
         });
-
-        Integer blogId = blogTagList.get(0).getBlogId();
 
         Blog blog = Blog.builder().blogId(blogId).blogUpdateTime(new DateTime()).build();
         if (blogDao.updateById(blog) == Status.Exception.ordinal()) {
@@ -151,12 +231,12 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RestMsg deleteTag(List<Integer> blogTagIds, Integer blogId) {
-        if (blogTagIds.isEmpty()) {
+    public RestMsg deleteTag(List<Integer> blogTagIdList, Integer blogId) {
+        if (blogTagIdList.isEmpty()) {
             throw new ServiceException(MsgConstant.DELETE_FAULT);
         }
 
-        if (blogTagDao.deleteBatchIds(blogTagIds) == Status.Exception.ordinal()) {
+        if (blogTagDao.deleteBatchIds(blogTagIdList) == Status.Exception.ordinal()) {
             throw new ServiceException(MsgConstant.DELETE_FAULT);
         }
 
